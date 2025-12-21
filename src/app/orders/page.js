@@ -152,8 +152,15 @@ export default function OrdersList() {
               </button>
             </li>
           ))}
+
         </ul>
+        
       )}
+      <div className="row">
+                    <button onClick={() => window.location.href = "/Restorentitems"} style={{ backgroundColor: "green" }}>My items</button><br>
+                    </br>
+                    <button onClick={() => window.location.href = "/AcceptedOrdersList"} style={{ backgroundColor: "red" }}>accepted orders</button>
+                </div>
     </div>
   );
 }
