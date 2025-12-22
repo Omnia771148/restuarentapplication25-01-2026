@@ -210,7 +210,10 @@ export default function OrdersList() {
                     <button onClick={() => window.location.href = "/AcceptedOrdersList"} style={{ backgroundColor: "green" }}>Accepted orders</button>
                 </div>
                 <div className="row">
-                    <button onClick={() => window.location.href = "/todayorders"} style={{ backgroundColor: "green" }}>rejected orders</button>
+                    <button onClick={() => window.location.href = "/todayorders"} style={{ backgroundColor: "green" }}>Today orders</button>
+                </div>
+                <div className="row">
+                    <button onClick={() => window.location.href = "/RejectedOrders"} style={{ backgroundColor: "green" }}>Rejected orders</button>
                 </div>
       </div>
   

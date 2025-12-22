@@ -11,13 +11,51 @@ export async function GET(req) {
     const restaurantId = searchParams.get("restaurantId");
 
     if (!restaurantId) {
-      return NextResponse.json({ success: false, message: "No restaurantId" });
+      return NextResponse.json({
+        success: false,
+        message: "No restaurantId"
+      });
     }
 
-    const acceptedOrders = await AcceptedOrder.find({ restaurantId }).lean();
-    const rejectedOrders = await RejectedOrder.find({ restaurantId }).lean();
+    // ✅ Dynamic today in IST
+    const today = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
+    // Format: YYYY-MM-DD
 
-    // Add status explicitly
+    // ✅ Accepted Orders (today only)
+    const acceptedOrders = await AcceptedOrder.aggregate([
+      { $match: { restaurantId } },
+      {
+        $addFields: {
+          orderDay: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$orderDate",
+              timezone: "Asia/Kolkata"
+            }
+          }
+        }
+      },
+      { $match: { orderDay: today } }
+    ]);
+
+    // ✅ Rejected Orders (today only)
+    const rejectedOrders = await RejectedOrder.aggregate([
+      { $match: { restaurantId } },
+      {
+        $addFields: {
+          orderDay: {
+            $dateToString: {
+              format: "%Y-%m-%d",
+              date: "$orderDate",
+              timezone: "Asia/Kolkata"
+            }
+          }
+        }
+      },
+      { $match: { orderDay: today } }
+    ]);
+
+    // Add orderStatus
     const accepted = acceptedOrders.map(order => ({
       ...order,
       orderStatus: "accepted"
@@ -28,7 +66,7 @@ export async function GET(req) {
       orderStatus: "rejected"
     }));
 
-    // Merge & sort by date
+    // Merge and sort by orderDate
     const allOrders = [...accepted, ...rejected].sort(
       (a, b) => new Date(b.orderDate) - new Date(a.orderDate)
     );
@@ -37,8 +75,12 @@ export async function GET(req) {
       success: true,
       orders: allOrders
     });
+
   } catch (err) {
     console.error("Order history error:", err);
-    return NextResponse.json({ success: false });
+    return NextResponse.json({
+      success: false,
+      message: "Server error"
+    });
   }
 }
