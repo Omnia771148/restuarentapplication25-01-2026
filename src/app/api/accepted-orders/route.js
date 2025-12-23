@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import connectDB from "../../../../lib/mongoose";
+import connectionToDatabase from "../../../../lib/mongoose";
 import AcceptedOrder from "../../../../models/AcceptedOrder";
 
 export async function GET(request) {
-  await connectDB();
+  await connectionToDatabase();
 
   try {
     const { searchParams } = new URL(request.url);
