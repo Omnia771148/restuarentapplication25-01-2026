@@ -217,6 +217,7 @@ export default function OrdersList() {
                 backgroundColor: "#f9f9f9",
               }}
             >
+              {/* Items */}
               <ul>
                 {order.items.map((item, idx) => (
                   <li key={idx}>
@@ -225,8 +226,15 @@ export default function OrdersList() {
                 ))}
               </ul>
 
-              <p><strong>Total:</strong> ₹{order.totalPrice}</p>
+              {/* Schema details */}
+              <p><strong>User ID:</strong> {order.userId}</p>
+              <p><strong>Total Count:</strong> {order.totalCount}</p>
+              <p><strong>Total Price:</strong> ₹{order.totalPrice}</p>
+              <p><strong>Restaurant ID:</strong> {order.restaurantId}</p>
+              <p><strong>Order Date:</strong> {new Date(order.orderDate).toLocaleString()}</p>
+              <p><strong>Order ID:</strong> {order.orderId}</p>
 
+              {/* Action buttons */}
               <button
                 onClick={() => acceptOrder(order._id)}
                 style={{
