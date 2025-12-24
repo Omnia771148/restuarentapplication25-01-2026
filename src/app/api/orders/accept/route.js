@@ -7,14 +7,14 @@ export async function POST(request) {
   await connectionToDatabase();
 
   try {
-    // 1. Get the MongoDB ID (sent from frontend as 'orderId') and the rest location
-    const { orderId: mongoId, rest } = await request.json();
+    // 1. Get mongoId, rest location, AND razorpayOrderId from frontend
+    const { orderId: mongoId, rest, razorpayOrderId } = await request.json();
 
     if (!mongoId) {
       return NextResponse.json({ success: false, message: "ID is required" }, { status: 400 });
     }
 
-    // 2. Find the order using the MongoDB ID
+    // 2. Find the order in the pending collection
     const order = await Order.findById(mongoId);
     if (!order) {
       return NextResponse.json({ success: false, message: "Order not found" }, { status: 404 });
@@ -24,12 +24,14 @@ export async function POST(request) {
 
     // 3. Prepare the new entry
     const newEntryData = {
-      ...orderData,       // 👈 This copies everything, INCLUDING the original 'orderId'
-      rest: rest          // Adds the restaurant location
+      ...orderData,       // Copies existing data (items, price, etc.)
+      rest: rest,         // Adds restaurant location
+      // Ensure razorpayOrderId is included. 
+      // We take it from the request if sent, otherwise fallback to what's in the DB.
+      razorpayOrderId: razorpayOrderId || orderData.razorpayOrderId 
     };
 
-    // 4. Remove the old database _id so a new one is created
-    // (We do NOT touch 'orderId', so it stays the same as before!)
+    // 4. Remove the old database _id so a new unique one is created for the Accepted collection
     delete newEntryData._id;
     delete newEntryData.__v;
 

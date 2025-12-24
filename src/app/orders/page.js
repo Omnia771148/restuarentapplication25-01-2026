@@ -57,10 +57,10 @@ export default function OrdersList() {
         if (res.data.success) {
           const newOrders = res.data.orders;
 
-          const prevIds = prevOrdersRef.current.map(o => o._id);
-          const newIds = newOrders.map(o => o._id);
+          const prevIds = prevOrdersRef.current.map((o) => o._id);
+          const newIds = newOrders.map((o) => o._id);
 
-          const hasNewOrder = newIds.some(id => !prevIds.includes(id));
+          const hasNewOrder = newIds.some((id) => !prevIds.includes(id));
 
           if (hasNewOrder && audioEnabled) {
             const audio = new Audio("/noti.mp3");
@@ -94,12 +94,13 @@ export default function OrdersList() {
     });
   };
 
-  // ACCEPT ORDER
-  async function acceptOrder(orderId) {
+  // 🔹 ACCEPT ORDER (Updated to send razorpayOrderId)
+  async function acceptOrder(orderId, razorpayOrderId) {
     try {
       const res = await axios.post("/api/orders/accept", {
         orderId,
         rest,
+        razorpayOrderId, // 👈 Sending the ID here
       });
 
       if (res.data.success) {
@@ -114,7 +115,7 @@ export default function OrdersList() {
     }
   }
 
-  // REJECT ORDER
+  // 🔹 REJECT ORDER
   async function rejectOrder(orderId) {
     try {
       const res = await axios.post("/api/orders/reject", { orderId });
@@ -132,9 +133,9 @@ export default function OrdersList() {
   }
 
   const removeOrder = (orderId) => {
-    setOrders(prev => prev.filter(o => o._id !== orderId));
+    setOrders((prev) => prev.filter((o) => o._id !== orderId));
     prevOrdersRef.current = prevOrdersRef.current.filter(
-      o => o._id !== orderId
+      (o) => o._id !== orderId
     );
   };
 
@@ -183,7 +184,8 @@ export default function OrdersList() {
 
       <Link href="/AcceptedOrdersList">Accepted Orders</Link>
 
-      <br /><br />
+      <br />
+      <br />
 
       {!audioEnabled && (
         <button
@@ -206,7 +208,7 @@ export default function OrdersList() {
         <p>No orders found.</p>
       ) : (
         <ul style={{ listStyle: "none", padding: 0 }}>
-          {orders.map(order => (
+          {orders.map((order) => (
             <li
               key={order._id}
               style={{
@@ -227,16 +229,34 @@ export default function OrdersList() {
               </ul>
 
               {/* Schema details */}
-              <p><strong>User ID:</strong> {order.userId}</p>
-              <p><strong>Total Count:</strong> {order.totalCount}</p>
-              <p><strong>Total Price:</strong> ₹{order.totalPrice}</p>
-              <p><strong>Restaurant ID:</strong> {order.restaurantId}</p>
-              <p><strong>Order Date:</strong> {new Date(order.orderDate).toLocaleString()}</p>
-              <p><strong>Order ID:</strong> {order.orderId}</p>
+              <p>
+                <strong>User ID:</strong> {order.userId}
+              </p>
+              <p>
+                <strong>Total Count:</strong> {order.totalCount}
+              </p>
+              <p>
+                <strong>Total Price:</strong> ₹{order.totalPrice}
+              </p>
+              <p>
+                <strong>Restaurant ID:</strong> {order.restaurantId}
+              </p>
+              <p>
+                <strong>Order Date:</strong>{" "}
+                {new Date(order.orderDate).toLocaleString()}
+              </p>
+              <p>
+                <strong>Order ID:</strong> {order.orderId}
+              </p>
+              <p>
+                {/* Displaying Payment ID for debugging purposes */}
+                <strong>Payment ID:</strong> {order.razorpayOrderId}
+              </p>
 
               {/* Action buttons */}
               <button
-                onClick={() => acceptOrder(order._id)}
+                // 👈 PASSING BOTH IDs HERE
+                onClick={() => acceptOrder(order._id, order.razorpayOrderId)}
                 style={{
                   padding: "6px 12px",
                   backgroundColor: "#4CAF50",
