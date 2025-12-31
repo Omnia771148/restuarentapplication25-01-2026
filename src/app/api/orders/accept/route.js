@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import mongoose from "mongoose"; // ✅ ONLY NEW IMPORT
 import connectionToDatabase from "../../../../../lib/mongoose";
 import Order from "../../../../../models/Order";
 import AcceptedOrder from "../../../../../models/AcceptedOrder";
@@ -11,39 +12,62 @@ export async function POST(request) {
     const { orderId: mongoId, rest, razorpayOrderId } = await request.json();
 
     if (!mongoId) {
-      return NextResponse.json({ success: false, message: "ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: "ID is required" },
+        { status: 400 }
+      );
     }
 
     // 2. Find the order in the pending collection
     const order = await Order.findById(mongoId);
     if (!order) {
-      return NextResponse.json({ success: false, message: "Order not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: "Order not found" },
+        { status: 404 }
+      );
     }
 
     const orderData = order.toObject();
 
-    // 3. Prepare the new entry
+    // 3. Prepare the new entry (UNCHANGED)
     const newEntryData = {
-      ...orderData,       // Copies existing data (items, price, etc.)
-      rest: rest,         // Adds restaurant location
-      // Ensure razorpayOrderId is included. 
-      // We take it from the request if sent, otherwise fallback to what's in the DB.
-      razorpayOrderId: razorpayOrderId || orderData.razorpayOrderId 
+      ...orderData,
+      rest: rest,
+      razorpayOrderId: razorpayOrderId || orderData.razorpayOrderId,
     };
 
-    // 4. Remove the old database _id so a new unique one is created for the Accepted collection
+    // 4. Remove the old database _id so a new unique one is created
     delete newEntryData._id;
     delete newEntryData.__v;
 
-    // 5. Create in Accepted collection
+    // 5. Create in Accepted collection (UNCHANGED)
     await AcceptedOrder.create(newEntryData);
 
-    // 6. Delete from old collection
+    // 6. Delete from old collection (UNCHANGED)
     await Order.findByIdAndDelete(mongoId);
 
-    return NextResponse.json({ success: true, message: "Order accepted and moved" });
+    // ✅ 7. NEW FUNCTIONALITY (ONLY ADDITION)
+    await mongoose.connection.collection("orderstatuses").updateOne(
+      {
+        orderId: orderData.orderId, // ORD-xxxx
+        status: "Pending",
+      },
+      {
+        $set: {
+          status: "Waiting for delivery boy to accept",
+        },
+      }
+    );
+
+    return NextResponse.json({
+      success: true,
+      message: "Order accepted and status updated",
+    });
   } catch (err) {
     console.error("❌ Accept order error:", err);
-    return NextResponse.json({ success: false, message: err.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: err.message },
+      { status: 500 }
+    );
   }
 }

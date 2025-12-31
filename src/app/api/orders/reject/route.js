@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import mongoose from "mongoose"; // ✅ NEW (only addition)
 import connectionToDatabase from "../../../../../lib/mongoose";
 import Order from "../../../../../models/Order";
 import RejectedOrder from "../../../../../models/RejectedOrder";
@@ -17,7 +18,7 @@ export async function POST(req) {
       });
     }
 
-    // Save exact same structure
+    // Save exact same structure (UNCHANGED)
     await RejectedOrder.create({
       userId: order.userId,
       items: order.items,
@@ -30,8 +31,18 @@ export async function POST(req) {
       status: "rejected"
     });
 
-    // Remove from active orders
+    // Remove from active orders (UNCHANGED)
     await Order.findByIdAndDelete(orderId);
+
+    // ✅ NEW: Update OrderStatus collection
+    await mongoose.connection.collection("orderstatuses").updateOne(
+      { orderId: order.orderId },
+      {
+        $set: {
+          status: "Rejected by restaurant"
+        }
+      }
+    );
 
     return NextResponse.json({ success: true });
   } catch (err) {
