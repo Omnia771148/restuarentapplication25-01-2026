@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Loading from "./loading/page"
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [restId, setRestId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   // ✅ CHECK SESSION + AUTO REDIRECT
@@ -34,6 +36,7 @@ export default function Home() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       // Call your MongoDB API
@@ -56,27 +59,18 @@ export default function Home() {
         router.push("/orders");
       } else {
         alert(data.message || "Invalid login");
+        setIsSubmitting(false);
       }
     } catch (error) {
       console.error('Login error:', error);
       alert("Login failed. Please try again.");
+      setIsSubmitting(false);
     }
   };
 
   // 🔄 SHOW LOADING WHILE CHECKING SESSION
-  if (loading) {
-    return (
-      <div style={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "18px",
-        fontWeight: "bold"
-      }}>
-        Checking login status...
-      </div>
-    );
+  if (loading || isSubmitting) {
+    return <Loading />;
   }
 
   return (
