@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import Link from "next/link";
+// Import your custom loading component
+import Loading from "../loading/page";
 
 export default function OrdersList() {
   const [orders, setOrders] = useState([]);
@@ -20,9 +22,16 @@ export default function OrdersList() {
   // Enable audio notification
   const enableAudio = () => {
     setAudioEnabled(true);
+    localStorage.setItem("audioEnabled", "true");
     const audio = new Audio("/noti.mp3");
-    audio.play().catch(() => {});
+    audio.play().catch(() => { });
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("audioEnabled") === "true") {
+      setAudioEnabled(true);
+    }
+  }, []);
 
   useEffect(() => {
     const restaurantId = localStorage.getItem("restid");
@@ -62,9 +71,9 @@ export default function OrdersList() {
 
           const hasNewOrder = newIds.some((id) => !prevIds.includes(id));
 
-          if (hasNewOrder && audioEnabled) {
+          if (hasNewOrder && audioEnabled && isActive) {
             const audio = new Audio("/noti.mp3");
-            audio.play().catch(() => {});
+            audio.play().catch(() => { });
           }
 
           setOrders(newOrders);
@@ -96,6 +105,26 @@ export default function OrdersList() {
 
   // 🔹 ACCEPT ORDER (Updated to send razorpayOrderId)
   async function acceptOrder(orderId, razorpayOrderId) {
+    setLoading(true); // Start loading
+
+    // 🟢 BACKUP TO LOCAL STORAGE IMMEDIATELY
+    // This ensures that even if you delete from MongoDB immediately after, 
+    // it is already saved in the restaurant's local browser.
+    const orderToAccept = orders.find((o) => o._id === orderId);
+    if (orderToAccept) {
+      const restId = localStorage.getItem("restid");
+      const lsKey = `acceptedOrders_${restId}`;
+      const existing = JSON.parse(localStorage.getItem(lsKey)) || [];
+
+      // Avoid duplicates based on the unique 'orderId'
+      if (!existing.some((o) => o.orderId === orderToAccept.orderId)) {
+        // Save it!
+        const entry = { ...orderToAccept, razorpayOrderId };
+        existing.push(entry);
+        localStorage.setItem(lsKey, JSON.stringify(existing));
+      }
+    }
+
     try {
       const res = await axios.post("/api/orders/accept", {
         orderId,
@@ -112,11 +141,14 @@ export default function OrdersList() {
     } catch (err) {
       console.error("Accept error:", err);
       alert("Error accepting order");
+    } finally {
+      setLoading(false); // Stop loading
     }
   }
 
   // 🔹 REJECT ORDER
   async function rejectOrder(orderId) {
+    setLoading(true); // Start loading
     try {
       const res = await axios.post("/api/orders/reject", { orderId });
 
@@ -129,6 +161,8 @@ export default function OrdersList() {
     } catch (err) {
       console.error("Reject error:", err);
       alert("Error rejecting order");
+    } finally {
+      setLoading(false); // Stop loading
     }
   }
 
@@ -139,7 +173,8 @@ export default function OrdersList() {
     );
   };
 
-  if (loading) return <p>Loading...</p>;
+  // Replace text loading with your custom component
+  if (loading) return <Loading />;
 
   return (
     <div style={{ padding: "20px" }}>
@@ -238,9 +273,7 @@ export default function OrdersList() {
               <p>
                 <strong>Total Price:</strong> ₹{order.totalPrice}
               </p>
-              <p>
-                <strong>Restaurant ID:</strong> {order.restaurantId}
-              </p>
+
               <p>
                 <strong>Order Date:</strong>{" "}
                 {new Date(order.orderDate).toLocaleString()}
@@ -248,10 +281,7 @@ export default function OrdersList() {
               <p>
                 <strong>Order ID:</strong> {order.orderId}
               </p>
-              <p>
-                {/* Displaying Payment ID for debugging purposes */}
-                <strong>Payment ID:</strong> {order.razorpayOrderId}
-              </p>
+
 
               {/* Action buttons */}
               <button
@@ -279,7 +309,7 @@ export default function OrdersList() {
                   borderRadius: "6px",
                 }}
               >
-             
+                Reject
               </button>
             </li>
           ))}

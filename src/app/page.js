@@ -2,39 +2,43 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Loading from "./loading/page";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [restId, setRestId] = useState(null);
-  const [loading, setLoading] = useState(true); // ✅ NEW
+  const [loading, setLoading] = useState(true); 
   const router = useRouter();
 
   // ✅ CHECK SESSION + AUTO REDIRECT
-  useEffect(() => {
-    const loginTime = localStorage.getItem("loginTime");
-    const storedRestId = localStorage.getItem("restid");
+ useEffect(() => {
+  const loginTime = localStorage.getItem("loginTime");
+  const storedRestId = localStorage.getItem("restid");
 
-    if (loginTime && storedRestId) {
-      const now = Date.now();
-      const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+  if (loginTime && storedRestId) {
+    const now = Date.now();
+    
+    // Change this to 6 to ensure they are logged out ON the 7th day
+    const SIX_DAYS = 6 * 24 * 60 * 60 * 1000; 
 
-      if (now - Number(loginTime) < SEVEN_DAYS) {
-        router.push("/orders");
-        return;
-      } else {
-        localStorage.clear();
-        alert("Session expired. Please login again.");
-      }
+    if (now - Number(loginTime) < SIX_DAYS) {
+      router.push("/orders");
+      return;
+    } else {
+      localStorage.clear();
+      alert("Session expired. Please login again.");
+      // No router.push here needed if you are already on the Home/Login page
     }
-
-    // ✅ Done checking
+  }
+ 
     setLoading(false);
   }, [router]);
 
   const handleLogin = (e) => {
     e.preventDefault();
 
+    // loginTime is ONLY set here, so it will NOT be extended when they revisit the site
     if (email === "kushas" && password === "1234") {
       localStorage.setItem("restid", "1");
       localStorage.setItem("restlocation", "https://maps.app.goo.gl/EaQzfEaVe1r1c6s18");
@@ -75,19 +79,9 @@ export default function Home() {
     }
   };
 
-  // 🔄 SHOW LOADING WHILE CHECKING SESSION
   if (loading) {
     return (
-      <div style={{
-        height: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: "18px",
-        fontWeight: "bold"
-      }}>
-        Checking login status...
-      </div>
+      <Loading />
     );
   }
 

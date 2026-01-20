@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
+import Loading from "../../loading/page";
 
 export default function InvoicePage() {
   const { id } = useParams();
@@ -25,7 +26,8 @@ export default function InvoicePage() {
     fetchInvoice();
   }, [id]);
 
-  if (!order) return <p>Loading invoice...</p>;
+  // Use your pizza loading component here
+  if (!order) return <Loading />;
 
   return (
     <div style={{ width: "300px", fontFamily: "monospace" }}>

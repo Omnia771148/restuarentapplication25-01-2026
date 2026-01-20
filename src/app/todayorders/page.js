@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+// Import the custom pizza loading component
+import Loading from "../../loading/page"; 
 
 export default function OrderHistory() {
   const [orders, setOrders] = useState([]);
@@ -30,7 +32,8 @@ export default function OrderHistory() {
     fetchHistory();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  // Updated to return your custom pizza loading page
+  if (loading) return <Loading />;
 
   return (
     <div style={{ padding: "20px" }}>

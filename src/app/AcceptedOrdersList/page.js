@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+// Import the Loading component (ensure the path matches where you saved the pizza code)
+import Loading from '../loading/page';
 
 export default function AcceptedOrdersList() {
   const [orders, setOrders] = useState([]);
@@ -24,11 +26,33 @@ export default function AcceptedOrdersList() {
         );
 
         if (res.data.success) {
-          setOrders(res.data.orders);
+          const apiOrders = res.data.orders;
+
+          // Get locally saved accepted orders
+          const localOrders = JSON.parse(localStorage.getItem(`acceptedOrders_${restaurantId}`)) || [];
+
+          // Merge API orders with Local orders (avoid duplicates by Order ID)
+          const orderMap = new Map();
+
+          // Prioritize local orders (in case they were deleted from DB but exist locally)
+          localOrders.forEach(o => orderMap.set(o.orderId, o));
+          apiOrders.forEach(o => orderMap.set(o.orderId, o));
+
+          const mergedOrders = Array.from(orderMap.values());
+
+          // Sort by date (newest first)
+          mergedOrders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+
+          // Save back to local storage
+          localStorage.setItem(`acceptedOrders_${restaurantId}`, JSON.stringify(mergedOrders));
+
+          setOrders(mergedOrders);
         }
       } catch (err) {
         console.error(err);
-        alert("Failed to fetch orders");
+        // If API fails, load from local storage
+        const localOrders = JSON.parse(localStorage.getItem(`acceptedOrders_${restaurantId}`)) || [];
+        setOrders(localOrders);
       } finally {
         setLoading(false);
       }
@@ -37,7 +61,8 @@ export default function AcceptedOrdersList() {
     fetchOrders();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  // Use the pizza loading page instead of the plain text
+  if (loading) return <Loading />;
 
   return (
     <div style={{ padding: "20px" }}>
@@ -57,6 +82,7 @@ export default function AcceptedOrdersList() {
             }}
           >
             <p><strong>Order ID:</strong> {order.orderId}</p>
+            <p><strong>Order Date:</strong> {new Date(order.orderDate).toLocaleString()}</p>
             <p><strong>Total:</strong> ₹{order.totalPrice}</p>
 
             <ul>

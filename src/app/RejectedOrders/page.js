@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+// Import the custom pizza loading component
+import Loading from "../loading/page"; 
 
 export default function RejectedOrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -24,7 +26,9 @@ export default function RejectedOrdersPage() {
     fetchRejectedOrders();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  // Updated to use the pizza loading component
+  if (loading) return <Loading />;
+  
   if (orders.length === 0) return <p>No rejected orders found.</p>;
 
   return (
@@ -41,8 +45,6 @@ export default function RejectedOrdersPage() {
           }}
         >
           <p><strong>Order ID:</strong> {order.orderId}</p>
-          <p><strong>User ID:</strong> {order.userId}</p>
-          <p><strong>Restaurant:</strong> {order.rest || order.restaurantId}</p>
           <p><strong>Total Items:</strong> {order.totalCount}</p>
           <p><strong>Total Price:</strong> ₹{order.totalPrice}</p>
           <p><strong>Order Date:</strong> {new Date(order.orderDate).toLocaleString()}</p>
