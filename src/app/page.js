@@ -8,7 +8,7 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [restId, setRestId] = useState(null);
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true); // ✅ NEW
   const router = useRouter();
 
   // ✅ CHECK SESSION + AUTO REDIRECT
@@ -35,10 +35,9 @@ export default function Home() {
     setLoading(false);
   }, [router]);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    // loginTime is ONLY set here, so it will NOT be extended when they revisit the site
     if (email === "kushas" && password === "1234") {
       localStorage.setItem("restid", "1");
       localStorage.setItem("restlocation", "https://maps.app.goo.gl/EaQzfEaVe1r1c6s18");

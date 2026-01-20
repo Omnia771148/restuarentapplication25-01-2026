@@ -1,7 +1,17 @@
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 import connectionToDatabase from "../../../../../lib/mongoose";
 import Order from "../../../../../models/Order";
 import AcceptedOrder from "../../../../../models/AcceptedOrder";
+
+// ✅ NEW: lightweight model for orderstatuses
+const OrderStatus =
+  mongoose.models.OrderStatus ||
+  mongoose.model(
+    "OrderStatus",
+    new mongoose.Schema({}, { strict: false }), // allow any fields
+    "orderstatuses" // force collection name
+  );
 
 export async function POST(request) {
   await connectionToDatabase();
@@ -11,39 +21,61 @@ export async function POST(request) {
     const { orderId: mongoId, rest, razorpayOrderId } = await request.json();
 
     if (!mongoId) {
-      return NextResponse.json({ success: false, message: "ID is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: "ID is required" },
+        { status: 400 }
+      );
     }
 
     // 2. Find the order in the pending collection
     const order = await Order.findById(mongoId);
     if (!order) {
-      return NextResponse.json({ success: false, message: "Order not found" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: "Order not found" },
+        { status: 404 }
+      );
     }
 
     const orderData = order.toObject();
 
     // 3. Prepare the new entry
     const newEntryData = {
-      ...orderData,       // Copies existing data (items, price, etc.)
-      rest: rest,         // Adds restaurant location
-      // Ensure razorpayOrderId is included. 
-      // We take it from the request if sent, otherwise fallback to what's in the DB.
-      razorpayOrderId: razorpayOrderId || orderData.razorpayOrderId 
+      ...orderData,
+      rest: rest,
+      razorpayOrderId: razorpayOrderId || orderData.razorpayOrderId,
     };
 
-    // 4. Remove the old database _id so a new unique one is created for the Accepted collection
+    // 4. Remove the old database _id so a new unique one is created
     delete newEntryData._id;
     delete newEntryData.__v;
 
-    // 5. Create in Accepted collection
-    await AcceptedOrder.create(newEntryData);
+    // 5. ✅ Upsert into Accepted collection (avoids duplicate key error)
+    await AcceptedOrder.updateOne(
+      { orderId: orderData.orderId }, // match by orderId
+      { $set: newEntryData },
+      { upsert: true }
+    );
 
     // 6. Delete from old collection
     await Order.findByIdAndDelete(mongoId);
 
-    return NextResponse.json({ success: true, message: "Order accepted and moved" });
+    // 7. Update status in orderstatuses collection
+    const result = await OrderStatus.updateOne(
+      { orderId: orderData.orderId, status: "Pending" },
+      { $set: { status: "Waiting for delivery boy to accept" } }
+    );
+
+    console.log("OrderStatus update result:", result);
+
+    return NextResponse.json({
+      success: true,
+      message: "Order accepted and status updated",
+    });
   } catch (err) {
     console.error("❌ Accept order error:", err);
-    return NextResponse.json({ success: false, message: err.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: err.message },
+      { status: 500 }
+    );
   }
 }
