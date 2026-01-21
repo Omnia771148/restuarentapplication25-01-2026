@@ -24,6 +24,8 @@ const acceptedOrderSchema = new mongoose.Schema({
   userEmail: String,
   userPhone: String,
 
+  deliveryAddress: Object,
+
   razorpayOrderId: String,
   razorpayPaymentId: String,
   paymentStatus: String,

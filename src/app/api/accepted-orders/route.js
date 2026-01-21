@@ -30,6 +30,8 @@ export async function GET(request) {
       userName: order.userName,
       userEmail: order.userEmail,
       userPhone: order.userPhone,
+      deliveryAddress: order.deliveryAddress,
+
       items: Array.isArray(order.items) ? order.items : []
     }));
 

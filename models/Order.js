@@ -16,12 +16,14 @@ const orderSchema = new mongoose.Schema({
   totalPrice: { type: Number, required: true },
   restaurantId: { type: String, required: true },
   orderDate: { type: Date, default: Date.now },
-  orderId: { 
-    type: String, 
-    required: true, 
-    unique: true 
+  deliveryAddress: Object,
+
+  orderId: {
+    type: String,
+    required: true,
+    unique: true
   },
-  
+
 });
 
 const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
