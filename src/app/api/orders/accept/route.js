@@ -28,7 +28,14 @@ export async function POST(request) {
     }
 
     // 2. Find the order in the pending collection
-    const order = await Order.findById(mongoId);
+    // Ensure User model is registered for populate to work
+    if (!mongoose.models.User) {
+      mongoose.model("User", new mongoose.Schema({}, { strict: false }));
+    }
+
+    // Populate userId to get customer details
+    const order = await Order.findById(mongoId).populate("userId");
+
     if (!order) {
       return NextResponse.json(
         { success: false, message: "Order not found" },
@@ -38,9 +45,28 @@ export async function POST(request) {
 
     const orderData = order.toObject();
 
+    // Extract user details safely
+    let userDetails = {
+      userName: "Unknown",
+      userEmail: "Unknown",
+      userPhone: "Unknown"
+    };
+
+    if (order.userId && typeof order.userId === 'object') {
+      const u = order.userId;
+      userDetails = {
+        userName: u.name || u.userName || "Unknown",
+        userEmail: u.email || "Unknown",
+        userPhone: u.phone || u.phoneNumber || u.mobile || "Unknown"
+      };
+      // Restore userId to ID string for the AcceptedOrder record
+      orderData.userId = u._id;
+    }
+
     // 3. Prepare the new entry
     const newEntryData = {
       ...orderData,
+      ...userDetails,
       rest: rest,
       razorpayOrderId: razorpayOrderId || orderData.razorpayOrderId,
     };

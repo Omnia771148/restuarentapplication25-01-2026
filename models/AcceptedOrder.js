@@ -20,6 +20,10 @@ const acceptedOrderSchema = new mongoose.Schema({
   deliveryCharge: Number,
   grandTotal: Number,
 
+  userName: String,
+  userEmail: String,
+  userPhone: String,
+
   razorpayOrderId: String,
   razorpayPaymentId: String,
   paymentStatus: String,

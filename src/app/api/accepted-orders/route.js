@@ -27,6 +27,9 @@ export async function GET(request) {
       totalCount: order.totalCount,
       totalPrice: order.totalPrice,
       orderId: order.orderId,
+      userName: order.userName,
+      userEmail: order.userEmail,
+      userPhone: order.userPhone,
       items: Array.isArray(order.items) ? order.items : []
     }));
 
