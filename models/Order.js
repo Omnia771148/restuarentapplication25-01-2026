@@ -17,6 +17,8 @@ const orderSchema = new mongoose.Schema({
   restaurantId: { type: String, required: true },
   orderDate: { type: Date, default: Date.now },
   deliveryAddress: Object,
+  mapUrl: String,
+  distanceText: String,
 
   orderId: {
     type: String,
