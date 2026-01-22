@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 // Import the custom pizza loading component
-import Loading from "../../loading/page"; 
+import Loading from "../loading/page";
 
 export default function OrderHistory() {
   const [orders, setOrders] = useState([]);

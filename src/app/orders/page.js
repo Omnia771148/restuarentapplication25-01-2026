@@ -5,12 +5,14 @@ import axios from "axios";
 import Link from "next/link";
 // Import your custom loading component
 import Loading from "../loading/page";
+import useFcmToken from "@/hooks/useFcmToken"; // Import the hook
 
 export default function OrdersList() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const { token, notificationPermissionStatus } = useFcmToken(); // Use the hook
 
   const rest =
     typeof window !== "undefined"
@@ -235,7 +237,7 @@ export default function OrdersList() {
             cursor: "pointer",
           }}
         >
-          Enable Notifications 🔔
+          Enable Sound 🔔
         </button>
       )}
 

@@ -24,6 +24,9 @@ const RegisterUserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    fcmToken: {
+      type: String, // Store the FCM token for notifications
+    },
   },
   { timestamps: true }
 );
