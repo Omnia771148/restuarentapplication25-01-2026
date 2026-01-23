@@ -1,6 +1,7 @@
 
 import { NextResponse } from "next/server";
-import mongoose from "mongoose";
+import connectionToDatabase from "../../../../lib/mongoose";
+import RestuarentUser from "../../../../models/RegisterUser";
 
 export async function POST(req) {
     try {
