@@ -1,11 +1,14 @@
 
 import { NextResponse } from "next/server";
-import { admin } from "../../../../lib/firebaseAdmin";
+import { admin, initFirebaseAdmin } from "../../../../lib/firebaseAdmin";
 import RestuarentUser from "../../../../models/RegisterUser";
 import connectionToDatabase from "../../../../lib/mongoose";
 
 export async function POST(req) {
     try {
+        // Ensure Firebase message is initialized
+        initFirebaseAdmin();
+
         await connectionToDatabase();
         const { restaurantId, title, body } = await req.json();
 
