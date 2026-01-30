@@ -13,7 +13,7 @@ export default function OrdersList() {
   const [loading, setLoading] = useState(true);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  const [hasMobileApp, setHasMobileApp] = useState(false); // 👈 New state
+  const [hasMobileApp, setHasMobileApp] = useState(false); // 👈 Controls button visibility
   const { token, notificationPermissionStatus } = useFcmToken(); // Use the hook
   const router = useRouter(); // Initialize router
 
@@ -34,6 +34,9 @@ export default function OrdersList() {
 
   // 🔹 Logout Function
   const handleLogout = () => {
+    const id = localStorage.getItem("restid");
+    if (id) localStorage.removeItem(`mobileConnected_${id}`); // Clear flag so it shows again next time
+
     localStorage.removeItem("restid");
     localStorage.removeItem("restlocation");
     localStorage.removeItem("loginTime");
@@ -43,6 +46,14 @@ export default function OrdersList() {
   useEffect(() => {
     if (localStorage.getItem("audioEnabled") === "true") {
       setAudioEnabled(true);
+    }
+
+    // Check if we already connected in this session
+    const id = localStorage.getItem("restid");
+    if (id && localStorage.getItem(`mobileConnected_${id}`) === "true") {
+      setHasMobileApp(true);
+    } else {
+      setHasMobileApp(false);
     }
   }, []);
 
@@ -65,7 +76,7 @@ export default function OrdersList() {
         );
         if (res.data.success) {
           setIsActive(res.data.isActive);
-          setHasMobileApp(res.data.hasMobileApp); // 👈 Update state from API
+          // Always show button now
         }
       } catch (err) {
         console.error("Status fetch error", err);
@@ -211,7 +222,7 @@ export default function OrdersList() {
         </button>
       </div>
 
-      {/* 🔹 DEEP LINK BUTTON (Only show if NOT connected) */}
+      {/* 🔹 DEEP LINK BUTTON (Shows if not yet connected in this session) */}
       {!hasMobileApp && (
         <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#e3f2fd', borderRadius: '8px', border: '1px solid #2196f3' }}>
           <h3>📱 Setup Mobile Notifications</h3>
@@ -221,8 +232,9 @@ export default function OrdersList() {
               const id = localStorage.getItem("restid");
               if (id) {
                 window.location.href = `restaurantapp://register?id=${id}`;
-                // Optimistically hide it after click, or wait for refresh
-                // setTimeout(() => setHasMobileApp(true), 1000); 
+                // Mark as connected in local storage so it hides for this session
+                localStorage.setItem(`mobileConnected_${id}`, "true");
+                setHasMobileApp(true);
               } else {
                 alert("Please log in first");
               }
