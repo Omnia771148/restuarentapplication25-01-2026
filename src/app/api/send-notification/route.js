@@ -1,14 +1,10 @@
-
 import { NextResponse } from "next/server";
-import { admin, initFirebaseAdmin } from "../../../../lib/firebaseAdmin";
 import RestuarentUser from "../../../../models/RegisterUser";
 import connectionToDatabase from "../../../../lib/mongoose";
+import { initFirebaseAdmin } from "../../../../lib/firebaseAdmin";
 
 export async function POST(req) {
     try {
-        // Ensure Firebase message is initialized
-        initFirebaseAdmin();
-
         await connectionToDatabase();
         const { restaurantId, title, body } = await req.json();
 
@@ -19,47 +15,77 @@ export async function POST(req) {
         // Find the restaurant user with this restId
         const user = await RestuarentUser.findOne({ restId: restaurantId });
 
-        if (!user || !user.fcmToken) {
-            console.log(`No FCM token found for restaurant: ${restaurantId}`);
-            // Not finding a token isn't strictly/always an error if they just haven't logged in yet, 
-            // but we can't send a notification.
-            return NextResponse.json({ success: false, message: "No FCM token registered for this restaurant" }, { status: 404 });
+        if (!user) {
+            return NextResponse.json({ success: false, message: "Restaurant not found" }, { status: 404 });
         }
 
-        const message = {
-            notification: {
-                title: title || "New Order Received!",
-                body: body || "You have a new order waiting.",
-            },
-            token: user.fcmToken,
-            // Android specific options for high priority to wake up device
-            android: {
-                priority: 'high',
+        const tokens = [];
+        if (user.fcmToken) tokens.push({ token: user.fcmToken, type: 'web' });
+        if (user.mobileFcmToken) tokens.push({ token: user.mobileFcmToken, type: 'mobile' });
+
+        if (tokens.length === 0) {
+            console.log(`No FCM Token found for restaurant: ${restaurantId}`);
+            return NextResponse.json({ success: false, message: "No FCM Token registered for this restaurant" }, { status: 404 });
+        }
+
+        const admin = initFirebaseAdmin();
+        const results = await Promise.all(tokens.map(async ({ token, type }) => {
+            const message = {
+                token: token,
                 notification: {
-                    channelId: 'default',
-                    priority: 'high',
-                    defaultSound: true,
-                    defaultVibrateTimings: true
-                }
-            },
-            // Webpush options
-            webpush: {
-                headers: {
-                    Urgency: 'high'
+                    title: title || "New Order Received!",
+                    body: body || "You have a new order waiting."
                 },
-                notification: {
-                    icon: '/icons/icon-192x192.png',
-                    requireInteraction: true // Keeps notification until user interacts
+                data: {
+                    url: 'https://restuarentapplication25-01-2026.vercel.app/orders', // Full URL for RN app to open
+                    click_action: '/orders' // For Web legacy
+                },
+                android: {
+                    priority: 'high',
+                    notification: {
+                        sound: 'default',
+                        clickAction: 'FLUTTER_NOTIFICATION_CLICK', // Often used defaults, but RN handles data payload usually
+                        channelId: 'default',
+                    },
+                },
+                webpush: {
+                    headers: {
+                        Urgency: "high"
+                    },
+                    notification: {
+                        icon: '/icons/icon-192x192.png',
+                        requireInteraction: true
+                    },
+                    fcmOptions: {
+                        link: '/orders'
+                    }
                 }
+            };
+
+            try {
+                await admin.messaging().send(message);
+                return { success: true, token };
+            } catch (error) {
+                console.error(`Error sending to ${type} token:`, error);
+                if (error.code === 'messaging/registration-token-not-registered') {
+                    const updateQuery = type === 'web' ? { $unset: { fcmToken: "" } } : { $unset: { mobileFcmToken: "" } };
+                    await RestuarentUser.updateOne({ restId: restaurantId }, updateQuery);
+                }
+                return { success: false, error: error.message };
             }
-        };
+        }));
 
-        const response = await admin.messaging().send(message);
-        console.log("Successfully sent message:", response);
+        const successCount = results.filter(r => r.success).length;
+        console.log(`Sent notifications to ${successCount} devices for restaurant ${restaurantId}`);
 
-        return NextResponse.json({ success: true, message: "Notification sent", response });
+        return NextResponse.json({
+            success: true,
+            message: `FCM Notification sent to ${successCount} devices`,
+            details: results
+        });
+
     } catch (error) {
-        console.error("Error sending notification:", error);
-        return NextResponse.json({ success: false, message: "Error sending notification", error: error.message }, { status: 500 });
+        console.error("Error in notification endpoint:", error);
+        return NextResponse.json({ success: false, message: "Internal Server Error", error: error.message }, { status: 500 });
     }
 }

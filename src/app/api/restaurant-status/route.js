@@ -14,11 +14,16 @@ export async function GET(req) {
 
   let status = await RestaurantStatus.findOne({ restaurantId });
 
+  // Check if mobile app is connected (by checking RegisterUser model)
+  const RestuarentUser = (await import("../../../../models/RegisterUser")).default;
+  const user = await RestuarentUser.findOne({ restId: restaurantId });
+  const hasMobileApp = !!user?.mobileFcmToken;
+
   if (!status) {
     status = await RestaurantStatus.create({ restaurantId });
   }
 
-  return NextResponse.json({ success: true, isActive: status.isActive });
+  return NextResponse.json({ success: true, isActive: status.isActive, hasMobileApp });
 }
 
 export async function PATCH(req) {

@@ -6,7 +6,7 @@ import RestuarentUser from "../../../../models/RegisterUser";
 export async function POST(req) {
     try {
         await connectionToDatabase();
-        const { restId, token } = await req.json();
+        const { restId, token, platform } = await req.json();
 
         if (!restId || !token) {
             return NextResponse.json(
@@ -15,10 +15,12 @@ export async function POST(req) {
             );
         }
 
+        const updateField = platform === 'mobile' ? { mobileFcmToken: token } : { fcmToken: token };
+
         // Find the user by restId and update the fcmToken
         const updatedUser = await RestuarentUser.findOneAndUpdate(
             { restId: restId },
-            { $set: { fcmToken: token } },
+            { $set: updateField },
             { new: true }
         );
 

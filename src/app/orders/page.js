@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation"; // Import useRouter
 import Link from "next/link";
 // Import your custom loading component
 import Loading from "../loading/page";
@@ -12,7 +13,9 @@ export default function OrdersList() {
   const [loading, setLoading] = useState(true);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [hasMobileApp, setHasMobileApp] = useState(false); // 👈 New state
   const { token, notificationPermissionStatus } = useFcmToken(); // Use the hook
+  const router = useRouter(); // Initialize router
 
   const rest =
     typeof window !== "undefined"
@@ -29,6 +32,14 @@ export default function OrdersList() {
     audio.play().catch(() => { });
   };
 
+  // 🔹 Logout Function
+  const handleLogout = () => {
+    localStorage.removeItem("restid");
+    localStorage.removeItem("restlocation");
+    localStorage.removeItem("loginTime");
+    router.push("/"); // Redirect to login page
+  };
+
   useEffect(() => {
     if (localStorage.getItem("audioEnabled") === "true") {
       setAudioEnabled(true);
@@ -39,6 +50,8 @@ export default function OrdersList() {
     const restaurantId = localStorage.getItem("restid");
 
     if (!restaurantId) {
+      // If we are already checking for ID and alerting, we might want to just redirect here too if it fails, 
+      // but let's leave the existing logic as is, just ensuring logout works manually.
       alert("No Restaurant ID found");
       setLoading(false);
       return;
@@ -52,6 +65,7 @@ export default function OrdersList() {
         );
         if (res.data.success) {
           setIsActive(res.data.isActive);
+          setHasMobileApp(res.data.hasMobileApp); // 👈 Update state from API
         }
       } catch (err) {
         console.error("Status fetch error", err);
@@ -180,7 +194,54 @@ export default function OrdersList() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>🧾 Orders for Your Restaurant</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h2>🧾 Orders for Your Restaurant</h2>
+        <button
+          onClick={handleLogout}
+          style={{
+            backgroundColor: "#ff4444",
+            color: "white",
+            padding: "8px 16px",
+            borderRadius: "6px",
+            border: "none",
+            cursor: "pointer"
+          }}
+        >
+          Logout
+        </button>
+      </div>
+
+      {/* 🔹 DEEP LINK BUTTON (Only show if NOT connected) */}
+      {!hasMobileApp && (
+        <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#e3f2fd', borderRadius: '8px', border: '1px solid #2196f3' }}>
+          <h3>📱 Setup Mobile Notifications</h3>
+          <p>Click below to connect your installed Android App automatically.</p>
+          <button
+            onClick={() => {
+              const id = localStorage.getItem("restid");
+              if (id) {
+                window.location.href = `restaurantapp://register?id=${id}`;
+                // Optimistically hide it after click, or wait for refresh
+                // setTimeout(() => setHasMobileApp(true), 1000); 
+              } else {
+                alert("Please log in first");
+              }
+            }}
+            style={{
+              backgroundColor: "#2196f3", // Blue
+              color: "white",
+              padding: "10px 20px",
+              borderRadius: "6px",
+              border: "none",
+              cursor: "pointer",
+              fontWeight: 'bold'
+            }}
+          >
+            Connect Mobile App 🚀
+          </button>
+        </div>
+      )}
+
 
       {/* 🔥 ACTIVE / INACTIVE BUTTONS */}
       <div style={{ marginBottom: "15px" }}>
@@ -219,7 +280,8 @@ export default function OrdersList() {
         </button>
       </div>
 
-      <Link href="/AcceptedOrdersList">Accepted Orders</Link>
+      <Link href="/AcceptedOrdersList">Live</Link><br></br>
+      <Link href="/accepted-restaurants-orders">Order History</Link>
 
       <br />
       <br />
