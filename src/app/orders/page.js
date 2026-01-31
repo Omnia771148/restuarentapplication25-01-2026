@@ -8,6 +8,7 @@ import Link from "next/link";
 import Loading from "../loading/page";
 import useFcmToken from "@/hooks/useFcmToken"; // Import the hook
 
+
 export default function OrdersList() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -23,6 +24,12 @@ export default function OrdersList() {
       : null;
 
   const prevOrdersRef = useRef([]);
+  const activeRef = useRef(false); // 1. Ref to track active status for interval
+
+  // 2. Sync ref with state
+  useEffect(() => {
+    activeRef.current = isActive;
+  }, [isActive]);
 
   // Enable audio notification
   const enableAudio = () => {
@@ -98,7 +105,8 @@ export default function OrdersList() {
 
           const hasNewOrder = newIds.some((id) => !prevIds.includes(id));
 
-          if (hasNewOrder && audioEnabled && isActive) {
+          // Use activeRef.current to get the live status inside the closure
+          if (hasNewOrder && audioEnabled && activeRef.current) {
             const audio = new Audio("/noti.mp3");
             audio.play().catch(() => { });
           }
@@ -120,15 +128,7 @@ export default function OrdersList() {
     return () => clearInterval(interval);
   }, [audioEnabled]);
 
-  // 🔹 Update restaurant status
-  const updateRestaurantStatus = async (status) => {
-    setIsActive(status);
 
-    await axios.patch("/api/restaurant-status", {
-      restaurantId: localStorage.getItem("restid"),
-      isActive: status,
-    });
-  };
 
   // 🔹 ACCEPT ORDER (Updated to send razorpayOrderId)
   async function acceptOrder(orderId, razorpayOrderId) {
@@ -254,44 +254,6 @@ export default function OrdersList() {
         </div>
       )}
 
-
-      {/* 🔥 ACTIVE / INACTIVE BUTTONS */}
-      <div style={{ marginBottom: "15px" }}>
-        <h3>
-          Restaurant Status:{" "}
-          <span style={{ color: isActive ? "green" : "red" }}>
-            {isActive ? "ACTIVE" : "INACTIVE"}
-          </span>
-        </h3>
-
-        <button
-          onClick={() => updateRestaurantStatus(true)}
-          style={{
-            backgroundColor: "green",
-            color: "white",
-            padding: "8px 16px",
-            marginRight: "10px",
-            borderRadius: "6px",
-            border: "none",
-          }}
-        >
-          ACTIVE
-        </button>
-
-        <button
-          onClick={() => updateRestaurantStatus(false)}
-          style={{
-            backgroundColor: "red",
-            color: "white",
-            padding: "8px 16px",
-            borderRadius: "6px",
-            border: "none",
-          }}
-        >
-          INACTIVE
-        </button>
-      </div>
-
       <Link href="/AcceptedOrdersList">Live</Link><br></br>
       <Link href="/accepted-restaurants-orders">Order History</Link><br></br>
       <Link href="/status-control" style={{ color: "blue", textDecoration: "underline" }}>Status Control</Link>
@@ -392,6 +354,7 @@ export default function OrdersList() {
           ))}
         </ul>
       )}
+
     </div>
   );
 }

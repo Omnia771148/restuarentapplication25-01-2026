@@ -6,6 +6,7 @@ import Link from 'next/link';
 // Import the Loading component (ensure the path matches where you saved the pizza code)
 import Loading from '../loading/page';
 
+
 export default function AcceptedOrdersList() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -112,6 +113,7 @@ export default function AcceptedOrdersList() {
           </div>
         ))
       )}
+
     </div>
   );
 }

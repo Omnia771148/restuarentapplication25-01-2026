@@ -22,7 +22,7 @@ export default function Home() {
       const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
 
       if (now - Number(loginTime) < SEVEN_DAYS) {
-        router.push("/orders");
+        router.push("/dashboard");
         return;
       } else {
         localStorage.clear();
@@ -56,7 +56,7 @@ export default function Home() {
         localStorage.setItem("restlocation", data.user.restLocation);
         localStorage.setItem("loginTime", Date.now());
         setRestId(data.user.restId);
-        router.push("/orders");
+        router.push("/dashboard");
       } else {
         alert(data.message || "Invalid login");
         setIsSubmitting(false);
@@ -105,32 +105,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
