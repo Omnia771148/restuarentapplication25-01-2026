@@ -293,7 +293,8 @@ export default function OrdersList() {
       </div>
 
       <Link href="/AcceptedOrdersList">Live</Link><br></br>
-      <Link href="/accepted-restaurants-orders">Order History</Link>
+      <Link href="/accepted-restaurants-orders">Order History</Link><br></br>
+      <Link href="/status-control" style={{ color: "blue", textDecoration: "underline" }}>Status Control</Link>
 
       <br />
       <br />
