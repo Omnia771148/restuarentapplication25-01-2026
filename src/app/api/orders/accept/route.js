@@ -93,6 +93,22 @@ export async function POST(request) {
 
     console.log("OrderStatus update result:", result);
 
+    // 🚀 NEW: Trigger Notification to All Delivery Boys
+    try {
+      console.log("🔔 Triggering delivery notifications...");
+      // Using fire-and-forget approach (not awaiting perfectly to avoid blocking response)
+      fetch('https://deliverymanmain.vercel.app/api/deliveryboy/broadcast-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: "New Order Available! 🛵",
+          body: `Order #${orderData.orderId} is ready for pickup in ${rest || 'your area'}`
+        })
+      }).then(res => res.json()).then(d => console.log("Notification Sent:", d)).catch(e => console.error("Notif Failed:", e));
+    } catch (e) {
+      console.error("Notification Trigger Error:", e);
+    }
+
     return NextResponse.json({
       success: true,
       message: "Order accepted and status updated",
