@@ -13,6 +13,15 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
+
+  // 🔒 Prevent scrolling on login page
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   // ✅ CHECK SESSION + AUTO REDIRECT
   useEffect(() => {
     const loginTime = localStorage.getItem("loginTime");

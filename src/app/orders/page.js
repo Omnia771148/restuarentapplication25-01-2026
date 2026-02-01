@@ -2,21 +2,21 @@
 
 import { useEffect, useState, useRef } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation"; // Import useRouter
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-// Import your custom loading component
 import Loading from "../loading/page";
-import useFcmToken from "@/hooks/useFcmToken"; // Import the hook
-
+import useFcmToken from "@/hooks/useFcmToken";
+import { FaBell, FaCheckCircle, FaExclamationCircle } from "react-icons/fa";
+import "./orders.css"; // Custom Styles
 
 export default function OrdersList() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [audioEnabled, setAudioEnabled] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  const [hasMobileApp, setHasMobileApp] = useState(false); // 👈 Controls button visibility
-  const { token, notificationPermissionStatus } = useFcmToken(); // Use the hook
-  const router = useRouter(); // Initialize router
+  const [hasMobileApp, setHasMobileApp] = useState(false);
+  const { token, notificationPermissionStatus } = useFcmToken();
+  const router = useRouter();
 
   const rest =
     typeof window !== "undefined"
@@ -24,14 +24,12 @@ export default function OrdersList() {
       : null;
 
   const prevOrdersRef = useRef([]);
-  const activeRef = useRef(false); // 1. Ref to track active status for interval
+  const activeRef = useRef(false);
 
-  // 2. Sync ref with state
   useEffect(() => {
     activeRef.current = isActive;
   }, [isActive]);
 
-  // Enable audio notification
   const enableAudio = () => {
     setAudioEnabled(true);
     localStorage.setItem("audioEnabled", "true");
@@ -39,15 +37,14 @@ export default function OrdersList() {
     audio.play().catch(() => { });
   };
 
-  // 🔹 Logout Function
   const handleLogout = () => {
     const id = localStorage.getItem("restid");
-    if (id) localStorage.removeItem(`mobileConnected_${id}`); // Clear flag so it shows again next time
+    if (id) localStorage.removeItem(`mobileConnected_${id}`);
 
     localStorage.removeItem("restid");
     localStorage.removeItem("restlocation");
     localStorage.removeItem("loginTime");
-    router.push("/"); // Redirect to login page
+    router.push("/");
   };
 
   useEffect(() => {
@@ -55,7 +52,6 @@ export default function OrdersList() {
       setAudioEnabled(true);
     }
 
-    // Check if we already connected in this session
     const id = localStorage.getItem("restid");
     if (id && localStorage.getItem(`mobileConnected_${id}`) === "true") {
       setHasMobileApp(true);
@@ -68,14 +64,11 @@ export default function OrdersList() {
     const restaurantId = localStorage.getItem("restid");
 
     if (!restaurantId) {
-      // If we are already checking for ID and alerting, we might want to just redirect here too if it fails, 
-      // but let's leave the existing logic as is, just ensuring logout works manually.
       alert("No Restaurant ID found");
       setLoading(false);
       return;
     }
 
-    // 🔹 Fetch restaurant ACTIVE / INACTIVE status
     const fetchRestaurantStatus = async () => {
       try {
         const res = await axios.get(
@@ -83,14 +76,12 @@ export default function OrdersList() {
         );
         if (res.data.success) {
           setIsActive(res.data.isActive);
-          // Always show button now
         }
       } catch (err) {
         console.error("Status fetch error", err);
       }
     };
 
-    // 🔹 Fetch orders
     const fetchOrders = async () => {
       try {
         const res = await axios.get(
@@ -99,16 +90,6 @@ export default function OrdersList() {
 
         if (res.data.success) {
           const newOrders = res.data.orders;
-
-          const prevIds = prevOrdersRef.current.map((o) => o._id);
-          const newIds = newOrders.map((o) => o._id);
-
-          const hasNewOrder = newIds.some((id) => !prevIds.includes(id));
-
-          // Use activeRef.current to get the live status inside the closure
-          // GlobalSoundManager handles the sound now.
-
-
           setOrders(newOrders);
           prevOrdersRef.current = newOrders;
         }
@@ -126,35 +107,15 @@ export default function OrdersList() {
     return () => clearInterval(interval);
   }, [audioEnabled]);
 
-
-
-  // 🔹 ACCEPT ORDER (Updated to send razorpayOrderId)
   async function acceptOrder(orderId, razorpayOrderId) {
-    setLoading(true); // Start loading
-
-    // 🟢 BACKUP TO LOCAL STORAGE IMMEDIATELY
-    // This ensures that even if you delete from MongoDB immediately after, 
-    // it is already saved in the restaurant's local browser.
+    setLoading(true);
     const orderToAccept = orders.find((o) => o._id === orderId);
-    if (orderToAccept) {
-      const restId = localStorage.getItem("restid");
-      const lsKey = `acceptedOrders_${restId}`;
-      const existing = JSON.parse(localStorage.getItem(lsKey)) || [];
-
-      // Avoid duplicates based on the unique 'orderId'
-      if (!existing.some((o) => o.orderId === orderToAccept.orderId)) {
-        // Save it!
-        const entry = { ...orderToAccept, razorpayOrderId };
-        existing.push(entry);
-        localStorage.setItem(lsKey, JSON.stringify(existing));
-      }
-    }
 
     try {
       const res = await axios.post("/api/orders/accept", {
         orderId,
         rest,
-        razorpayOrderId, // 👈 Sending the ID here
+        razorpayOrderId,
       });
 
       if (res.data.success) {
@@ -167,13 +128,12 @@ export default function OrdersList() {
       console.error("Accept error:", err);
       alert("Error accepting order");
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   }
 
-  // 🔹 REJECT ORDER
   async function rejectOrder(orderId) {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
       const res = await axios.post("/api/orders/reject", { orderId });
 
@@ -187,7 +147,7 @@ export default function OrdersList() {
       console.error("Reject error:", err);
       alert("Error rejecting order");
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   }
 
@@ -198,161 +158,149 @@ export default function OrdersList() {
     );
   };
 
-  // Replace text loading with your custom component
   if (loading) return <Loading />;
 
   return (
-    <div style={{ padding: "20px", paddingBottom: "100px" }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h2>🧾 Orders for Your Restaurant</h2>
-        <button
-          onClick={handleLogout}
-          style={{
-            backgroundColor: "#ff4444",
-            color: "white",
-            padding: "8px 16px",
-            borderRadius: "6px",
-            border: "none",
-            cursor: "pointer"
-          }}
-        >
-          Logout
-        </button>
+    <div className="container-fluid p-3 pb-5">
+      {/* Header Section */}
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className="page-header">
+          <FaBell className="header-icon" />
+          <span>Orders</span>
+        </div>
+
+        <div>
+          <button onClick={handleLogout} className="btn btn-danger btn-sm me-2">
+            Logout
+          </button>
+          {/* Navigation Links as Badges or Buttons */}
+          <Link href="/AcceptedOrdersList" className="btn btn-outline-primary btn-sm me-1">Live</Link>
+          <Link href="/accepted-restaurants-orders" className="btn btn-outline-secondary btn-sm">History</Link>
+        </div>
       </div>
 
-      {/* 🔹 DEEP LINK BUTTON (Shows if not yet connected in this session) */}
+      {/* Mobile App Connection Prompt */}
       {!hasMobileApp && (
-        <div style={{ marginBottom: '20px', padding: '15px', backgroundColor: '#e3f2fd', borderRadius: '8px', border: '1px solid #2196f3' }}>
-          <h3>📱 Setup Mobile Notifications</h3>
-          <p>Click below to connect your installed Android App automatically.</p>
+        <div className="alert alert-info d-flex flex-column align-items-center mb-4">
+          <h5 className="mb-2">📱 Enable Notifications</h5>
           <button
             onClick={() => {
               const id = localStorage.getItem("restid");
               if (id) {
                 window.location.href = `restaurantapp://register?id=${id}`;
-                // Mark as connected in local storage so it hides for this session
                 localStorage.setItem(`mobileConnected_${id}`, "true");
                 setHasMobileApp(true);
               } else {
                 alert("Please log in first");
               }
             }}
-            style={{
-              backgroundColor: "#2196f3", // Blue
-              color: "white",
-              padding: "10px 20px",
-              borderRadius: "6px",
-              border: "none",
-              cursor: "pointer",
-              fontWeight: 'bold'
-            }}
+            className="btn btn-primary"
           >
             Connect Mobile App 🚀
           </button>
         </div>
       )}
 
-      <Link href="/AcceptedOrdersList">Live</Link><br></br>
-      <Link href="/accepted-restaurants-orders">Order History</Link><br></br>
-      <Link href="/status-control" style={{ color: "blue", textDecoration: "underline" }}>Status Control</Link>
-
-      <br />
-      <br />
-
+      {/* Sound Toggle */}
       {!audioEnabled && (
-        <button
-          onClick={enableAudio}
-          style={{
-            marginBottom: "12px",
-            padding: "6px 12px",
-            backgroundColor: "#ff9800",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-          }}
-        >
-          Enable Sound 🔔
-        </button>
+        <div className="text-center mb-3">
+          <button onClick={enableAudio} className="btn btn-warning text-white">
+            Enable Sound 🔔
+          </button>
+        </div>
       )}
 
-      {orders.length === 0 ? (
-        <p>No orders found.</p>
-      ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {orders.map((order) => (
-            <li
-              key={order._id}
-              style={{
-                marginBottom: "12px",
-                padding: "12px",
-                border: "1px solid #ccc",
-                borderRadius: "8px",
-                backgroundColor: "#f9f9f9",
-              }}
-            >
-              {/* Items */}
-              <ul>
-                {order.items.map((item, idx) => (
-                  <li key={idx}>
-                    {item.name} — ₹{item.price} × {item.quantity}
-                  </li>
-                ))}
-              </ul>
+      {/* Orders List */}
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-8 col-lg-6">
+          {orders.length === 0 ? (
+            <div className="text-center mt-5 text-muted">
+              <h4>No new orders</h4>
+              <p>Waiting for orders to arrive...</p>
+            </div>
+          ) : (
+            orders.map((order) => (
+              <div key={order._id} className="order-card position-relative">
 
-              {/* Schema details */}
-              <p>
-                <strong>User ID:</strong> {order.userId}
-              </p>
-              <p>
-                <strong>Total Count:</strong> {order.totalCount}
-              </p>
-              <p>
-                <strong>Total Price:</strong> ₹{order.totalPrice}
-              </p>
+                {/* Order ID & Date */}
+                <div className="order-id-row">
+                  <div>ORDER ID : <span className="order-id-val">{order.orderId || "NA"}</span></div>
+                  <div className="order-date-time">
+                    {new Date(order.orderDate).toLocaleDateString()}
+                    , {new Date(order.orderDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </div>
+                </div>
 
-              <p>
-                <strong>Order Date:</strong>{" "}
-                {new Date(order.orderDate).toLocaleString()}
-              </p>
-              <p>
-                <strong>Order ID:</strong> {order.orderId}
-              </p>
+                {/* Items Table */}
+                <table className="items-table">
+                  <thead>
+                    <tr>
+                      <th>ITEMS</th>
+                      <th className="text-center">QUANTITY</th>
+                      {/* Cost column removed as per request */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {order.items.map((item, idx) => (
+                      <tr key={idx}>
+                        <td className="item-name">{item.name}</td>
+                        <td className="text-center">{item.quantity}</td>
+                        {/* Cost cell removed */}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
 
+                <div className="divider-line"></div>
 
-              {/* Action buttons */}
-              <button
-                // 👈 PASSING BOTH IDs HERE
-                onClick={() => acceptOrder(order._id, order.razorpayOrderId)}
-                style={{
-                  padding: "6px 12px",
-                  backgroundColor: "#4CAF50",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                }}
-              >
-                Accept
-              </button>
+                {/* Total Counts */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontWeight: 'bold' }}>
+                  <span>Total Items: {order.items.length}</span>
+                  <span>Total Quantity: {order.items.reduce((sum, item) => sum + item.quantity, 0)}</span>
+                </div>
 
-              <button
-                onClick={() => rejectOrder(order._id)}
-                style={{
-                  marginLeft: "8px",
-                  padding: "6px 12px",
-                  backgroundColor: "#f44336",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "6px",
-                }}
-              >
-                Reject
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+                {/* Calculated Totals (Visual only, based on items) */}
+                {/* User asked to HIDE Total price. I will comment this out or strictly follow "not show in UI". 
+                     However, the screenshot has Sub Total, GST, Total. 
+                     The USER TEXT overrides the screenshot: "no need to show Total price and Userid".
+                     So I will NOT render the Total section. 
+                 */}
 
+                {/* 
+                <div className="price-row">
+                    <span>Sub Total</span>
+                    <span>{order.totalPrice}</span>
+                </div>
+                */}
+
+                {/* Payment Status */}
+                <div className="payment-status">
+                  <span>Payment status - </span>
+                  <FaCheckCircle className="status-icon ms-2" />
+                  <span className="text-success">Complete</span>
+                </div>
+
+                {/* Buttons */}
+                <div className="action-buttons">
+                  <button
+                    className="btn-accept"
+                    onClick={() => acceptOrder(order._id, order.razorpayOrderId)}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    className="btn-reject"
+                    onClick={() => rejectOrder(order._id)}
+                  >
+                    Reject
+                  </button>
+                </div>
+
+              </div>
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 }

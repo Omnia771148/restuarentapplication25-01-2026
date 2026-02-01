@@ -1,10 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap');
 
+html,
 body {
     margin: 0;
     padding: 0;
     background-color: #f0f2f5;
     /* Neutral background for desktop */
+    height: 100%;
+    overscroll-behavior: none;
+    /* Prevent rubber-banding */
 }
 
 /* 
@@ -14,19 +18,18 @@ body {
 .login-container {
     display: flex;
     height: 100vh;
-    /* Full viewport height */
+    /* Fallback */
+    height: 100dvh;
+    /* Dynamic height for mobile browsers */
     width: 100%;
     max-width: 480px;
-    /* Restrict to typical mobile width */
     margin: 0 auto;
-    /* Center on desktop */
     position: relative;
     background-color: #F8F7F2;
-    /* The app background */
     overflow: hidden;
-    /* Clip content to rounded corners if desired */
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-    /* Nice shadow on desktop */
+    top: 0;
+    /* Ensure it starts at the top */
 }
 
 /* Left colored panel: 35% of the APP width */
