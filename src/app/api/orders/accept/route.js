@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import connectionToDatabase from "../../../../../lib/mongoose";
 import Order from "../../../../../models/Order";
 import AcceptedOrder from "../../../../../models/AcceptedOrder";
+import AcceptedByRestaurant from "../../../../../models/AcceptedByRestaurant";
 
 // ✅ NEW: lightweight model for orderstatuses
 const OrderStatus =
@@ -77,6 +78,13 @@ export async function POST(request) {
 
     // 5. ✅ Upsert into Accepted collection (avoids duplicate key error)
     await AcceptedOrder.updateOne(
+      { orderId: orderData.orderId }, // match by orderId
+      { $set: newEntryData },
+      { upsert: true }
+    );
+
+    // 5b. ✅ Upsert into AcceptedByRestaurant collection
+    await AcceptedByRestaurant.updateOne(
       { orderId: orderData.orderId }, // match by orderId
       { $set: newEntryData },
       { upsert: true }

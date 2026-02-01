@@ -36,6 +36,7 @@ const acceptedByRestaurantSchema = new mongoose.Schema({
   rest: String,
   mapUrl: String,
   distanceText: String,
+  restaurantName: String,
 
   orderDate: { type: Date, default: Date.now },
 

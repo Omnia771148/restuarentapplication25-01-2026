@@ -19,6 +19,7 @@ const orderSchema = new mongoose.Schema({
   deliveryAddress: Object,
   mapUrl: String,
   distanceText: String,
+  restaurantName: String,
 
   orderId: {
     type: String,
