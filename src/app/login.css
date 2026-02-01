@@ -1,0 +1,174 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Poppins:wght@300;400;500;600&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f2f5;
+    /* Neutral background for desktop */
+}
+
+/* 
+   Wrapper to center the "Mobile App" on desktop.
+   On mobile, this fills the screen.
+*/
+.login-container {
+    display: flex;
+    height: 100vh;
+    /* Full viewport height */
+    width: 100%;
+    max-width: 480px;
+    /* Restrict to typical mobile width */
+    margin: 0 auto;
+    /* Center on desktop */
+    position: relative;
+    background-color: #F8F7F2;
+    /* The app background */
+    overflow: hidden;
+    /* Clip content to rounded corners if desired */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    /* Nice shadow on desktop */
+}
+
+/* Left colored panel: 35% of the APP width */
+.split-left {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 35%;
+    background-color: #E0D4C0;
+    z-index: 0;
+}
+
+/* The form wrapper centered absolutely relative to the container */
+.login-form-wrapper {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 75%;
+    max-width: 380px;
+    /* Ensure it fits inside the 480px container */
+    z-index: 10;
+}
+
+/* "Welcome Back" Title */
+.title-box {
+    background-color: #FFFFFF;
+    padding: 12px 20px;
+    /* Slightly reduced padding to fit */
+    border-radius: 50px;
+    margin-bottom: 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    min-width: 180px;
+    white-space: nowrap;
+}
+
+.title-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 2rem;
+    color: #1a1a1a;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Labels */
+.input-label-small {
+    align-self: flex-start;
+    margin-left: 20px;
+    margin-bottom: 5px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: #000;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* Input Fields Wrapper */
+.input-group-custom {
+    background-color: #FFFFFF;
+    border-radius: 50px;
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 60px;
+}
+
+/* Explicit Icon Sizing */
+.input-icon {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    color: #000;
+    margin-right: 15px;
+}
+
+/* Input Text */
+.form-control-custom {
+    border: none;
+    background: transparent;
+    outline: none;
+    flex: 1;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: #222;
+}
+
+.form-control-custom::placeholder {
+    color: #aaa;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    opacity: 1;
+}
+
+/* Login Button */
+.login-btn {
+    background-color: #FFFFFF;
+    color: #000;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 0;
+    width: 160px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 10px;
+}
+
+.login-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer Quote */
+.footer-quote {
+    position: absolute;
+    bottom: 150px;
+    width: 100%;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #000;
+    padding: 0 20px;
+    z-index: 10;
+}
+
+/* Ensure full screen on actual mobile devices */
+@media (max-width: 480px) {
+    .login-container {
+        max-width: 100%;
+        box-shadow: none;
+    }
+}

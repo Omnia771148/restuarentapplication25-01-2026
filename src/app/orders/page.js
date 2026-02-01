@@ -106,10 +106,8 @@ export default function OrdersList() {
           const hasNewOrder = newIds.some((id) => !prevIds.includes(id));
 
           // Use activeRef.current to get the live status inside the closure
-          if (hasNewOrder && audioEnabled && activeRef.current) {
-            const audio = new Audio("/noti.mp3");
-            audio.play().catch(() => { });
-          }
+          // GlobalSoundManager handles the sound now.
+
 
           setOrders(newOrders);
           prevOrdersRef.current = newOrders;
@@ -204,7 +202,7 @@ export default function OrdersList() {
   if (loading) return <Loading />;
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px", paddingBottom: "100px" }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h2>🧾 Orders for Your Restaurant</h2>
         <button

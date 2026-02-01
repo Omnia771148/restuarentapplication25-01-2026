@@ -24,9 +24,10 @@
 }
 
 .nav-hidden {
-    opacity: 0;
-    transform: translateX(-50%) translateY(100px);
+    opacity: 0 !important;
+    transform: translateX(-50%) translateY(100px) !important;
     /* Move down off-screen */
+    pointer-events: none;
 }
 
 /* Individual Nav Items */

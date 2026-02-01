@@ -18,12 +18,15 @@ export const metadata = {
   manifest: '/manifest.webmenifest'
 };
 
+import GlobalSoundManager from "@/components/GlobalSoundManager";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <GlobalSoundManager />
         {children}
         <Navbar />
       </body>

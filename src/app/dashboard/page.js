@@ -20,10 +20,13 @@ export default function Dashboard() {
         totalEarnings: 0,
         totalOrders: 0
     });
+    const [soundEnabled, setSoundEnabled] = useState(false);
 
     useEffect(() => {
         const storedRestId = localStorage.getItem("restid");
         const loginTime = localStorage.getItem("loginTime");
+        const isAudioEnabled = localStorage.getItem("audioEnabled") === "true";
+        setSoundEnabled(isAudioEnabled);
 
         if (!storedRestId || !loginTime) {
             router.push("/");
@@ -60,6 +63,16 @@ export default function Dashboard() {
             }
         } catch (err) {
             console.error("Status fetch error", err);
+        }
+    };
+
+    const toggleSound = () => {
+        const newState = !soundEnabled;
+        setSoundEnabled(newState);
+        localStorage.setItem("audioEnabled", String(newState));
+        if (newState) {
+            const audio = new Audio("/noti.mp3");
+            audio.play().catch(() => { });
         }
     };
 
@@ -193,11 +206,23 @@ export default function Dashboard() {
             onMouseLeave={onMouseLeave}
         >
             {/* Header */}
-            <div className="header-box">
-                <div className="logo-circle"></div>
-                <h2 className="logo-text">SPV</h2>
-                <div className="text-end ms-auto">
-                    <small>Thank for choosing our<br />service</small>
+            <div className="header-box" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div className="logo-circle"></div>
+                    <h2 className="logo-text">SPV</h2>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                    <button
+                        onClick={toggleSound}
+                        style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
+                        title={soundEnabled ? "Mute Sound" : "Enable Sound"}
+                    >
+                        {soundEnabled ? "🔊" : "🔇"}
+                    </button>
+                    <div className="text-end">
+                        <small>Thank for choosing our<br />service</small>
+                    </div>
                 </div>
             </div>
 

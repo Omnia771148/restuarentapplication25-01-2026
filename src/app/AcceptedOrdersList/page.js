@@ -66,7 +66,7 @@ export default function AcceptedOrdersList() {
   if (loading) return <Loading />;
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px", paddingBottom: "100px" }}>
       <h2>✅ Accepted Orders</h2>
 
       {orders.length === 0 ? (

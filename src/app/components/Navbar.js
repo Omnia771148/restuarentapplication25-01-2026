@@ -8,16 +8,43 @@ import './navbar.css';
 export default function Navbar() {
     const router = useRouter();
     const pathname = usePathname();
+    const [isVisible, setIsVisible] = React.useState(true);
+    const lastScrollY = React.useRef(0);
 
     const handleNavigation = (path) => {
         router.push(path);
     };
 
+    React.useEffect(() => {
+        const controlNavbar = () => {
+            if (typeof window !== 'undefined') {
+                const currentScrollY = window.scrollY;
+
+                if (currentScrollY > lastScrollY.current && currentScrollY > 10) {
+                    // Scrolling DOWN and moved more than 10px
+                    setIsVisible(false);
+                } else {
+                    // Scrolling UP
+                    setIsVisible(true);
+                }
+                lastScrollY.current = currentScrollY;
+            }
+        };
+
+        if (typeof window !== 'undefined') {
+            window.addEventListener('scroll', controlNavbar, { passive: true });
+
+            return () => {
+                window.removeEventListener('scroll', controlNavbar);
+            };
+        }
+    }, []);
+
     // Don't show navbar on login page
     if (pathname === '/') return null;
 
     return (
-        <div className="navbar-container">
+        <div className={`navbar-container ${isVisible ? 'nav-visible' : 'nav-hidden'}`}>
             {/* 1. Dashboard (Home) */}
             <button
                 className={`nav-item ${pathname === '/dashboard' ? 'active' : ''}`}
