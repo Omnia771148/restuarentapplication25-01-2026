@@ -1,10 +1,14 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { FaChevronLeft, FaCheckCircle, FaClipboardList } from "react-icons/fa";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./accepted-orders.css";
 
 export default function AcceptedByRestaurantsOrders() {
+    const router = useRouter();
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -46,98 +50,182 @@ export default function AcceptedByRestaurantsOrders() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-50">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            <div className="accepted-orders-container">
+                <div className="orders-header">
+                    <button onClick={() => router.back()} className="back-button">
+                        <FaChevronLeft />
+                    </button>
+                    <div className="header-title-pill">
+                        <FaClipboardList className="header-icon" />
+                        <span>Accepted Orders</span>
+                    </div>
+                </div>
+                <div className="loading-container">
+                    <div className="spinner-border text-secondary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                </div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 text-red-500">
-                <h2 className="text-2xl font-bold mb-2">Error</h2>
-                <p>{error}</p>
-                <button
-                    onClick={() => window.location.reload()}
-                    className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                >
-                    Retry
-                </button>
+            <div className="accepted-orders-container">
+                <div className="orders-header">
+                    <button onClick={() => router.back()} className="back-button">
+                        <FaChevronLeft />
+                    </button>
+                    <div className="header-title-pill">
+                        <FaClipboardList className="header-icon" />
+                        <span>Accepted Orders</span>
+                    </div>
+                </div>
+                <div className="error-container">
+                    <h3>Error</h3>
+                    <p>{error}</p>
+                    <button onClick={() => window.location.reload()} className="btn btn-outline-dark mt-3">Retry</button>
+                </div>
             </div>
         );
     }
 
-    return (
-        <div className="min-h-screen bg-gray-50 p-6">
-            <div className="max-w-4xl mx-auto">
-                <header className="mb-8">
-                    <h1 className="text-3xl font-bold text-gray-800">Accepted By Restaurants Collection</h1>
-                    <p className="text-gray-600 mt-2">
-                        Showing orders for Restaurant ID: <span className="font-mono bg-gray-200 px-2 py-1 rounded">{restaurantId}</span>
-                    </p>
-                </header>
+    const handlePrintInvoice = (order) => {
+        const printWindow = window.open('', '', 'width=600,height=600');
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Invoice - ${order.orderId}</title>
+                    <style>
+                        body { font-family: 'Courier New', monospace; padding: 20px; text-align: center; }
+                        .header { margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 15px; }
+                        .restaurant-name { font-size: 1.5rem; font-weight: bold; text-transform: uppercase; margin: 0; }
+                        .order-meta { margin: 15px 0; font-size: 0.9rem; text-align: left; border-bottom: 1px dashed #000; padding-bottom: 10px; }
+                        .items-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; }
+                        .items-table th { border-bottom: 1px solid #000; padding: 5px 0; text-align: left; }
+                        .items-table td { padding: 5px 0; text-align: left; }
+                        .text-right { text-align: right !important; }
+                        .total-section { border-top: 2px solid #000; padding-top: 10px; font-weight: bold; font-size: 1.1rem; text-align: right; }
+                        .footer { margin-top: 30px; font-size: 0.8rem; color: #555; }
+                        @media print {
+                            .no-print { display: none; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1 class="restaurant-name">Restaurant Invoice</h1>
+                        <p>Thank you for your order!</p>
+                    </div>
+                    
+                    <div class="order-meta">
+                        <p><strong>Order ID:</strong> ${order.orderId}</p>
+                        <p><strong>Date:</strong> ${new Date(order.orderDate).toLocaleString()}</p>
+                        ${order.userName ? `<p><strong>Customer:</strong> ${order.userName}</p>` : ''}
+                    </div>
 
+                    <table class="items-table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th style="text-align: center;">Qty</th>
+                                <th class="text-right">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${order.items.map(item => `
+                                <tr>
+                                    <td>${item.name}</td>
+                                    <td style="text-align: center;">${item.quantity}</td>
+                                    <td class="text-right">₹${item.price * item.quantity}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+
+                    <div class="total-section">
+                        <p>Total: ₹${order.grandTotal || order.totalPrice}</p>
+                    </div>
+
+                    <div class="footer">
+                        <p>-- End of Receipt --</p>
+                    </div>
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => {
+            printWindow.print();
+            printWindow.close();
+        }, 500);
+    };
+
+    return (
+        <div className="accepted-orders-container">
+            {/* Header */}
+            <div className="orders-header">
+                <button onClick={() => router.back()} className="back-button">
+                    <FaChevronLeft />
+                </button>
+                <div className="header-title-pill">
+                    <FaClipboardList className="header-icon" />
+                    <span>Accepted Orders</span>
+                </div>
+            </div>
+
+            {/* Orders List */}
+            <div className="container p-0">
                 {orders.length === 0 ? (
-                    <div className="bg-white rounded-lg shadow-md p-8 text-center">
-                        <p className="text-xl text-gray-500">No orders found in this collection.</p>
+                    <div className="text-center p-5 text-muted">
+                        <p>No accepted orders found for this restaurant.</p>
                     </div>
                 ) : (
-                    <div className="grid gap-6">
-                        {orders.map((order) => (
-                            <div
-                                key={order._id}
-                                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border border-gray-100"
-                            >
-                                <div className="p-6">
-                                    <div className="flex justify-between items-start mb-4 border-b pb-4">
-                                        <div>
-                                            <p className="text-sm text-gray-500 uppercase font-semibold tracking-wider">Order ID</p>
-                                            <p className="text-lg font-bold text-gray-800">{order.orderId}</p>
-                                        </div>
-                                        <div className="text-right">
-                                            <p className="text-sm text-gray-500 uppercase font-semibold tracking-wider">Date</p>
-                                            <p className="text-gray-800">
-                                                {new Date(order.orderDate).toLocaleDateString()} at {new Date(order.orderDate).toLocaleTimeString()}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div className="mb-4">
-                                        <h3 className="text-md font-semibold text-gray-700 mb-2">Customer Details</h3>
-                                        <p className="text-gray-600"><span className="font-medium">Name:</span> {order.userName}</p>
-                                        <p className="text-gray-600"><span className="font-medium">Phone:</span> {order.userPhone}</p>
-                                    </div>
-
-                                    <div className="mb-4 bg-gray-50 p-4 rounded-md">
-                                        <h3 className="text-md font-semibold text-gray-700 mb-2">Items</h3>
-                                        <ul className="divide-y divide-gray-200">
-                                            {order.items.map((item, index) => (
-                                                <li key={index} className="py-2 flex justify-between">
-                                                    <span className="text-gray-800">
-                                                        {item.quantity} x {item.name}
-                                                    </span>
-                                                    <span className="font-medium text-gray-800">
-                                                        ₹{item.price * item.quantity}
-                                                    </span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-
-                                    <div className="flex justify-between items-center text-lg font-bold text-gray-900 border-t pt-4">
-                                        <span>Total Amount</span>
-                                        <span className="text-green-600">₹{order.grandTotal || order.totalPrice}</span>
-                                    </div>
-
-                                    {order.status && (
-                                        <div className="mt-4 inline-block px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                            Status: {order.status}
-                                        </div>
-                                    )}
+                    orders.map((order) => (
+                        <div key={order._id} className="order-card">
+                            <div className="order-header-row">
+                                <div className="order-id-container">
+                                    <span className="order-id-label">Order id:</span>
+                                    <span className="order-id">{order.orderId}</span>
+                                </div>
+                                <div className="order-date-container">
+                                    <span className="order-date">
+                                        {new Date(order.orderDate).toLocaleDateString()}, {new Date(order.orderDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </span>
                                 </div>
                             </div>
-                        ))}
-                    </div>
+
+                            <div className="order-details-box">
+                                <div className="items-table-header">
+                                    <span style={{ flex: 1 }}>Item</span>
+                                    <span style={{ width: '60px', textAlign: 'center' }}>Qty</span>
+                                    <span style={{ width: '80px', textAlign: 'right' }}>Price</span>
+                                </div>
+
+                                <div className="order-items-list">
+                                    {order.items.map((item, idx) => (
+                                        <div key={idx} className="order-item-row">
+                                            <span className="item-name">{item.name}</span>
+                                            <span className="item-qty-badge">x{item.quantity}</span>
+                                            <span className="item-price">₹{item.price * item.quantity}</span>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div className="order-total-row">
+                                    <span className="total-label">Total</span>
+                                    <span className="total-amount">₹{order.grandTotal || order.totalPrice}</span>
+                                </div>
+                            </div>
+
+                            <button
+                                className="invoice-btn"
+                                onClick={() => handlePrintInvoice(order)}
+                            >
+                                <FaClipboardList /> Generate Invoice
+                            </button>
+                        </div>
+                    ))
                 )}
             </div>
         </div>

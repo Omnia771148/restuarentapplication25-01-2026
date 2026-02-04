@@ -1,0 +1,153 @@
+.settings-container {
+    min-height: 100vh;
+    background-color: #F8F5EE;
+    /* Creamy background */
+    font-family: 'serif';
+    /* Matches the serif font in the image (SPV) - seemingly Serif for some parts? Or classic sans. Let's use a system font stack but maybe Serif for the logo. The user UI looks like it mixes fonts. The menu items look serif-like. */
+    font-family: "Times New Roman", Times, serif;
+    /* The image has a very serif look */
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    padding-bottom: 80px;
+    /* Space for bottom nav */
+}
+
+/* Header Section */
+.top-header {
+    background-color: #DFD3C3;
+    /* Tan/Beige */
+    border-radius: 15px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+}
+
+.logo-circle {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.header-text {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-text {
+    font-size: 1.5rem;
+    font-style: italic;
+    font-weight: bold;
+    color: #333;
+    margin-right: auto;
+    font-family: cursive;
+    /* Similar to the script font "SPV" */
+}
+
+.sub-header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 0.9rem;
+    color: #333;
+    font-family: serif;
+}
+
+/* Page Title Pill */
+.page-title-pill {
+    background-color: white;
+    padding: 10px 25px;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    margin-bottom: 30px;
+    align-self: flex-start;
+    font-family: serif;
+    font-size: 1.2rem;
+}
+
+.settings-icon-spin {
+    color: #999;
+    font-size: 1.5rem;
+}
+
+/* Menu Container */
+.menu-container {
+    background-color: #E3D9C6;
+    /* Beige/Brown container */
+    border-radius: 30px;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.menu-item {
+    background-color: white;
+    border-radius: 50px;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    color: black;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.1s ease;
+    cursor: pointer;
+}
+
+.menu-item:active {
+    transform: scale(0.98);
+}
+
+.menu-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.menu-icon {
+    font-size: 1.8rem;
+    color: black;
+}
+
+.menu-text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    font-family: serif;
+}
+
+.arrow-icon {
+    font-size: 1.5rem;
+}
+
+/* Logout Button */
+.logout-btn {
+    background-color: #E74C3C;
+    /* Red */
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 15px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-top: 20px;
+    width: 100%;
+    cursor: pointer;
+    font-family: serif;
+    box-shadow: 0 4px 6px rgba(231, 76, 60, 0.3);
+}
+
+.logout-btn:active {
+    transform: scale(0.98);
+}
