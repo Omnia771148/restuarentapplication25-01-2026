@@ -26,18 +26,33 @@ export default function OrdersPage() {
 
     if (storedRestId === "1") {
       // Fetch items 1 to 4
-      filteredData = Data.filter(item => item.id >= 1 && item.id <= 4);
+      filteredData = Data.filter(item => item.id >= 1 && item.id <= 100);
     } 
     else if (storedRestId === "2") {
       // Fetch items 5 to 8
-      filteredData = Data.filter(item => item.id >= 5 && item.id <= 8);
+      filteredData = Data.filter(item => item.id >= 101 && item.id <= 205);
     } 
     else if (storedRestId === "3") {
       // Fetch items 9 to 12
-      filteredData = Data.filter(item => item.id >= 9 && item.id <= 12);
+      filteredData = Data.filter(item => item.id >= 206 && item.id <= 310);
     }
-
-    setItems(filteredData);
+    else if (storedRestId === "4") {
+      // Fetch items 13 to 16
+      filteredData = Data.filter(item => item.id >= 311 && item.id <= 411);
+    }
+    else if (storedRestId === "5") {
+      // Fetch items 17 to 20
+      filteredData = Data.filter(item => item.id >= 412 && item.id <= 512);
+    }
+    else if (storedRestId === "6") {
+      // Fetch items 21 to 24
+      filteredData = Data.filter(item => item.id >= 513 && item.id <= 613 );
+    }
+    else if (storedRestId === "7") {
+      // Fetch items 25 to 28
+      filteredData = Data.filter(item => item.id >= 614 && item.id <= 714);
+    }
+       setItems(filteredData);
 
   }, [router]);
 
