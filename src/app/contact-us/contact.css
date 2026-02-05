@@ -1,0 +1,94 @@
+.contact-container {
+    min-height: 100vh;
+    background-color: #F8F5EE;
+    /* Creamy background matching settings */
+    font-family: "Times New Roman", Times, serif;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    padding-bottom: 80px;
+}
+
+/* Header Area */
+.contact-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    position: relative;
+    justify-content: center;
+    /* Centers the title pill */
+}
+
+.back-button {
+    width: 45px;
+    height: 45px;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+    /* Position back button absolutely to the left */
+    color: black;
+    font-size: 1.2rem;
+}
+
+.contact-title-pill {
+    background-color: white;
+    padding: 12px 30px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: black;
+}
+
+/* Contact Card */
+.contact-card {
+    background-color: #E3D9C6;
+    /* Beige/Tan card background */
+    border-radius: 30px;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.contact-item {
+    background-color: white;
+    border-radius: 50px;
+    padding: 15px 25px;
+    /* Increased padding for pill shape */
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-decoration: none;
+    color: black;
+    font-size: 1.1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.1s ease;
+}
+
+.contact-item:active {
+    transform: scale(0.98);
+}
+
+.contact-icon {
+    font-size: 1.4rem;
+    color: black;
+    min-width: 24px;
+    /* Ensure alignment */
+    text-align: center;
+}
+
+.contact-text {
+    font-weight: 500;
+}

@@ -69,10 +69,10 @@ export default function Navbar() {
                 <FaClipboardList className="nav-icon" />
             </button>
 
-            {/* 4. Settings (Gear) - No Action yet */}
+            {/* 4. Settings (Gear) */}
             <button
-                className="nav-item"
-                onClick={() => alert("Settings coming soon!")}
+                className={`nav-item ${pathname === '/settings' ? 'active' : ''}`}
+                onClick={() => handleNavigation('/settings')}
             >
                 <FaCog className="nav-icon" />
             </button>
