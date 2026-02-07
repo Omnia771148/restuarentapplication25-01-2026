@@ -4,7 +4,6 @@ import connectionToDatabase from "../../../../../lib/mongoose";
 import Order from "../../../../../models/Order";
 import AcceptedOrder from "../../../../../models/AcceptedOrder";
 import AcceptedByRestaurant from "../../../../../models/AcceptedByRestaurant";
-import PaymentToStoreStorents from "../../../../../models/PaymentToStoreStorents";
 
 // ✅ NEW: lightweight model for orderstatuses
 const OrderStatus =
@@ -88,19 +87,6 @@ export async function POST(request) {
     await AcceptedByRestaurant.updateOne(
       { orderId: orderData.orderId }, // match by orderId
       { $set: newEntryData },
-      { upsert: true }
-    );
-
-    // 5c. ✅ Update PaymentToStoreStorents collection (Increment totalPrice)
-    await PaymentToStoreStorents.updateOne(
-      { restaurantId: orderData.restaurantId },
-      {
-        $inc: { totalPrice: orderData.totalPrice },
-        $set: {
-          restaurantName: orderData.restaurantName,
-          orderId: orderData.orderId
-        }
-      },
       { upsert: true }
     );
 
