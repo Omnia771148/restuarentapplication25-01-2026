@@ -61,18 +61,13 @@ export default function StatusControlPage() {
         }
     };
     const activateAll = async () => {
-        // Optimistic update all locally
         const allActive = {};
         buttonIds.forEach(id => {
             allActive[id] = true;
         });
         setStatuses(prev => ({ ...prev, ...allActive }));
-        // Send requests to backend
-        // Note: Ideally the backend should support a bulk update endpoint.
-        // For now, we loop through and send updates to maintain compatibility.
         for (const id of buttonIds) {
             try {
-                // Send request without awaiting strictly for the whole batch purely sequentially in UI terms
                 fetch("/api/button-status", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -80,6 +75,24 @@ export default function StatusControlPage() {
                 });
             } catch (error) {
                 console.error(`Failed to activate ID ${id}`, error);
+            }
+        }
+    };
+    const deactivateAll = async () => {
+        const allInactive = {};
+        buttonIds.forEach(id => {
+            allInactive[id] = false;
+        });
+        setStatuses(prev => ({ ...prev, ...allInactive }));
+        for (const id of buttonIds) {
+            try {
+                fetch("/api/button-status", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ buttonId: id, isActive: false }),
+                });
+            } catch (error) {
+                console.error(`Failed to deactivate ID ${id}`, error);
             }
         }
     };
@@ -92,16 +105,21 @@ export default function StatusControlPage() {
     }
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Status Control</h1>
-            
-            {/* New Button to Activate All */}
-            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-                <button 
-                    className={`${styles.button} ${styles.activeBtn}`} 
-                    style={{ padding: '10px 20px', fontSize: '16px', fontWeight: 'bold' }}
+            <h1 className={styles.title}>Menu Status Control</h1>
+
+            {/* New Buttons to Activate/Deactivate All */}
+            <div className={styles.bulkActions}>
+                <button
+                    className={styles.activateAllBtn}
                     onClick={activateAll}
                 >
                     Activate All
+                </button>
+                <button
+                    className={styles.deactivateAllBtn}
+                    onClick={deactivateAll}
+                >
+                    Deactivate All
                 </button>
             </div>
             <div className={styles.grid}>

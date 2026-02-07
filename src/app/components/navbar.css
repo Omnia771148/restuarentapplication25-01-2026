@@ -25,8 +25,7 @@
 
 .nav-hidden {
     opacity: 0 !important;
-    transform: translateX(-50%) translateY(100px) !important;
-    /* Move down off-screen */
+    transform: translateX(-50%) translateY(30px) !important;
     pointer-events: none;
 }
 

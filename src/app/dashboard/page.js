@@ -76,29 +76,23 @@ export default function Dashboard() {
         }
     };
 
-    const [dragX, setDragX] = useState(null); // null means not dragging
-    const [startX, setStartX] = useState(0);
-    const [startDragX, setStartDragX] = useState(0); // where the knob was when drag started
-
-    // ... existing stats fetch ...
-
-    const handleToggleClick = () => {
-        // Fallback for click if no drag occurred
-        if (dragX === null) updateStatus(!isActive);
+    const toggleStatus = () => {
+        updateStatus(!isActive);
     };
 
     const updateStatus = async (newStatus) => {
         setIsActive(newStatus);
-        setDragX(null); // Reset drag
 
         // Sync Audio Enabled with Active Status
         if (newStatus) {
             localStorage.setItem("audioEnabled", "true");
+            setSoundEnabled(true);
             // Play confirmation sound
             const audio = new Audio("/noti.mp3");
             audio.play().catch(e => console.log("Audio play failed", e));
         } else {
             localStorage.setItem("audioEnabled", "false");
+            setSoundEnabled(false);
         }
 
         try {
@@ -112,54 +106,6 @@ export default function Dashboard() {
             alert("Failed to update status");
         }
     };
-
-    // --- Swipe Handlers ---
-    const handleStart = (clientX) => {
-        setStartX(clientX);
-        // If active, we start at 230px, else 0px
-        setStartDragX(isActive ? 230 : 0);
-        setDragX(isActive ? 230 : 0); // Initialize drag position
-    };
-
-    const handleMove = (clientX) => {
-        if (dragX === null) return;
-        const delta = clientX - startX;
-        let newX = startDragX + delta;
-
-        // Clamp between 0 and 230
-        newX = Math.max(0, Math.min(230, newX));
-        setDragX(newX);
-    };
-
-    const handleEnd = () => {
-        if (dragX === null) return;
-
-        // Threshold to toggle (e.g., dragged past midpoint of 115px)
-        const midpoint = 115;
-        const shouldBeActive = dragX > midpoint;
-
-        if (shouldBeActive !== isActive) {
-            updateStatus(shouldBeActive);
-        } else {
-            // Snap back
-            setDragX(null);
-        }
-    };
-
-    // Touch events
-    const onTouchStart = (e) => handleStart(e.touches[0].clientX);
-    const onTouchMove = (e) => handleMove(e.touches[0].clientX);
-    const onTouchEnd = () => handleEnd();
-
-    // Mouse events (for desktop testing)
-    const onMouseDown = (e) => handleStart(e.clientX);
-    const onMouseMove = (e) => {
-        if (dragX !== null) handleMove(e.clientX);
-    };
-    const onMouseUp = () => handleEnd();
-    const onMouseLeave = () => handleEnd();
-
-    // ... (rest of render logic remains, replace just the toggle-switch jsx)
 
     const processStats = (orders) => {
         const today = new Date().toDateString();
@@ -200,11 +146,8 @@ export default function Dashboard() {
     }
 
     return (
-        <div className="dashboard-container container-fluid p-3"
-            onMouseMove={onMouseMove}
-            onMouseUp={onMouseUp}
-            onMouseLeave={onMouseLeave}
-        >
+        <div className="dashboard-container container-fluid p-3">
+
             {/* Header */}
             <div className="header-box" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -213,13 +156,7 @@ export default function Dashboard() {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                    <button
-                        onClick={toggleSound}
-                        style={{ background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer' }}
-                        title={soundEnabled ? "Mute Sound" : "Enable Sound"}
-                    >
-                        {soundEnabled ? "🔊" : "🔇"}
-                    </button>
+
                     <div className="text-end">
                         <small>Thank for choosing our<br />service</small>
                     </div>
@@ -231,36 +168,20 @@ export default function Dashboard() {
                 <div className="hero-image-placeholder"></div>
             </div>
 
-            {/* Swipe Handle / Toggle */}
-            <div className="restaurant-status-toggle">
-                <div className="swipe-text">
-                    {isActive ? "Swipe left to close" : "Swipe right to open"}
-                </div>
-
+            {/* Swipe Toggle (Performance Click) */}
+            <div className="status-toggle-wrapper">
                 <div
-                    className={`toggle-switch ${isActive ? 'active' : ''}`}
-                    onTouchStart={onTouchStart}
-                    onTouchMove={onTouchMove}
-                    onTouchEnd={onTouchEnd}
-                    onMouseDown={onMouseDown}
-                // No onClick here, logic is in handleEnd
+                    className={`swipe-style-switch ${isActive ? 'active' : 'inactive'}`}
+                    onClick={toggleStatus}
+                    title={isActive ? "Click to Close" : "Click to Open"}
                 >
-                    <div
-                        className="toggle-knob"
-                        style={
-                            dragX !== null
-                                ? { transform: `translateX(${dragX}px)`, transition: 'none' }
-                                : {}
-                        }
-                    >
-                        {isActive ? "On" : "Off"}
+                    <div className="switch-knob"></div>
+                    <div className="switch-label">
+                        {isActive ? "OPEN" : "CLOSE"}
                     </div>
                 </div>
-
-                <div className="swipe-text text-center mt-1">
-                    {/* Visual cue text for bottom if needed */}
-                </div>
             </div>
+
 
             {/* My Menu Button */}
             <div className="text-center">
@@ -273,7 +194,10 @@ export default function Dashboard() {
                 <div className="col-6">
                     <div className="stat-card">
                         <div className="stat-title">Today earnings</div>
-                        <div className="stat-value">Rs-{formatCurrency(stats.todayEarnings)}</div>
+                        <div className="stat-value">
+                            <span className="stat-currency">₹</span>
+                            {formatCurrency(stats.todayEarnings)}
+                        </div>
                     </div>
                 </div>
                 <div className="col-6">
@@ -285,7 +209,10 @@ export default function Dashboard() {
                 <div className="col-6">
                     <div className="stat-card">
                         <div className="stat-title">Total earnings</div>
-                        <div className="stat-value">Rs-{formatCurrency(stats.totalEarnings)}</div>
+                        <div className="stat-value">
+                            <span className="stat-currency">₹</span>
+                            {formatCurrency(stats.totalEarnings)}
+                        </div>
                     </div>
                 </div>
                 <div className="col-6">
@@ -293,8 +220,10 @@ export default function Dashboard() {
                         <div className="stat-title">Total orders</div>
                         <div className="stat-value">{stats.totalOrders}</div>
                     </div>
+
                 </div>
             </div>
+
 
 
         </div>

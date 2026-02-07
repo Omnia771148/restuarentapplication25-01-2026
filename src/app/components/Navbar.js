@@ -16,27 +16,47 @@ export default function Navbar() {
     };
 
     React.useEffect(() => {
-        const controlNavbar = () => {
-            if (typeof window !== 'undefined') {
-                const currentScrollY = window.scrollY;
+        // Very low threshold for maximum sensitivity (good for slow scrolls)
+        const threshold = 2;
+        let lastScrollYValue = window.scrollY;
+        let ticking = false;
 
-                if (currentScrollY > lastScrollY.current && currentScrollY > 10) {
-                    // Scrolling DOWN and moved more than 10px
-                    setIsVisible(false);
-                } else {
-                    // Scrolling UP
-                    setIsVisible(true);
-                }
-                lastScrollY.current = currentScrollY;
+        const updateNavbarVisibility = () => {
+            const currentScrollY = window.scrollY;
+
+            // Sensitivity Check
+            const difference = currentScrollY - lastScrollYValue;
+
+            if (Math.abs(difference) < threshold) {
+                ticking = false;
+                return;
+            }
+
+            if (currentScrollY <= 5) {
+                // Near the very top, always show
+                setIsVisible(true);
+            } else if (difference > 0) {
+                // Scrolling DOWN (even slowly)
+                setIsVisible(false);
+            } else {
+                // Scrolling UP
+                setIsVisible(true);
+            }
+
+            lastScrollYValue = currentScrollY;
+            ticking = false;
+        };
+
+        const onScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(updateNavbarVisibility);
+                ticking = true;
             }
         };
 
         if (typeof window !== 'undefined') {
-            window.addEventListener('scroll', controlNavbar, { passive: true });
-
-            return () => {
-                window.removeEventListener('scroll', controlNavbar);
-            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            return () => window.removeEventListener('scroll', onScroll);
         }
     }, []);
 

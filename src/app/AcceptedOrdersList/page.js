@@ -50,14 +50,11 @@ export default function AcceptedOrdersList() {
   return (
     <div className="container-fluid p-3 pb-5">
       {/* Header */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex justify-content-center align-items-center mb-4">
         <div className="page-header">
           <FaCheckCircle className="header-icon text-success" />
           <span>Accepted Orders</span>
         </div>
-
-        {/* Navigation Link back/to other pages if needed */}
-        <Link href="/dashboard" className="btn btn-outline-secondary btn-sm">Back to Dashboard</Link>
       </div>
 
       <div className="row justify-content-center">
@@ -108,7 +105,7 @@ export default function AcceptedOrdersList() {
                 {/* Status & Actions */}
                 <div className="payment-status d-flex justify-content-between align-items-center mt-3">
                   <div>
-                    <span>Status: </span>
+
                     <span className="badge bg-success text-white px-3 py-2 rounded-pill" style={{ fontSize: '0.9rem' }}>Accepted</span>
                   </div>
 

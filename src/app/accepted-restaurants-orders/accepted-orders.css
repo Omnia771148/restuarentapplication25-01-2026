@@ -1,11 +1,12 @@
 .accepted-orders-container {
     min-height: 100vh;
-    background-color: #F8F5EE;
+    background-color: #fcfbf7;
     font-family: "Times New Roman", Times, serif;
     display: flex;
     flex-direction: column;
     padding: 20px;
-    padding-bottom: 80px;
+    padding-bottom: 200px;
+    /* Increased for scrollability */
 }
 
 /* Header Area - Matching Contact/MyOrders UI */
@@ -40,7 +41,7 @@
 }
 
 .header-title-pill {
-    background-color: white;
+    background-color: #e6e0d0;
     padding: 12px 30px;
     border-radius: 50px;
     display: flex;

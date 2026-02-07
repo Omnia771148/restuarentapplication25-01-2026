@@ -1,16 +1,12 @@
 .settings-container {
     min-height: 100vh;
-    background-color: #F8F5EE;
-    /* Creamy background */
-    font-family: 'serif';
-    /* Matches the serif font in the image (SPV) - seemingly Serif for some parts? Or classic sans. Let's use a system font stack but maybe Serif for the logo. The user UI looks like it mixes fonts. The menu items look serif-like. */
+    background-color: #fcfbf7;
     font-family: "Times New Roman", Times, serif;
-    /* The image has a very serif look */
     display: flex;
     flex-direction: column;
     padding: 20px;
-    padding-bottom: 80px;
-    /* Space for bottom nav */
+    padding-bottom: 200px;
+    /* Increased for scrollability */
 }
 
 /* Header Section */
@@ -62,7 +58,7 @@
 
 /* Page Title Pill */
 .page-title-pill {
-    background-color: white;
+    background-color: #e6e0d0;
     padding: 10px 25px;
     border-radius: 50px;
     display: inline-flex;

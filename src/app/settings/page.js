@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaCog, FaEdit, FaEnvelope, FaPlay } from "react-icons/fa";
+import { FaCog, FaEdit, FaEnvelope, FaPlay, FaUser } from "react-icons/fa";
 import { BsMailbox2Flag } from "react-icons/bs";
 import "./settings.css";
 
@@ -22,22 +22,12 @@ export default function SettingsPage() {
 
     return (
         <div className="settings-container">
-            {/* Top Header */}
-            <div className="top-header">
-                <div className="logo-circle"></div>
-                <div className="header-text">
-                    <span className="brand-text">SPV</span>
-                    <div className="sub-header-text">
-                        <span>Delivery partner app</span>
-                        <span>Thanks for your service</span>
-                    </div>
-                </div>
-            </div>
+
 
             {/* Page Title */}
             <div className="page-title-pill">
                 <FaCog className="settings-icon-spin" />
-                <span>Setting</span>
+                <span>Settings</span>
             </div>
 
             {/* Menu Container */}
@@ -46,7 +36,7 @@ export default function SettingsPage() {
                 {/* Profile */}
                 <Link href="/my-profile" className="menu-item">
                     <div className="menu-left">
-                        <FaEdit className="menu-icon" />
+                        <FaUser className="menu-icon" />
                         <span className="menu-text">my profile</span>
                     </div>
                     <FaPlay className="arrow-icon" />

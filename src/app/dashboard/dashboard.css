@@ -1,23 +1,21 @@
 /* src/app/home.css */
 .dashboard-container {
     background-color: #fcfbf7;
-    /* Light creamy background */
     min-height: 100vh;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     color: #333;
-    padding-bottom: 80px;
-    /* Space for bottom nav if it were there */
+    padding-bottom: 120px;
+    /* Space for bottom nav */
 }
 
-/* Header */
 .header-box {
     background-color: #e6e0d0;
-    padding: 15px;
+    padding: 10px 15px;
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .logo-circle {
@@ -34,10 +32,9 @@
     color: #222;
 }
 
-/* Hero Image */
 .hero-image-container {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -49,63 +46,82 @@
     display: block;
 }
 
-/* Slider / Toggle */
-.restaurant-status-toggle {
-    text-align: center;
-    margin-bottom: 25px;
+.status-toggle-wrapper {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: center;
 }
 
-.swipe-text {
-    font-size: 0.9rem;
-    color: #aaa;
-    margin-bottom: 5px;
-}
-
-.toggle-switch {
-    background-color: #ef4444;
-    /* Red for Off */
-    border-radius: 50px;
+.swipe-style-switch {
+    width: 180px;
+    /* Further decreased width */
+    height: 52px;
+    background: #e0e0e0;
+    border-radius: 26px;
     padding: 5px;
     position: relative;
-    width: 290px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    /* Always start from left, use transform for movement */
     cursor: pointer;
-    transition: background-color 0.3s;
-    margin: 0 auto;
-    /* Center the switch */
-    touch-action: none;
-    /* Prevent scroll while swiping */
-}
-
-.toggle-switch.active {
-    background-color: #22c55e;
-    /* Green for On */
-}
-
-.toggle-knob {
-    background-color: white;
-    color: #ef4444;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    /* Remove margins for precise calculations */
-    margin: 0;
-    transition: transform 0.3s, color 0.3s;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1), 0 4px 10px rgba(0, 0, 0, 0.1);
+    user-select: none;
 }
 
-/* 290px width - 10px padding - 50px knob = 230px travel */
-.toggle-switch.active .toggle-knob {
-    color: #22c55e;
-    transform: translateX(230px);
+.swipe-style-switch.inactive {
+    background: #ff4d4d;
+}
+
+.swipe-style-switch.active {
+    background: #00b894;
+}
+
+.switch-knob {
+    width: 42px;
+    height: 42px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    z-index: 2;
+}
+
+.swipe-style-switch.inactive .switch-knob {
+    transform: translateX(0);
+}
+
+.swipe-style-switch.nav-hidden {
+    opacity: 0 !important;
+    transform: translateX(-50%) translateY(40px) !important;
+    /* Smaller move for smoother feel */
+    pointer-events: none;
+}
+
+.swipe-style-switch.active .switch-knob {
+    transform: translateX(128px);
+    /* 180 - 10 (padding) - 42 (knob) = 128 */
+}
+
+.switch-label {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    left: 0;
+    font-weight: 900;
+    font-size: 1rem;
+    color: white;
+    letter-spacing: 1px;
+    pointer-events: none;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.swipe-style-switch.inactive .switch-label {
+    padding-left: 42px;
+}
+
+.swipe-style-switch.active .switch-label {
+    padding-right: 42px;
 }
 
 /* Menu Button */
@@ -114,12 +130,14 @@
     color: #000;
     border: none;
     border-radius: 25px;
-    padding: 15px 40px;
+    padding: 10px 40px;
+    /* Thinner button */
     font-weight: 800;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     text-transform: uppercase;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 0 auto 30px;
+    margin: 0 auto 15px;
+    /* Less margin */
     display: block;
     width: fit-content;
     cursor: pointer;
@@ -128,34 +146,62 @@
 
 /* Stats Grid */
 .stats-container {
+    margin-top: 10px;
     padding: 0 10px;
+}
+
+.g-3,
+.gx-3 {
+    --bs-gutter-x: 1.5rem !important;
+}
+
+.g-3,
+.gy-3 {
+    --bs-gutter-y: 1.5rem !important;
 }
 
 .stat-card {
     background-color: #e6e0d0;
-    border-radius: 12px;
-    padding: 15px;
-    margin-bottom: 15px;
+    border-radius: 16px;
+    padding: 20px 15px;
+    margin-bottom: 5px;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.stat-card:active {
+    transform: scale(0.98);
 }
 
 .stat-title {
-    font-size: 0.9rem;
-    color: #333;
-    margin-bottom: 5px;
-    border-bottom: 1px dashed #bbb;
-    padding-bottom: 5px;
-    display: inline-block;
+    font-size: 0.85rem;
+    color: #5d5d5d;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: block;
 }
 
 .stat-value {
-    font-size: 2rem;
-    font-weight: 900;
+    font-size: 1.4rem;
+    font-weight: 800;
     color: #000;
     margin: 0;
-    font-family: 'Impact', sans-serif;
-    /* close approximation to the bold font */
+    font-family: 'Inter', -apple-system, sans-serif;
+    letter-spacing: -0.5px;
+}
+
+.stat-currency {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #444;
+    margin-right: 4px;
 }
 
 /* Login Form Styles (Merging existing styles to be cleaner) */
@@ -178,7 +224,7 @@
 
 .hero-image-placeholder {
     width: 100%;
-    height: 200px;
+    height: 150px;
     background-color: #ddd;
     background-image: url("https://placehold.co/600x400?text=Food+Image");
     background-size: cover;

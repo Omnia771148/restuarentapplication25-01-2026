@@ -18,6 +18,14 @@ export default function OrdersList() {
   const { token, notificationPermissionStatus } = useFcmToken();
   const router = useRouter();
 
+  // Custom Alert State
+  const [alertConfig, setAlertConfig] = useState({
+    show: false,
+    title: "",
+    message: "",
+    type: "success" // 'success' or 'error'
+  });
+
   const rest =
     typeof window !== "undefined"
       ? localStorage.getItem("restlocation")
@@ -29,6 +37,14 @@ export default function OrdersList() {
   useEffect(() => {
     activeRef.current = isActive;
   }, [isActive]);
+
+  const showCustomAlert = (title, message, type = "success") => {
+    setAlertConfig({ show: true, title, message, type });
+  };
+
+  const closeAlert = () => {
+    setAlertConfig({ ...alertConfig, show: false });
+  };
 
   const enableAudio = () => {
     setAudioEnabled(true);
@@ -64,7 +80,7 @@ export default function OrdersList() {
     const restaurantId = localStorage.getItem("restid");
 
     if (!restaurantId) {
-      alert("No Restaurant ID found");
+      showCustomAlert("Error", "No Restaurant ID found", "error");
       setLoading(false);
       return;
     }
@@ -109,8 +125,6 @@ export default function OrdersList() {
 
   async function acceptOrder(orderId, razorpayOrderId) {
     setLoading(true);
-    const orderToAccept = orders.find((o) => o._id === orderId);
-
     try {
       const res = await axios.post("/api/orders/accept", {
         orderId,
@@ -119,14 +133,14 @@ export default function OrdersList() {
       });
 
       if (res.data.success) {
-        alert("✅ Order accepted");
+        showCustomAlert("Order Accepted", "The order has been successfully accepted.", "success");
         removeOrder(orderId);
       } else {
-        alert(res.data.message);
+        showCustomAlert("Accept Failed", res.data.message || "Could not accept order.", "error");
       }
     } catch (err) {
       console.error("Accept error:", err);
-      alert("Error accepting order");
+      showCustomAlert("Error", "Failed to connect to server.", "error");
     } finally {
       setLoading(false);
     }
@@ -138,14 +152,14 @@ export default function OrdersList() {
       const res = await axios.post("/api/orders/reject", { orderId });
 
       if (res.data.success) {
-        alert("❌ Order rejected");
+        showCustomAlert("Order Rejected", "The order has been rejected.", "error");
         removeOrder(orderId);
       } else {
-        alert(res.data.message);
+        showCustomAlert("Reject Failed", res.data.message || "Could not reject order.", "error");
       }
     } catch (err) {
       console.error("Reject error:", err);
-      alert("Error rejecting order");
+      showCustomAlert("Error", "Failed to connect to server.", "error");
     } finally {
       setLoading(false);
     }
@@ -162,50 +176,55 @@ export default function OrdersList() {
 
   return (
     <div className="container-fluid p-3 pb-5">
+      {/* Custom Alert Overlay */}
+      {alertConfig.show && (
+        <div className="custom-alert-overlay">
+          <div className="custom-alert-card">
+            <div className={`custom-alert-icon ${alertConfig.type}`}>
+              {alertConfig.type === "success" ? <FaCheckCircle /> : <FaExclamationCircle />}
+            </div>
+            <h3 className="custom-alert-title">{alertConfig.title}</h3>
+            <p className="custom-alert-message">{alertConfig.message}</p>
+            <button className="custom-alert-btn" onClick={closeAlert}>OK</button>
+          </div>
+        </div>
+      )}
+
       {/* Header Section */}
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex justify-content-center align-items-center mb-4">
         <div className="page-header">
           <FaBell className="header-icon" />
           <span>Orders</span>
         </div>
-
-        <div>
-          <button onClick={handleLogout} className="btn btn-danger btn-sm me-2">
-            Logout
-          </button>
-          {/* Navigation Links as Badges or Buttons */}
-          <Link href="/AcceptedOrdersList" className="btn btn-outline-primary btn-sm me-1">Live</Link>
-          <Link href="/accepted-restaurants-orders" className="btn btn-outline-secondary btn-sm">History</Link>
-        </div>
       </div>
 
-      {/* Mobile App Connection Prompt */}
+      {/* Mobile App Connection Prompt - Premium UI */}
       {!hasMobileApp && (
-        <div className="alert alert-info d-flex flex-column align-items-center mb-4">
-          <h5 className="mb-2">📱 Enable Notifications</h5>
+        <div className="mobile-connect-card">
+          <h5>📱 Stay Connected</h5>
+          <p>Get instant sound alerts and order notifications on your phone.</p>
           <button
             onClick={() => {
               const id = localStorage.getItem("restid");
               if (id) {
-                window.location.href = `restaurantapp://register?id=${id}`;
+                // Determine if we are on localhost or production
+                const currentOrigin = window.location.origin;
+                // Path used by the mobile app to sync
+                const connectUrl = `restaurantapp://register?id=${id}&url=${currentOrigin}`;
+
+                console.log("Connecting to:", connectUrl);
+                window.location.href = connectUrl;
+
                 localStorage.setItem(`mobileConnected_${id}`, "true");
                 setHasMobileApp(true);
+                showCustomAlert("Connection Sent", "If the app didn't open, ensure it is installed on your phone.", "success");
               } else {
-                alert("Please log in first");
+                showCustomAlert("Attention", "Please log in first", "error");
               }
             }}
-            className="btn btn-primary"
+            className="btn-connect-app"
           >
-            Connect Mobile App 🚀
-          </button>
-        </div>
-      )}
-
-      {/* Sound Toggle */}
-      {!audioEnabled && (
-        <div className="text-center mb-3">
-          <button onClick={enableAudio} className="btn btn-warning text-white">
-            Enable Sound 🔔
+            Connect Mobile App
           </button>
         </div>
       )}
@@ -237,7 +256,6 @@ export default function OrdersList() {
                     <tr>
                       <th>ITEMS</th>
                       <th className="text-center">QUANTITY</th>
-                      {/* Cost column removed as per request */}
                     </tr>
                   </thead>
                   <tbody>
@@ -245,7 +263,6 @@ export default function OrdersList() {
                       <tr key={idx}>
                         <td className="item-name">{item.name}</td>
                         <td className="text-center">{item.quantity}</td>
-                        {/* Cost cell removed */}
                       </tr>
                     ))}
                   </tbody>
@@ -258,20 +275,6 @@ export default function OrdersList() {
                   <span>Total Items: {order.items.length}</span>
                   <span>Total Quantity: {order.items.reduce((sum, item) => sum + item.quantity, 0)}</span>
                 </div>
-
-                {/* Calculated Totals (Visual only, based on items) */}
-                {/* User asked to HIDE Total price. I will comment this out or strictly follow "not show in UI". 
-                     However, the screenshot has Sub Total, GST, Total. 
-                     The USER TEXT overrides the screenshot: "no need to show Total price and Userid".
-                     So I will NOT render the Total section. 
-                 */}
-
-                {/* 
-                <div className="price-row">
-                    <span>Sub Total</span>
-                    <span>{order.totalPrice}</span>
-                </div>
-                */}
 
                 {/* Payment Status */}
                 <div className="payment-status">
