@@ -13,6 +13,7 @@ export async function POST(req) {
         }
 
         console.log(`📡 NOTIFICATION REQUEST: Attempting to notify Restaurant ${restaurantId}`);
+        console.log(`🚀 DEPLOYMENT TIMESTAMP: ${new Date().toISOString()}`); // Force Redeploy
 
         // Robust find: try string and then number
         let user = await RestuarentUser.findOne({ restId: String(restaurantId) });
