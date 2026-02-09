@@ -152,7 +152,7 @@ export default function OrdersList() {
       const res = await axios.post("/api/orders/reject", { orderId });
 
       if (res.data.success) {
-        showCustomAlert("Order Rejected", "The order has been rejected.", "error");
+        showCustomAlert("Order Rejected", "Theis order has been rejected.", "error");
         removeOrder(orderId);
       } else {
         showCustomAlert("Reject Failed", res.data.message || "Could not reject order.", "error");
