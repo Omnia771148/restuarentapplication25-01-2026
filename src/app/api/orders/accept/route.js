@@ -14,6 +14,20 @@ const OrderStatus =
     "orderstatuses" // force collection name
   );
 
+// ✅ NEW: lightweight model for pendingpayments
+const PendingPayment =
+  mongoose.models.PendingPayment ||
+  mongoose.model(
+    "PendingPayment",
+    new mongoose.Schema({
+      restaurantId: { type: String, required: true },
+      restaurantName: String,
+      grandTotal: { type: Number, default: 0 },
+      date: { type: Date, default: Date.now }
+    }),
+    "pendingpayments"
+  );
+
 export async function POST(request) {
   await connectionToDatabase();
 
@@ -87,6 +101,19 @@ export async function POST(request) {
     await AcceptedByRestaurant.updateOne(
       { orderId: orderData.orderId }, // match by orderId
       { $set: newEntryData },
+      { upsert: true }
+    );
+
+    // 5c. ✅ Record/Update Pending Payment for Restaurant
+    await PendingPayment.updateOne(
+      { restaurantId: orderData.restaurantId },
+      {
+        $inc: { grandTotal: orderData.totalPrice },
+        $set: {
+          restaurantName: orderData.restaurantName,
+          date: new Date()
+        }
+      },
       { upsert: true }
     );
 
