@@ -144,21 +144,11 @@ export default function AcceptedOrdersList() {
   return (
     <div className="container-fluid p-3 pb-5">
       {/* Header */}
-      <div className="d-flex justify-content-center align-items-center mb-4 position-relative">
+      <div className="d-flex justify-content-center align-items-center mb-4">
         <div className="page-header">
           <FaCheckCircle className="header-icon text-success" />
           <span>Accepted Orders</span>
         </div>
-
-        {/* Refresh Button */}
-        <button
-          onClick={fetchOrders}
-          className="btn btn-light position-absolute end-0 me-3 rounded-circle shadow-sm"
-          title="Refresh List"
-          style={{ width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          <FaSyncAlt className="text-muted" />
-        </button>
       </div>
 
       <div className="row justify-content-center">
