@@ -19,6 +19,7 @@ const RegisterUserSchema = new mongoose.Schema(
     restId: {
       type: String,
       required: true,
+      unique: true, // Optimizes query performance (adds index)
     },
     restLocation: {
       type: String,
