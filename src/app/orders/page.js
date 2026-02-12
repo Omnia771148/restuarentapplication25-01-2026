@@ -33,7 +33,10 @@ export default function OrdersList() {
 
   const restaurantLocation =
     typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("restaurantLocation") || "{}")
+      ? (() => {
+        const item = localStorage.getItem("restaurantLocation");
+        return item && item !== "undefined" ? JSON.parse(item) : {};
+      })()
       : {};
 
   const prevOrdersRef = useRef([]);
