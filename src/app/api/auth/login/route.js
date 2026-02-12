@@ -5,7 +5,7 @@ const MONGODB_URI = process.env.MongoURL;
 
 export async function POST(request) {
   let client;
-  
+
   try {
     const { email, password } = await request.json();
 
@@ -20,7 +20,7 @@ export async function POST(request) {
     // Connect to MongoDB using your MongoURL
     client = new MongoClient(MONGODB_URI);
     await client.connect();
-    
+
     // Get the database from the connection
     const db = client.db();
     const collection = db.collection('restuarentusers');
@@ -44,6 +44,7 @@ export async function POST(request) {
       user: {
         restId: user.restId,
         restLocation: user.restLocation,
+        restaurantLocation: user.restaurantLocation,
         email: user.email,
         phone: user.phone,
         _id: user._id

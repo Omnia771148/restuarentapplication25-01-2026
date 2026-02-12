@@ -41,6 +41,28 @@ const ProfileCard = ({ user }) => {
                 </div>
             </div>
 
+            {/* Latitude */}
+            <div className="d-flex align-items-center mb-4">
+                <div className="me-3" style={styles.iconContainer}>
+                    <FaMapMarkerAlt />
+                </div>
+                <div>
+                    <div style={styles.label}>Latitude</div>
+                    <div style={styles.value}>{user.restaurantLocation?.lat}</div>
+                </div>
+            </div>
+
+            {/* Longitude */}
+            <div className="d-flex align-items-center mb-4">
+                <div className="me-3" style={styles.iconContainer}>
+                    <FaMapMarkerAlt />
+                </div>
+                <div>
+                    <div style={styles.label}>Longitude</div>
+                    <div style={styles.value}>{user.restaurantLocation?.lng}</div>
+                </div>
+            </div>
+
             <div className="divider-line"></div>
 
             {/* Location Button */}

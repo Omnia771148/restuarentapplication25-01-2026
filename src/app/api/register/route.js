@@ -12,6 +12,8 @@ export async function POST(req) {
       password,
       restId,
       restLocation,
+      latitude,
+      longitude,
     } = await req.json();
 
     // validation
@@ -20,7 +22,9 @@ export async function POST(req) {
       !phone ||
       !password ||
       !restId ||
-      !restLocation
+      !restLocation ||
+      !latitude ||
+      !longitude
     ) {
       return NextResponse.json(
         { message: "All fields are required" },
@@ -45,6 +49,10 @@ export async function POST(req) {
       password,
       restId,
       restLocation,
+      restaurantLocation: {
+        lat: Number(latitude),
+        lng: Number(longitude),
+      },
     });
 
     return NextResponse.json(

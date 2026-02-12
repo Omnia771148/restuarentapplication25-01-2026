@@ -31,6 +31,7 @@ export async function GET(request) {
                 email: user.email,
                 phone: user.phone,
                 restLocation: user.restLocation,
+                restaurantLocation: user.restaurantLocation,
             },
         });
     } catch (error) {
