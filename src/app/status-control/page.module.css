@@ -30,15 +30,16 @@
 }
 
 .card {
-  background: #e6e0d0;
+  background: #ffffff;
   border-radius: 16px;
-  padding: 1.5rem;
+  padding: 1rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ccc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #eee;
   transition: transform 0.3s ease;
+  width: 100%;
 }
 
 .card:hover {
@@ -56,15 +57,367 @@
   gap: 1rem;
 }
 
-.button {
-  padding: 0.75rem 1.7rem;
-  border: none;
-  border-radius: 30px;
+
+
+.itemDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  flex: 1;
+}
+
+.itemName {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #222;
+  margin-bottom: 2px;
+}
+
+.itemMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.price {
+  color: #333;
   font-weight: 600;
+}
+
+.veg {
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+.nonVeg {
+  color: #c62828;
+  font-weight: 600;
+}
+
+/* Custom Toggle Switch Styles */
+.toggleContainer {
+  display: flex;
+  align-items: center;
+  position: relative;
+  background-color: #e0e0e0;
+  border-radius: 30px;
+  width: 200px;
+  height: 48px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  user-select: none;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+.toggleContainer.active {
+  background-color: #e0e0e0;
+  /* Background stays gray, pill moves */
+}
+
+.togglePill {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  background-color: #4caf50;
+  /* Green */
+  border-radius: 24px;
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
   font-size: 1rem;
-  outline: none;
+  z-index: 2;
+}
+
+
+
+/* We will handle the pill position via inline style or separate class for state */
+.toggleText {
+  z-index: 1;
+  flex: 1;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #888;
+  transition: color 0.3s ease;
+}
+
+.toggleText.activeText {
+  color: white;
+  /* When covered by pill */
+}
+
+/*  New approach: 
+    The container has two text labels.
+    A separate 'knob' or 'background' moves. 
+*/
+
+.switch {
+  position: relative;
+  width: 180px;
+  height: 44px;
+  background-color: #eee;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 4px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.slider {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  /* Approximately half minus padding */
+  height: 36px;
+  border-radius: 18px;
+  background-color: #2e7d32;
+  /* Forest Green */
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* To hold text and circle */
+  padding: 0 6px;
+}
+
+.knob {
+  width: 28px;
+  height: 28px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.activeLabel {
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.inactiveLabelContainer {
+  position: absolute;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+}
+
+.inactiveLabel {
+  color: #999;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: opacity 0.3s;
+}
+
+/* State: Inactive */
+.switch.off .slider {
+  /* When off, we want the slider to maybe disappear or move? 
+      Actually the user wants: [ Active (green) ] [ Inactive ]
+      When inactive, it should probably be: [ Active ] [ Inactive (Red/Gray?) ] 
+      or the knob slides to the right.
+   */
+  transform: translateX(100%);
+  background-color: #ddd;
+  /* Gray when inactive? Or Red? */
+}
+
+/* Let's refine based on the image: 
+   Active State: [ (✓ Active O) Inactive ]
+   Left side is green pill with "Active" and a white circle. Right side is "Inactive" text.
+   
+   Inactive State (Implicit): [ Active (O Inactive ) ] ?
+   Or the pill slides to the right.
+*/
+
+.toggleWrapper {
+  display: flex;
+  background: #e8e8e8;
+  border-radius: 30px;
+  position: relative;
+  width: 170px;
+  height: 40px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.toggleBackground {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 55%;
+  /* Slightly more than half */
+  border-radius: 30px;
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 5px;
+  z-index: 1;
+}
+
+.activeBackground {
+  background-color: #2e7d32;
+  left: 0;
+  justify-content: flex-end;
+  /* Knob on right */
+  padding-right: 5px;
+}
+
+.inactiveBackground {
+  background-color: #bdbdbd;
+  /* Gray for inactive */
+  left: 45%;
+  /* Move to right */
+  justify-content: flex-start;
+  /* Knob on left */
+  padding-left: 5px;
+}
+
+.knobCircle {
+  width: 30px;
+  height: 30px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.textLabels {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 15px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  z-index: 2;
+  pointer-events: none;
+  /* Let clicks pass through */
+}
+
+.activeText {
+  color: white;
+  /* Will be covered by green bg */
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.2s;
+}
+
+.inactiveText {
+  color: #888;
+  transition: color 0.3s;
+}
+
+/* When Active: ActiveText is visible on Green. InactiveText is visible on Gray. */
+/* When Inactive: ActiveText is on Gray? InactiveText is on Green/Gray? */
+
+/* Simplified Approach matching the exact image */
+.customToggle {
+  width: 200px;
+  height: 44px;
+  background-color: #e0e0e0;
+  border-radius: 22px;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.toggleSlider {
+  position: absolute;
+  height: 40px;
+  width: 110px;
+  /* Width of the green active part */
+  border-radius: 20px;
+  transition: transform 0.3s ease, background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* Text Left, Knob Right */
+  padding: 0 6px;
+  z-index: 2;
+  top: 2px;
+  left: 2px;
+}
+
+.toggleSlider.active {
+  background-color: #2e7d32;
+  /* Green */
+  transform: translateX(0);
+}
+
+.toggleSlider.inactive {
+  background-color: #bdbdbd;
+  /* Gray */
+  transform: translateX(86px);
+  /* Move right: 200 - 110 - 4 = 86px */
+  flex-direction: row-reverse;
+  /* Flip content: Knob Left, Text Right */
+}
+
+.toggleKnob {
+  width: 32px;
+  height: 32px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggleStatusText {
+  color: white;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 4px;
+}
+
+.staticLabelRight {
+  position: absolute;
+  right: 20px;
+  color: #999;
+  font-weight: 600;
+  font-size: 0.95rem;
+  z-index: 1;
+}
+
+.staticLabelLeft {
+  position: absolute;
+  left: 20px;
+  color: #999;
+  font-weight: 600;
+  font-size: 0.95rem;
+  z-index: 1;
 }
 
 .activeBtn {
@@ -162,7 +515,16 @@
     padding: 1rem;
     flex-direction: column;
     gap: 1rem;
-    text-align: center;
+    /* text-align: center; Removed to keep left alignment usually desired, or can force left */
+    align-items: flex-start;
+    /* Align everything to left on mobile too? Or center? */
+  }
+
+  .itemDetails {
+    align-items: center;
+    /* Center align on mobile if preferred, or left. Let's stick to left for "Align them" request usually implies alignment to an edge. */
+    align-items: flex-start;
+    width: 100%;
   }
 
   .label {
