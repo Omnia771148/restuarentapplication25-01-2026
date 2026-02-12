@@ -513,11 +513,10 @@
 
   .card {
     padding: 1rem;
-    flex-direction: column;
+    /* Removed flex-direction: column to keep it side-by-side (row) layout */
     gap: 1rem;
-    /* text-align: center; Removed to keep left alignment usually desired, or can force left */
-    align-items: flex-start;
-    /* Align everything to left on mobile too? Or center? */
+    align-items: center;
+    /* Vertically center content */
   }
 
   .itemDetails {
@@ -546,30 +545,101 @@
 
 @media (max-width: 480px) {
   .container {
-    padding: 1rem;
-    gap: 1rem;
+    padding: 1rem 0.5rem;
+    /* Less horizontal padding */
+    gap: 1.5rem;
   }
 
   .title {
-    font-size: 1.5rem;
-    width: 90%;
+    font-size: 1.8rem;
+    width: 100%;
     text-align: center;
+    border-radius: 0;
+    /* Optional: if making it edge-to-edge look */
+    margin-bottom: 1rem;
   }
 
   .bulkActions {
     flex-direction: column;
-    gap: 0.8rem;
-    align-items: center;
+    gap: 1rem;
+    align-items: stretch;
+    /* Stretch buttons to full width */
+    width: 100%;
+    padding: 0;
+    /* Remove padding if any */
   }
 
   .activateAllBtn,
   .deactivateAllBtn {
     width: 100%;
-    padding: 0.8rem 1rem !important;
+    border-radius: 8px;
+    /* Slightly less rounded for full width look */
     font-size: 1rem !important;
+    padding: 1rem !important;
+  }
+
+  .grid {
+    width: 100%;
+    padding: 0;
+  }
+
+  .card {
+    border-radius: 12px;
+    padding: 1.2rem;
+    width: 100%;
   }
 
   .label {
     font-size: 1.1rem;
+  }
+
+  .customToggle {
+    /* width: 100%; Removed full width to keep it compact on the right */
+    width: auto;
+    min-width: 140px;
+    /* Ensure enough width for labels */
+    height: 40px;
+    /* Slightly smaller height on mobile */
+  }
+
+  .toggleSlider {
+    height: 36px;
+    /* Adjust slider height for smaller container */
+    width: 90px;
+    /* Smaller slider width */
+    top: 2px;
+  }
+
+  .toggleSlider.inactive {
+    transform: translateX(calc(100% - 90px - 4px));
+    /* Adjust translation logic based on container width */
+    /* Or simpler: if container is dynamic, maybe use specific pixel value if known. 
+         Let's stick to fixed mobile width for simplicity: 160px container
+      */
+  }
+
+  /* Overriding toggle width specifically for mobile to fit side-by-side */
+  .customToggle {
+    width: 160px;
+  }
+
+  .toggleSlider.inactive {
+    /* Container 160, Slider 90, Padding 2. Space = 160-4 = 156. Right pos = 156 - 90 = 66 */
+    transform: translateX(66px);
+  }
+
+  .staticLabelLeft,
+  .staticLabelRight {
+    font-size: 0.8rem;
+    /* Smaller text */
+  }
+
+  /* Hide static labels on very small screens if needed, or adjust pos */
+  .staticLabelRight {
+    right: 10px;
+  }
+
+  .staticLabelLeft {
+    left: 10px;
   }
 }
