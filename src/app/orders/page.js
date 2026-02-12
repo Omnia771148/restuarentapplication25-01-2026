@@ -31,6 +31,14 @@ export default function OrdersList() {
       ? localStorage.getItem("restlocation")
       : null;
 
+  const restaurantLocation =
+    typeof window !== "undefined"
+      ? (() => {
+        const item = localStorage.getItem("restaurantLocation");
+        return item && item !== "undefined" ? JSON.parse(item) : {};
+      })()
+      : {};
+
   const prevOrdersRef = useRef([]);
   const activeRef = useRef(false);
 
@@ -59,6 +67,7 @@ export default function OrdersList() {
 
     localStorage.removeItem("restid");
     localStorage.removeItem("restlocation");
+    localStorage.removeItem("restaurantLocation");
     localStorage.removeItem("loginTime");
     router.push("/");
   };
@@ -129,6 +138,7 @@ export default function OrdersList() {
       const res = await axios.post("/api/orders/accept", {
         orderId,
         rest,
+        restaurantLocation,
         razorpayOrderId,
       });
 

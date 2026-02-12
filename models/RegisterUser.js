@@ -24,6 +24,10 @@ const RegisterUserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    restaurantLocation: {
+      lat: { type: Number, required: true },
+      lng: { type: Number, required: true },
+    },
     fcmToken: {
       type: String, // Store the FCM token for notifications (Web)
     },

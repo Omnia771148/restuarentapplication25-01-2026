@@ -7,6 +7,8 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [restId, setRestId] = useState("");
   const [restLocation, setRestLocation] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
   const [msg, setMsg] = useState("");
 
   return (
@@ -28,6 +30,12 @@ export default function RegisterPage() {
       <input placeholder="Restaurant Location" onChange={(e) => setRestLocation(e.target.value)} />
       <br /><br />
 
+      <input placeholder="Latitude" onChange={(e) => setLatitude(e.target.value)} />
+      <br /><br />
+
+      <input placeholder="Longitude" onChange={(e) => setLongitude(e.target.value)} />
+      <br /><br />
+
       <button
         onClick={async () => {
           const res = await fetch("/api/register", {
@@ -39,6 +47,8 @@ export default function RegisterPage() {
               password,
               restId,
               restLocation,
+              latitude,
+              longitude,
             }),
           });
           const data = await res.json();
@@ -52,3 +62,4 @@ export default function RegisterPage() {
     </div>
   );
 }
+//dddd

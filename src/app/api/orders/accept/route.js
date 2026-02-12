@@ -33,7 +33,7 @@ export async function POST(request) {
 
   try {
     // 1. Get mongoId, rest location, AND razorpayOrderId from frontend
-    const { orderId: mongoId, rest, razorpayOrderId } = await request.json();
+    const { orderId: mongoId, rest, restaurantLocation, razorpayOrderId } = await request.json();
 
     if (!mongoId) {
       return NextResponse.json(
@@ -83,6 +83,7 @@ export async function POST(request) {
       ...orderData,
       ...userDetails,
       rest: rest,
+      restaurantLocation: restaurantLocation, // Save as object {lat, lng}
       razorpayOrderId: razorpayOrderId || orderData.razorpayOrderId,
     };
 

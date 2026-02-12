@@ -31,6 +31,7 @@ const acceptedOrderSchema = new mongoose.Schema({
   paymentStatus: String,
 
   location: Object,
+  restaurantLocation: Object,
 
   restaurantId: String,
   aa: String,

@@ -52,6 +52,7 @@ export default function Home() {
       if (data.success) {
         localStorage.setItem("restid", data.user.restId);
         localStorage.setItem("restlocation", data.user.restLocation);
+        localStorage.setItem("restaurantLocation", JSON.stringify(data.user.restaurantLocation));
         localStorage.setItem("loginTime", Date.now());
         router.push("/dashboard");
       } else {
