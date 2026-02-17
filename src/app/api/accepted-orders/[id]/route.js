@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectionToDatabase from "../../../../../lib/mongoose";
 import AcceptedOrder from "../../../../../models/AcceptedOrder";
+import RestuarentUser from "../../../../../models/RegisterUser";
 
 export async function GET(request, context) {
   await connectionToDatabase();
@@ -25,9 +26,16 @@ export async function GET(request, context) {
       );
     }
 
+    // Fetch restaurant email
+    const restaurantUser = await RestuarentUser.findOne({ restId: order.restaurantId });
+    const restaurantEmail = restaurantUser ? restaurantUser.email : null;
+
     return NextResponse.json({
       success: true,
-      order,
+      order: {
+        ...order.toObject(),
+        restaurantEmail
+      },
     });
   } catch (err) {
     console.error("❌ Error fetching accepted order:", err);

@@ -1,18 +1,24 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import axios from "axios";
 import Loading from "../../loading/page";
 
 export default function InvoicePage() {
   const { id } = useParams();
+  const searchParams = useSearchParams();
+  const source = searchParams.get('source');
   const [order, setOrder] = useState(null);
 
   useEffect(() => {
     const fetchInvoice = async () => {
       try {
-        const res = await axios.get(`/api/accepted-orders/${id}`);
+        const url = source === 'restaurant'
+          ? `/api/accepted-by-restaurants/${id}`
+          : `/api/accepted-orders/${id}`;
+
+        const res = await axios.get(url);
         setOrder(res.data.order);
 
         // Auto print
@@ -23,15 +29,17 @@ export default function InvoicePage() {
       }
     };
 
-    fetchInvoice();
-  }, [id]);
+    if (id) fetchInvoice();
+  }, [id, source]);
 
   // Use your pizza loading component here
   if (!order) return <Loading />;
 
   return (
     <div style={{ width: "300px", fontFamily: "monospace" }}>
-      <h3 style={{ textAlign: "center" }}>🍽 Restaurant Invoice</h3>
+      <h3 style={{ textAlign: "center" }}>
+        🍽 {order.restaurantEmail || order.restaurantName || "Restaurant Invoice"}
+      </h3>
       <hr />
 
       <p>Order ID: {order.orderId}</p>

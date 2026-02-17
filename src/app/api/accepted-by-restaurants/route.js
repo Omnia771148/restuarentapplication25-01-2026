@@ -32,7 +32,8 @@ export async function GET(request) {
             userPhone: order.userPhone,
             deliveryAddress: order.deliveryAddress,
             items: Array.isArray(order.items) ? order.items : [],
-            status: order.status
+            status: order.status,
+            restaurantName: order.restaurantName
         }));
 
         return NextResponse.json({ success: true, orders: formattedOrders });

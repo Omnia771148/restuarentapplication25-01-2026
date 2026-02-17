@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { FaChevronLeft, FaCheckCircle, FaClipboardList } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./accepted-orders.css";
@@ -90,76 +91,7 @@ export default function AcceptedByRestaurantsOrders() {
         );
     }
 
-    const handlePrintInvoice = (order) => {
-        const printWindow = window.open('', '', 'width=600,height=600');
-        printWindow.document.write(`
-            <html>
-                <head>
-                    <title>Invoice - ${order.orderId}</title>
-                    <style>
-                        body { font-family: 'Courier New', monospace; padding: 20px; text-align: center; }
-                        .header { margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 15px; }
-                        .restaurant-name { font-size: 1.5rem; font-weight: bold; text-transform: uppercase; margin: 0; }
-                        .order-meta { margin: 15px 0; font-size: 0.9rem; text-align: left; border-bottom: 1px dashed #000; padding-bottom: 10px; }
-                        .items-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; }
-                        .items-table th { border-bottom: 1px solid #000; padding: 5px 0; text-align: left; }
-                        .items-table td { padding: 5px 0; text-align: left; }
-                        .text-right { text-align: right !important; }
-                        .total-section { border-top: 2px solid #000; padding-top: 10px; font-weight: bold; font-size: 1.1rem; text-align: right; }
-                        .footer { margin-top: 30px; font-size: 0.8rem; color: #555; }
-                        @media print {
-                            .no-print { display: none; }
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="header">
-                        <h1 class="restaurant-name">Restaurant Invoice</h1>
-                        <p>Thank you for your order!</p>
-                    </div>
-                    
-                    <div class="order-meta">
-                        <p><strong>Order ID:</strong> ${order.orderId}</p>
-                        <p><strong>Date:</strong> ${new Date(order.orderDate).toLocaleString()}</p>
-                        ${order.userName ? `<p><strong>Customer:</strong> ${order.userName}</p>` : ''}
-                    </div>
 
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th style="text-align: center;">Qty</th>
-                                <th class="text-right">Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${order.items.map(item => `
-                                <tr>
-                                    <td>${item.name}</td>
-                                    <td style="text-align: center;">${item.quantity}</td>
-                                    <td class="text-right">₹${item.price * item.quantity}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-
-                    <div class="total-section">
-                        <p>Total: ₹${order.grandTotal || order.totalPrice}</p>
-                    </div>
-
-                    <div class="footer">
-                        <p>-- End of Receipt --</p>
-                    </div>
-                </body>
-            </html>
-        `);
-        printWindow.document.close();
-        printWindow.focus();
-        setTimeout(() => {
-            printWindow.print();
-            printWindow.close();
-        }, 500);
-    };
 
     return (
         <div className="accepted-orders-container">
@@ -218,12 +150,13 @@ export default function AcceptedByRestaurantsOrders() {
                                 </div>
                             </div>
 
-                            <button
-                                className="invoice-btn"
-                                onClick={() => handlePrintInvoice(order)}
+                            <Link
+                                href={`/invoice/${order._id}?source=restaurant`}
+                                target="_blank"
+                                className="invoice-btn text-decoration-none d-inline-flex align-items-center justify-content-center"
                             >
-                                <FaClipboardList /> Generate Invoice
-                            </button>
+                                <FaClipboardList className="me-2" /> Generate Invoice
+                            </Link>
                         </div>
                     ))
                 )}
