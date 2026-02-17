@@ -21,6 +21,9 @@ export default function InvoicePage() {
         const res = await axios.get(url);
         setOrder(res.data.order);
 
+        // Set title to remove "Next App" from print header
+        document.title = "Restaurant Invoice";
+
         // Auto print
         setTimeout(() => window.print(), 500);
       } catch (err) {
@@ -37,9 +40,26 @@ export default function InvoicePage() {
 
   return (
     <div style={{ width: "300px", fontFamily: "monospace" }}>
+      <style jsx global>{`
+        @media print {
+          @page {
+            margin: 0;
+            size: auto;
+          }
+          body {
+            margin: 1cm;
+          }
+        }
+      `}</style>
       <h3 style={{ textAlign: "center" }}>
         🍽 {order.restaurantEmail || order.restaurantName || "Restaurant Invoice"}
       </h3>
+      <p style={{ textAlign: "center", margin: "5px 0", fontSize: "12px" }}>
+        Address: {order.address || "None"}
+      </p>
+      <p style={{ textAlign: "center", margin: "5px 0", fontSize: "12px" }}>
+        FSSAI: {order.fssai || "None"}
+      </p>
       <hr />
 
       <p>Order ID: {order.orderId}</p>

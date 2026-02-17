@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Loading from "../loading/page";
-import { FaUserCircle, FaEnvelope, FaPhone, FaMapMarkerAlt, FaSyncAlt, FaExclamationCircle } from "react-icons/fa";
+import { FaUserCircle, FaEnvelope, FaPhone, FaMapMarkerAlt, FaSyncAlt, FaExclamationCircle, FaBuilding } from "react-icons/fa";
 import "../orders/orders.css"; // Reuse themed CSS
 
 // --- Sub-Component: Profile Card ---
@@ -38,6 +38,28 @@ const ProfileCard = ({ user }) => {
                 <div>
                     <div style={styles.label}>Phone Number</div>
                     <div style={styles.value}>{user.phone}</div>
+                </div>
+            </div>
+
+            {/* Address */}
+            <div className="d-flex align-items-center mb-4">
+                <div className="me-3" style={styles.iconContainer}>
+                    <FaBuilding />
+                </div>
+                <div>
+                    <div style={styles.label}>Restaurant Address</div>
+                    <div style={styles.value}>{user.address || "None"}</div>
+                </div>
+            </div>
+
+            {/* FSSAI */}
+            <div className="d-flex align-items-center mb-4">
+                <div className="me-3" style={styles.iconContainer}>
+                    <FaUserCircle />
+                </div>
+                <div>
+                    <div style={styles.label}>FSSAI Number</div>
+                    <div style={styles.value}>{user.fssai || "None"}</div>
                 </div>
             </div>
 

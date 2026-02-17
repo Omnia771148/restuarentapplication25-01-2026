@@ -12,6 +12,8 @@ export async function POST(req) {
       password,
       restId,
       restLocation,
+      address,
+      fssai,
       latitude,
       longitude,
     } = await req.json();
@@ -23,6 +25,8 @@ export async function POST(req) {
       !password ||
       !restId ||
       !restLocation ||
+      !address ||
+      !fssai ||
       !latitude ||
       !longitude
     ) {
@@ -49,6 +53,8 @@ export async function POST(req) {
       password,
       restId,
       restLocation,
+      address,
+      fssai,
       restaurantLocation: {
         lat: Number(latitude),
         lng: Number(longitude),

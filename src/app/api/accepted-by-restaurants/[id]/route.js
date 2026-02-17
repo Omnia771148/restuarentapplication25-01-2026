@@ -28,12 +28,16 @@ export async function GET(request, context) {
         // Fetch restaurant email
         const restaurantUser = await RestuarentUser.findOne({ restId: order.restaurantId });
         const restaurantEmail = restaurantUser ? restaurantUser.email : null;
+        const fssai = restaurantUser ? restaurantUser.fssai : null;
+        const address = restaurantUser ? restaurantUser.address : null;
 
         return NextResponse.json({
             success: true,
             order: {
                 ...order.toObject(),
-                restaurantEmail
+                restaurantEmail,
+                fssai,
+                address
             },
         });
     } catch (err) {

@@ -31,6 +31,8 @@ export async function GET(request) {
                 email: user.email,
                 phone: user.phone,
                 restLocation: user.restLocation,
+                address: user.address,
+                fssai: user.fssai,
                 restaurantLocation: user.restaurantLocation,
             },
         });

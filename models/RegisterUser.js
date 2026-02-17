@@ -24,6 +24,14 @@ const RegisterUserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    address: {
+      type: String,
+      required: true,
+    },
+    fssai: {
+      type: String,
+      required: true,
+    },
     restaurantLocation: {
       lat: { type: Number, required: true },
       lng: { type: Number, required: true },
