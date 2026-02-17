@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import connectionToDatabase from '../../../../lib/mongoose';
-import RestaurantStatus from '../../../../models/RestaurantStatus';
+import connectionToDatabase from '../../../../../lib/mongoose';
+import RestaurantStatus from '../../../../../models/RestaurantStatus';
 
 export const dynamic = 'force-dynamic'; // Ensure this route is not cached
 
