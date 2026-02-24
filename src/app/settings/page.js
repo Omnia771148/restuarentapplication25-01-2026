@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaCog, FaEdit, FaEnvelope, FaPlay, FaUser } from "react-icons/fa";
+import { FaCog, FaEdit, FaEnvelope, FaPlay, FaUser, FaStar } from "react-icons/fa";
 import { BsMailbox2Flag } from "react-icons/bs";
 import "./settings.css";
 
@@ -47,6 +47,15 @@ export default function SettingsPage() {
                     <div className="menu-left">
                         <BsMailbox2Flag className="menu-icon" />
                         <span className="menu-text">My Orders</span>
+                    </div>
+                    <FaPlay className="arrow-icon" />
+                </Link>
+
+                {/* My Reviews */}
+                <Link href="/my-reviews" className="menu-item">
+                    <div className="menu-left">
+                        <FaStar className="menu-icon" />
+                        <span className="menu-text">My Reviews</span>
                     </div>
                     <FaPlay className="arrow-icon" />
                 </Link>

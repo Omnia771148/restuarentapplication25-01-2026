@@ -14,6 +14,8 @@ export async function POST(req) {
       restLocation,
       address,
       fssai,
+      openTime,
+      closeTime,
       latitude,
       longitude,
     } = await req.json();
@@ -27,6 +29,8 @@ export async function POST(req) {
       !restLocation ||
       !address ||
       !fssai ||
+      !openTime ||
+      !closeTime ||
       !latitude ||
       !longitude
     ) {
@@ -55,6 +59,8 @@ export async function POST(req) {
       restLocation,
       address,
       fssai,
+      openTime,
+      closeTime,
       restaurantLocation: {
         lat: Number(latitude),
         lng: Number(longitude),

@@ -9,6 +9,8 @@ export default function RegisterPage() {
   const [restLocation, setRestLocation] = useState("");
   const [address, setAddress] = useState("");
   const [fssai, setFssai] = useState("");
+  const [openTime, setOpenTime] = useState("");
+  const [closeTime, setCloseTime] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [msg, setMsg] = useState("");
@@ -38,6 +40,14 @@ export default function RegisterPage() {
       <input placeholder="Restaurant FSSAI Number" onChange={(e) => setFssai(e.target.value)} />
       <br /><br />
 
+      <label>Opening Time</label>
+      <input type="time" onChange={(e) => setOpenTime(e.target.value)} />
+      <br /><br />
+
+      <label>Closing Time</label>
+      <input type="time" onChange={(e) => setCloseTime(e.target.value)} />
+      <br /><br />
+
       <input placeholder="Latitude" onChange={(e) => setLatitude(e.target.value)} />
       <br /><br />
 
@@ -57,6 +67,8 @@ export default function RegisterPage() {
               restLocation,
               address,
               fssai,
+              openTime,
+              closeTime,
               latitude,
               longitude,
             }),

@@ -1,0 +1,200 @@
+.my-reviews-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f8f9fa;
+    font-family: 'Poppins', sans-serif;
+    overflow-y: auto;
+    padding-bottom: 80px;
+    /* Space for bottom nav if present, or just some padding */
+}
+
+/* Header */
+.page-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #333;
+    cursor: pointer;
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}
+
+.back-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.page-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+/* Review List */
+.reviews-list {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.review-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    border: 1px solid #eee;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.review-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.review-rating {
+    display: flex;
+    align-items: center;
+    background-color: #e8f5e9;
+    /* Light green background for rating */
+    color: #2e7d32;
+    /* Dark green text */
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.star-icon {
+    margin-right: 4px;
+    font-size: 0.8rem;
+}
+
+.review-date {
+    font-size: 0.75rem;
+    color: #888;
+}
+
+.review-text {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.no-reviews {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    color: #888;
+    gap: 15px;
+}
+
+.no-reviews-icon {
+    font-size: 3rem;
+    color: #ddd;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #ff4757;
+    /* App primary color */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Restaurant ID badge (optional debug or info) */
+.restaurant-id-badge {
+    font-size: 0.7rem;
+    color: #999;
+    margin-top: 8px;
+    display: inline-block;
+}
+
+.reviewed-items {
+    margin-top: 15px;
+    padding-top: 12px;
+    border-top: 1px dashed #eee;
+}
+
+.reviewed-items h4 {
+    font-size: 0.75rem;
+    color: #999;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 600;
+}
+
+.item-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.item-badge {
+    background-color: #f5f5f5;
+    color: #333;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    border: 1px solid #efefef;
+}
+
+.item-badge .quantity {
+    background-color: #ff4757;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    margin-right: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}

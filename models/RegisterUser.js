@@ -32,6 +32,12 @@ const RegisterUserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    openTime: {
+      type: String, // format "HH:mm"
+    },
+    closeTime: {
+      type: String, // format "HH:mm"
+    },
     restaurantLocation: {
       lat: { type: Number, required: true },
       lng: { type: Number, required: true },
