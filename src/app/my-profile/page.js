@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Loading from "../loading/page";
-import { FaUserCircle, FaEnvelope, FaPhone, FaMapMarkerAlt, FaSyncAlt, FaExclamationCircle, FaBuilding } from "react-icons/fa";
+import { FaUserCircle, FaEnvelope, FaPhone, FaMapMarkerAlt, FaSyncAlt, FaExclamationCircle, FaBuilding, FaChevronLeft } from "react-icons/fa";
 import "../orders/orders.css"; // Reuse themed CSS
 
 // --- Sub-Component: Profile Card ---
@@ -161,10 +161,19 @@ export default function MyProfilePage() {
     return (
         <div className="container-fluid p-3 pb-5" style={styles.pageContainer}>
             {/* Header */}
-            <div className="d-flex justify-content-center align-items-center mb-4">
-                <div className="page-header">
-                    <FaUserCircle className="header-icon" />
-                    <span>My Profile</span>
+            <div className="d-flex align-items-center mb-4 position-relative">
+                <button
+                    onClick={() => router.push('/settings')}
+                    className="btn btn-light"
+                    style={{ position: 'absolute', left: '0', borderRadius: '50%', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}
+                >
+                    <FaChevronLeft />
+                </button>
+                <div className="d-flex justify-content-center w-100">
+                    <div className="page-header m-0">
+                        <FaUserCircle className="header-icon" />
+                        <span>My Profile</span>
+                    </div>
                 </div>
             </div>
 

@@ -266,6 +266,7 @@ export default function OrdersList() {
                     <tr>
                       <th>ITEMS</th>
                       <th className="text-center">QUANTITY</th>
+                      <th className="text-center">PRICE</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -273,6 +274,7 @@ export default function OrdersList() {
                       <tr key={idx}>
                         <td className="item-name">{item.name}</td>
                         <td className="text-center">{item.quantity}</td>
+                        <td className="text-center">₹{item.price}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -282,8 +284,18 @@ export default function OrdersList() {
 
                 {/* Total Counts */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', fontWeight: 'bold' }}>
-                  <span>Total Items: {order.items.length}</span>
-                  <span>Total Quantity: {order.items.reduce((sum, item) => sum + item.quantity, 0)}</span>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <span>Total Items</span>
+                    <span>{order.items.length}</span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <span>Total Quantity</span>
+                    <span>{order.items.reduce((sum, item) => sum + item.quantity, 0)}</span>
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <span>Total Price</span>
+                    <span>₹{order.totalPrice}</span>
+                  </div>
                 </div>
 
                 {/* Payment Status */}

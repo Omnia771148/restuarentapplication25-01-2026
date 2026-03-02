@@ -81,7 +81,7 @@ export default function Home() {
 
         {/* "Hello" Title */}
         <div className="title-box">
-          <h1 className="title-text">Hello</h1>
+          <h1 className="title-text">LEEVON</h1>
         </div>
 
         <form style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }} onSubmit={handleLogin}>

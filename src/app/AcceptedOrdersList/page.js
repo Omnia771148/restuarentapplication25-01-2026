@@ -39,6 +39,7 @@ const OrderCard = ({ order }) => {
           <tr>
             <th>ITEMS</th>
             <th className="text-center">QUANTITY</th>
+            <th className="text-center">PRICE</th>
           </tr>
         </thead>
         <tbody>
@@ -46,6 +47,7 @@ const OrderCard = ({ order }) => {
             <tr key={`${order._id}-item-${idx}`}>
               <td className="item-name">{item.name}</td>
               <td className="text-center">{item.quantity}</td>
+              <td className="text-center">₹{item.price}</td>
             </tr>
           ))}
         </tbody>
@@ -54,9 +56,19 @@ const OrderCard = ({ order }) => {
       <div className="divider-line"></div>
 
       {/* Total Counts */}
-      <div className="d-flex justify-content-between mt-2 fw-bold">
-        <span>Total Items: {order.items.length}</span>
-        <span>Total Quantity: {totalQuantity}</span>
+      <div className="d-flex justify-content-between mt-2 fw-bold text-center">
+        <div className="d-flex flex-column align-items-center">
+          <span>Total Items</span>
+          <span>{order.items.length}</span>
+        </div>
+        <div className="d-flex flex-column align-items-center">
+          <span>Total Quantity</span>
+          <span>{totalQuantity}</span>
+        </div>
+        <div className="d-flex flex-column align-items-center">
+          <span>Total Price</span>
+          <span>₹{order.totalPrice}</span>
+        </div>
       </div>
 
       {/* Status & Actions */}

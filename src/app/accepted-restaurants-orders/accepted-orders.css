@@ -42,21 +42,28 @@
 
 .header-title-pill {
     background-color: #e6e0d0;
-    padding: 12px 30px;
+    padding: 10px 20px;
     border-radius: 50px;
     display: flex;
     align-items: center;
     gap: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: bold;
     color: black;
+}
+
+@media (max-width: 480px) {
+    .header-title-pill {
+        padding: 6px 15px;
+        font-size: 1rem;
+    }
 }
 
 .header-icon {
     color: #4CAF50;
     /* Green checkmark style */
-    font-size: 1.5rem;
+    font-size: 1.3rem;
 }
 
 /* Order Card Styling */

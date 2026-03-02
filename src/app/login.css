@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 html,
 body {
@@ -12,10 +12,12 @@ body {
     display: flex;
     height: 100vh;
     height: 100dvh;
+    /* For mobile reliability */
     width: 100%;
     position: relative;
     overflow: hidden;
-    background-color: #FFFFFF;
+    background-color: #F7F6EE;
+    /* Fallback */
 }
 
 /* Background Split Panels */
@@ -25,7 +27,8 @@ body {
     top: 0;
     bottom: 0;
     width: 50%;
-    background-color: #FFFFFF;
+    background-color: #F8F7F2;
+    /* Lighter beige/cream */
     z-index: 0;
 }
 
@@ -35,7 +38,8 @@ body {
     top: 0;
     bottom: 0;
     width: 50%;
-    background-color: #DFD3C3;
+    background-color: #DDD4C4;
+    /* Darker beige */
     z-index: 0;
 }
 
@@ -46,26 +50,24 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    /* Pull content to top */
     width: 100%;
     height: 100%;
-    padding: 130px 40px 0;
-    /* Add top padding instead of centering */
+    padding: 120px 20px 0;
 }
 
 /* "Hello" Title Box */
 .title-box {
     background-color: #FFFFFF;
-    padding: 20px 80px;
-    border-radius: 50px;
-    margin-bottom: 60px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    padding: 15px 70px;
+    border-radius: 40px;
+    margin-bottom: 70px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
     text-align: center;
 }
 
 .title-text {
-    font-size: 3rem;
-    font-weight: 600;
+    font-size: 2rem;
+    font-weight: 500;
     color: #1a1a1a;
     margin: 0;
 }
@@ -73,19 +75,19 @@ body {
 /* Input Fields */
 .input-group-custom {
     background-color: #FFFFFF;
-    border-radius: 50px;
-    padding: 0 30px;
-    margin-bottom: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border-radius: 40px;
+    padding: 0 25px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 400px;
-    height: 75px;
+    max-width: 320px;
+    height: 60px;
 }
 
 .input-icon {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     margin-right: 15px;
     display: flex;
     align-items: center;
@@ -93,12 +95,11 @@ body {
 }
 
 .user-icon {
-    color: #888;
+    color: #9e9e9e;
 }
 
 .password-icon {
-    color: #E74C3C;
-    /* Red lock icon */
+    color: #E24836;
 }
 
 .form-control-custom {
@@ -106,31 +107,15 @@ body {
     background: transparent;
     outline: none;
     flex: 1;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #333;
-    font-weight: 400;
+    font-weight: 500;
 }
 
 .form-control-custom::placeholder {
-    color: #bbb;
-    font-size: 1.1rem;
-}
-
-/* Forgot Password */
-.forgot-password {
-    align-self: flex-end;
-    width: 100%;
-    max-width: 400px;
-    text-align: right;
-    margin-top: -10px;
-    margin-bottom: 50px;
-}
-
-.forgot-password a {
-    color: #000;
-    text-decoration: none;
+    color: #B5B5B5;
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 400;
 }
 
 /* Login Button */
@@ -138,55 +123,42 @@ body {
     background-color: #FFFFFF;
     color: #000;
     border: none;
-    border-radius: 50px;
-    padding: 15px 70px;
-    font-size: 2rem;
-    font-weight: 600;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border-radius: 40px;
+    padding: 15px 60px;
+    font-size: 1.5rem;
+    font-weight: 500;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    margin-bottom: 40px;
+    margin-top: 50px;
+    /* larger gap since forgot password is removed */
 }
 
 .login-btn-styled:hover {
     transform: translateY(-2px);
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
 
 .login-btn-styled:active {
     transform: scale(0.98);
 }
 
-/* Footer Section */
-.footer-signup {
-    margin-top: 20px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #000;
-}
-
-.signup-link {
-    color: #A52A2A;
-    /* Refinement for the red text */
-    text-decoration: none;
-    margin-left: 5px;
-}
-
 @media (max-width: 480px) {
-    .title-text {
-        font-size: 2.5rem;
-    }
-
     .title-box {
         padding: 15px 60px;
     }
 
-    .login-btn-styled {
+    .title-text {
         font-size: 1.8rem;
-        padding: 12px 60px;
     }
 
     .input-group-custom {
-        height: 65px;
+        max-width: 90%;
+        height: 60px;
+    }
+
+    .login-btn-styled {
+        font-size: 1.4rem;
+        padding: 15px 50px;
     }
 }
