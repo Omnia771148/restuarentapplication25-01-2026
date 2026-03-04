@@ -49,10 +49,17 @@ export async function POST(req) {
                 android: {
                     priority: 'high',
                     notification: {
-                        sound: 'default',
-                        channelId: 'default',
+                        sound: 'new_order.wav',
+                        channelId: 'orders',
                         priority: 'high',
                     },
+                },
+                apns: {
+                    payload: {
+                        aps: {
+                            sound: 'new_order.wav'
+                        }
+                    }
                 },
                 webpush: {
                     headers: { Urgency: "high" },
