@@ -15,10 +15,10 @@ export default function Loading() {
   return (
     <div style={styles.overlay}>
       <div style={styles.container}>
-        {/* SPV Logo with Orange Dot */}
+        {/* LEEVON Logo with Orange Dot */}
         <div style={styles.logoContainer}>
           <span style={styles.dot}></span>
-          <h1 style={styles.logoText}>SPV</h1>
+          <h1 className="stylish-logo">LEEVON</h1>
         </div>
 
         {/* Progress Bar */}
@@ -40,11 +40,25 @@ export default function Loading() {
       </div>
 
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@800&family=Outfit:wght@300;400;600&display=swap');
         
         body {
           margin: 0;
           font-family: 'Outfit', sans-serif;
+        }
+
+        .stylish-logo {
+          font-family: 'Montserrat', sans-serif;
+          font-size: 38px;
+          font-weight: 800;
+          margin: 0;
+          letter-spacing: 12px;
+          text-transform: uppercase;
+          line-height: 1;
+          background: linear-gradient(135deg, #2c2c2c 0%, #000000 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.15));
         }
       `}</style>
     </div>
@@ -87,13 +101,6 @@ const styles = {
     borderRadius: '50%',
     display: 'inline-block',
   },
-  logoText: {
-    fontSize: '36px', // Increased from 24px
-    fontWeight: '600',
-    color: '#1A1A1A',
-    margin: 0,
-    letterSpacing: '4px', // Increased from 2px
-  },
   progressBarContainer: {
     width: '240px', // Increased from 160px
     height: '4px', // Increased from 2px
@@ -129,3 +136,4 @@ const styles = {
     fontWeight: '400',
   },
 };
+

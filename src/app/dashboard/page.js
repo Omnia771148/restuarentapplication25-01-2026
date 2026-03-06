@@ -149,18 +149,15 @@ export default function Dashboard() {
         <div className="dashboard-container container-fluid p-3">
 
             {/* Header */}
-            <div className="header-box" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div className="logo-circle"></div>
-                    <h2 className="logo-text">SPV</h2>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-
-                    <div className="text-end">
-                        <small>Thank for choosing our<br />service</small>
-                    </div>
-                </div>
+            <div className="header-box" style={{ display: 'flex', alignItems: 'center', position: 'relative', height: '70px' }}>
+                <div className="logo-circle"></div>
+                <h2 className="logo-text" style={{
+                    position: 'absolute',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    margin: 0,
+                    whiteSpace: 'nowrap'
+                }}>LEEVON</h2>
             </div>
 
             {/* Hero Image */}
