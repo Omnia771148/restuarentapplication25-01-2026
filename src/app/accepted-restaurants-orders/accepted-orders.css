@@ -1,6 +1,6 @@
 .accepted-orders-container {
     min-height: 100vh;
-    background-color: #fcfbf7;
+    background-color: #E6DCC8;
     font-family: "Times New Roman", Times, serif;
     display: flex;
     flex-direction: column;
@@ -41,7 +41,7 @@
 }
 
 .header-title-pill {
-    background-color: #e6e0d0;
+    background-color: #E6DCC8;
     padding: 10px 20px;
     border-radius: 50px;
     display: flex;
@@ -68,7 +68,7 @@
 
 /* Order Card Styling */
 .order-card {
-    background-color: #E3D9C6;
+    background-color: #E6DCC8;
     border-radius: 20px;
     padding: 20px;
     margin-bottom: 20px;
@@ -84,7 +84,7 @@
     margin-bottom: 15px;
     padding: 8px 12px;
     /* Add padding for the bar */
-    background-color: #F8F5EE;
+    background-color: #E6DCC8;
     /* Combined background */
     border-radius: 8px;
     /* Rounded corners */
@@ -123,7 +123,7 @@
 }
 
 .order-details-box {
-    background-color: #F8F5EE;
+    background-color: #E6DCC8;
     border-radius: 12px;
     padding: 0 15px;
     overflow: hidden;

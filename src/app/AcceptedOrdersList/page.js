@@ -38,7 +38,7 @@ const OrderCard = ({ order }) => {
         <thead>
           <tr>
             <th>ITEMS</th>
-            <th className="text-center">QUANTITY</th>
+            <th className="text-center">QTY</th>
             <th className="text-center">PRICE</th>
           </tr>
         </thead>
@@ -62,7 +62,7 @@ const OrderCard = ({ order }) => {
           <span>{order.items.length}</span>
         </div>
         <div className="d-flex flex-column align-items-center">
-          <span>Total Quantity</span>
+          <span>Total QTY</span>
           <span>{totalQuantity}</span>
         </div>
         <div className="d-flex flex-column align-items-center">
