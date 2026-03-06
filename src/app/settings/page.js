@@ -3,8 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaCog, FaEdit, FaEnvelope, FaPlay, FaUser, FaStar } from "react-icons/fa";
-import { BsMailbox2Flag } from "react-icons/bs";
+import { FaCog, FaStar, FaEnvelope, FaChevronRight, FaRegUser, FaBoxOpen, FaSignOutAlt } from "react-icons/fa";
 import "./settings.css";
 
 export default function SettingsPage() {
@@ -23,7 +22,6 @@ export default function SettingsPage() {
     return (
         <div className="settings-container">
 
-
             {/* Page Title */}
             <div className="page-title-pill">
                 <FaCog className="settings-icon-spin" />
@@ -36,19 +34,19 @@ export default function SettingsPage() {
                 {/* Profile */}
                 <Link href="/my-profile" className="menu-item">
                     <div className="menu-left">
-                        <FaUser className="menu-icon" />
-                        <span className="menu-text">my profile</span>
+                        <FaRegUser className="menu-icon" />
+                        <span className="menu-text">My Profile</span>
                     </div>
-                    <FaPlay className="arrow-icon" />
+                    <FaChevronRight className="arrow-icon" />
                 </Link>
 
                 {/* Orders */}
                 <Link href="/accepted-restaurants-orders" className="menu-item">
                     <div className="menu-left">
-                        <BsMailbox2Flag className="menu-icon" />
+                        <FaBoxOpen className="menu-icon" />
                         <span className="menu-text">My Orders</span>
                     </div>
-                    <FaPlay className="arrow-icon" />
+                    <FaChevronRight className="arrow-icon" />
                 </Link>
 
                 {/* My Reviews */}
@@ -57,24 +55,35 @@ export default function SettingsPage() {
                         <FaStar className="menu-icon" />
                         <span className="menu-text">My Reviews</span>
                     </div>
-                    <FaPlay className="arrow-icon" />
+                    <FaChevronRight className="arrow-icon" />
                 </Link>
 
                 {/* Contact Us */}
                 <Link href="/contact-us" className="menu-item">
                     <div className="menu-left">
-                        <FaEnvelope className="menu-icon" /> {/* Using Envelope for Contact Us */}
+                        <FaEnvelope className="menu-icon" />
                         <span className="menu-text">Contact Us</span>
                     </div>
-                    <FaPlay className="arrow-icon" />
+                    <FaChevronRight className="arrow-icon" />
                 </Link>
 
                 {/* Logout */}
-                <button onClick={handleLogout} className="logout-btn">
-                    Logout
-                </button>
+                <div onClick={handleLogout} className="menu-item logout-item">
+                    <div className="menu-left">
+                        <FaSignOutAlt className="menu-icon logout-icon" />
+                        <span className="menu-text logout-text">Logout</span>
+                    </div>
+                    <FaChevronRight className="arrow-icon logout-arrow" />
+                </div>
             </div>
 
+            <style jsx global>{`
+                @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+                
+                .settings-container {
+                    font-family: 'Montserrat', sans-serif !important;
+                }
+            `}</style>
         </div>
     );
 }
