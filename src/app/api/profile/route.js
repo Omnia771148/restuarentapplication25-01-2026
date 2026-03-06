@@ -28,6 +28,7 @@ export async function GET(request) {
         return NextResponse.json({
             success: true,
             user: {
+                name: user.name, // Added this field
                 email: user.email,
                 phone: user.phone,
                 restLocation: user.restLocation,

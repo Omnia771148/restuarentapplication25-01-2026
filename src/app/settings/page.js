@@ -1,13 +1,39 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaCog, FaStar, FaEnvelope, FaChevronRight, FaRegUser, FaBoxOpen, FaSignOutAlt } from "react-icons/fa";
+import axios from "axios";
+import { FaCog, FaStar, FaEnvelope, FaChevronRight, FaRegUser, FaBoxOpen, FaSignOutAlt, FaPhoneAlt } from "react-icons/fa";
 import "./settings.css";
 
 export default function SettingsPage() {
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     const router = useRouter();
+
+    const fetchProfile = useCallback(async () => {
+        try {
+            const restId = typeof window !== 'undefined' ? localStorage.getItem("restid") : null;
+            if (!restId) {
+                router.push("/");
+                return;
+            }
+
+            const res = await axios.get(`/api/profile?restId=${restId}`);
+            if (res.data.success) {
+                setUser(res.data.user);
+            }
+        } catch (err) {
+            console.error("Profile fetch error:", err);
+        } finally {
+            setLoading(false);
+        }
+    }, [router]);
+
+    useEffect(() => {
+        fetchProfile();
+    }, [fetchProfile]);
 
     const handleLogout = () => {
         const id = localStorage.getItem("restid");
@@ -23,14 +49,31 @@ export default function SettingsPage() {
         <div className="settings-container">
 
             {/* Page Title */}
-            <div className="page-title-pill">
-                <FaCog className="settings-icon-spin" />
-                <span>Settings</span>
-            </div>
+            {!loading && (
+                <div className="page-title-pill">
+                    <FaCog className="settings-icon-spin" />
+                    <span>Settings</span>
+                </div>
+            )}
+
+            {/* Profile Detail Card */}
+            {user && (
+                <div className="profile-detail-card">
+                    <div className="profile-initial-circle">
+                        {user.email ? user.email.charAt(0).toUpperCase() : "L"}
+                    </div>
+                    <div className="profile-info-group">
+                        <h2 className="profile-name-text">{user.email || "LEEVON"}</h2>
+                        <div className="profile-phone-row">
+                            <FaPhoneAlt className="phone-icon-small" />
+                            <span className="profile-phone-text">{user.phone}</span>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* Menu Container */}
             <div className="menu-container">
-
                 {/* Profile */}
                 <Link href="/my-profile" className="menu-item">
                     <div className="menu-left">
@@ -78,7 +121,7 @@ export default function SettingsPage() {
             </div>
 
             <style jsx global>{`
-                @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap');
                 
                 .settings-container {
                     font-family: 'Montserrat', sans-serif !important;

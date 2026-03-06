@@ -8,6 +8,67 @@
     padding-bottom: 120px;
 }
 
+/* Profile Detail Card */
+.profile-detail-card {
+    background-color: white;
+    border-radius: 30px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
+    margin-bottom: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.profile-initial-circle {
+    width: 65px;
+    height: 65px;
+    background-color: #2D2D2D;
+    /* Dark charcoal */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+.profile-info-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.profile-name-text {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1A1A1A;
+    margin: 0;
+}
+
+.profile-phone-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #888;
+}
+
+.phone-icon-small {
+    color: #B28E5B;
+    /* Golden brown */
+    font-size: 0.85rem;
+    transform: rotate(10deg);
+}
+
+.profile-phone-text {
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+}
+
 /* Page Title Pill */
 .page-title-pill {
     background-color: #EDE6D8;

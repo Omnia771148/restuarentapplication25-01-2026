@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 
 const RegisterUserSchema = new mongoose.Schema(
   {
+    name: {
+      type: String,
+    },
     email: {
       type: String,
       required: true,
