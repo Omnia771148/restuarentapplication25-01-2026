@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { FaChevronLeft, FaCheckCircle, FaClipboardList } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Loading from "../loading/page";
 import "./accepted-orders.css";
 
 export default function AcceptedByRestaurantsOrders() {
@@ -50,25 +51,9 @@ export default function AcceptedByRestaurantsOrders() {
     }, []);
 
     if (loading) {
-        return (
-            <div className="accepted-orders-container">
-                <div className="orders-header">
-                    <button onClick={() => router.back()} className="back-button">
-                        <FaChevronLeft />
-                    </button>
-                    <div className="header-title-pill">
-                        <FaClipboardList className="header-icon" />
-                        <span>Accepted Orders</span>
-                    </div>
-                </div>
-                <div className="loading-container">
-                    <div className="spinner-border text-secondary" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </div>
-                </div>
-            </div>
-        );
+        return <Loading />;
     }
+
 
     if (error) {
         return (

@@ -1,93 +1,52 @@
 'use client';
 
-import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useEffect, useState } from 'react';
 
 export default function Loading() {
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prev) => (prev >= 100 ? 0 : prev + 1));
+    }, 30);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div style={styles.overlay}>
-      <div className="text-center">
-        {/* Steam Animation */}
-        <div className="steam-container">
-          <div className="steam steam-1"></div>
-          <div className="steam steam-2"></div>
+      <div style={styles.container}>
+        {/* SPV Logo with Orange Dot */}
+        <div style={styles.logoContainer}>
+          <span style={styles.dot}></span>
+          <h1 style={styles.logoText}>SPV</h1>
         </div>
 
-        {/* Biryani/Rice Bowl */}
-        <div className="biryani-box">
-          <span style={styles.foodEmoji}>🥘</span>
+        {/* Progress Bar */}
+        <div style={styles.progressBarContainer}>
+          <div
+            style={{
+              ...styles.progressBar,
+              left: `${progress}%`,
+              transform: `translateX(-${progress}%)`
+            }}
+          />
         </div>
 
-        {/* Scrolling Text Animation */}
-        <div className="mt-4">
-          <h5 className="scrolling-text">Preparing Your Menu...</h5>
-          <div className="progress mt-3" style={{ height: '6px', width: '220px', margin: '0 auto', borderRadius: '10px' }}>
-            <div
-              className="progress-bar progress-bar-striped progress-bar-animated bg-warning"
-              role="progressbar"
-              style={{ width: '100%' }}
-            ></div>
-          </div>
+        {/* Text Group */}
+        <div style={styles.textGroup}>
+          <h2 style={styles.titleText}>Wait for a Second...</h2>
+          <p style={styles.subtitleText}>Everything is getting ready for you</p>
         </div>
-
-        {/* This block injects the actual animation logic into the browser */}
-        <style>
-          {`
-            .biryani-box {
-              font-size: 80px;
-              display: inline-block;
-              position: relative;
-              /* No spin, just sitting there looking tasty */
-            }
-
-            .steam-container {
-              position: absolute;
-              top: -40px;
-              left: 50%;
-              transform: translateX(-50%);
-              width: 50px;
-              height: 40px;
-              display: flex;
-              justify-content: center;
-              gap: 10px;
-              pointer-events: none;
-            }
-
-            .steam {
-              width: 8px;
-              height: 25px;
-              background: rgba(200, 200, 200, 0.6);
-              border-radius: 10px;
-              animation: steamRise 2s infinite linear;
-              opacity: 0;
-              filter: blur(2px);
-              position: relative;
-            }
-
-            .steam-1 { animation-delay: 0s; }
-            .steam-2 { animation-delay: 0.8s; height: 35px; }
-
-            .scrolling-text {
-              color: #ffc107;
-              font-weight: bold;
-              letter-spacing: 1px;
-              animation: pulseText 1.5s ease-in-out infinite;
-            }
-
-            @keyframes steamRise {
-              0% { transform: translateY(0) scaleY(0.5); opacity: 0; }
-              50% { opacity: 0.6; }
-              100% { transform: translateY(-30px) scaleY(1.5); opacity: 0; }
-            }
-
-            @keyframes pulseText {
-              0% { opacity: 0.5; transform: translateY(0px); }
-              50% { opacity: 1; transform: translateY(-5px); }
-              100% { opacity: 0.5; transform: translateY(0px); }
-            }
-          `}
-        </style>
       </div>
+
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap');
+        
+        body {
+          margin: 0;
+          font-family: 'Outfit', sans-serif;
+        }
+      `}</style>
     </div>
   );
 }
@@ -99,15 +58,74 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FDFCF0', // Creamy off-white from image
     position: 'fixed',
     top: 0,
     left: 0,
     zIndex: 9999,
   },
-  foodEmoji: {
-    display: 'block',
-    filter: 'drop-shadow(0px 10px 15px rgba(0,0,0,0.2))',
-    userSelect: 'none'
-  }
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    textAlign: 'center',
+    width: '100%',
+    maxWidth: '350px', // Increased from 260px
+    padding: '20px',
+  },
+  logoContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '35px', // Increased from 20px
+    gap: '12px', // Increased from 8px
+  },
+  dot: {
+    width: '14px', // Increased from 8px
+    height: '14px', // Increased from 8px
+    backgroundColor: '#FF6B00',
+    borderRadius: '50%',
+    display: 'inline-block',
+  },
+  logoText: {
+    fontSize: '36px', // Increased from 24px
+    fontWeight: '600',
+    color: '#1A1A1A',
+    margin: 0,
+    letterSpacing: '4px', // Increased from 2px
+  },
+  progressBarContainer: {
+    width: '240px', // Increased from 160px
+    height: '4px', // Increased from 2px
+    backgroundColor: '#EAEAEA',
+    borderRadius: '10px',
+    position: 'relative',
+    overflow: 'hidden',
+    marginBottom: '30px', // Increased from 15px
+  },
+  progressBar: {
+    position: 'absolute',
+    height: '100%',
+    width: '40px', // Increased from 25px
+    backgroundColor: '#FF6B00',
+    borderRadius: '10px',
+    transition: 'left 0.1s linear',
+  },
+  textGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '8px', // Increased from 4px
+  },
+  titleText: {
+    fontSize: '24px', // Increased from 16px
+    fontWeight: '600',
+    color: '#1A1A1A',
+    margin: 0,
+  },
+  subtitleText: {
+    fontSize: '16px', // Increased from 12px
+    color: '#888888',
+    margin: 0,
+    fontWeight: '400',
+  },
 };

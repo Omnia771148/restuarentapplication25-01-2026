@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { FaArrowLeft, FaStar, FaRegSurprise } from "react-icons/fa";
+import Loading from "../loading/page";
 import "./my-reviews.css";
 
 export default function MyReviewsPage() {
@@ -49,12 +50,9 @@ export default function MyReviewsPage() {
     };
 
     if (loading) {
-        return (
-            <div className="loading-container">
-                <div className="spinner"></div>
-            </div>
-        );
+        return <Loading />;
     }
+
 
     return (
         <div className="my-reviews-container">

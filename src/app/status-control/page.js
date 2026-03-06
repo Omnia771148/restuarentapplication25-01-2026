@@ -2,9 +2,12 @@
 import { useState, useEffect } from "react";
 import styles from "./page.module.css";
 import { Data } from "../data/page";
+import Loading from "../loading/page";
+
 export default function StatusControlPage() {
     const [statuses, setStatuses] = useState({});
     const [loading, setLoading] = useState(true);
+
     const [restaurantItems, setRestaurantItems] = useState([]); // Store full items
 
     useEffect(() => {
@@ -91,12 +94,9 @@ export default function StatusControlPage() {
         }
     };
     if (loading) {
-        return (
-            <div className={styles.container}>
-                <div className={styles.title}>Loading...</div>
-            </div>
-        );
+        return <Loading />;
     }
+
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>Menu Status Control</h1>
