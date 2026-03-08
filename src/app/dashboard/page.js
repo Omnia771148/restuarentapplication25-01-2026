@@ -113,7 +113,7 @@ export default function Dashboard() {
         let totalO = orders.length;
 
         orders.forEach(order => {
-            const amount = parseFloat(order.grandTotal) || 0;
+            const amount = parseFloat(order.totalPrice) || 0;
             totalE += amount;
 
             const orderDate = new Date(order.orderDate).toDateString();
@@ -124,9 +124,9 @@ export default function Dashboard() {
         });
 
         setStats({
-            todayEarnings: todayE,
+            todayEarnings: todayE * 0.88,
             todayOrders: todayO,
-            totalEarnings: totalE,
+            totalEarnings: totalE * 0.88,
             totalOrders: totalO
         });
     };
@@ -171,7 +171,7 @@ export default function Dashboard() {
                     title={isActive ? "Click to Close" : "Click to Open"}
                 >
                     <div className="switch-knob" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                         {statusLoading && <FaSpinner className="loading-spinner" />}
+                        {statusLoading && <FaSpinner className="loading-spinner" />}
                     </div>
                     <div className="switch-label">
                         {isActive ? "OPEN" : "CLOSE"}
