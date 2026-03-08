@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Loading from "../loading/page";
 import axios from "axios";
+import { FaSpinner } from "react-icons/fa";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './dashboard.css';
@@ -12,6 +13,7 @@ export default function Dashboard() {
     const [restId, setRestId] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isActive, setIsActive] = useState(false); // Restaurant Status
+    const [statusLoading, setStatusLoading] = useState(false); // Status loading state
     const router = useRouter();
 
     const [stats, setStats] = useState({
@@ -54,6 +56,7 @@ export default function Dashboard() {
     };
 
     const fetchRestaurantStatus = async (restaurantId) => {
+        setStatusLoading(true);
         try {
             const res = await axios.get(
                 `/api/restaurant-status?restaurantId=${restaurantId}`
@@ -63,16 +66,8 @@ export default function Dashboard() {
             }
         } catch (err) {
             console.error("Status fetch error", err);
-        }
-    };
-
-    const toggleSound = () => {
-        const newState = !soundEnabled;
-        setSoundEnabled(newState);
-        localStorage.setItem("audioEnabled", String(newState));
-        if (newState) {
-            const audio = new Audio("/noti.mp3");
-            audio.play().catch(() => { });
+        } finally {
+            setStatusLoading(false);
         }
     };
 
@@ -81,29 +76,32 @@ export default function Dashboard() {
     };
 
     const updateStatus = async (newStatus) => {
+        setStatusLoading(true);
         setIsActive(newStatus);
-
-        // Sync Audio Enabled with Active Status
-        if (newStatus) {
-            localStorage.setItem("audioEnabled", "true");
-            setSoundEnabled(true);
-            // Play confirmation sound
-            const audio = new Audio("/noti.mp3");
-            audio.play().catch(e => console.log("Audio play failed", e));
-        } else {
-            localStorage.setItem("audioEnabled", "false");
-            setSoundEnabled(false);
-        }
 
         try {
             await axios.patch("/api/restaurant-status", {
                 restaurantId: restId,
                 isActive: newStatus,
             });
+
+            // Sync Audio Enabled with Active Status
+            if (newStatus) {
+                localStorage.setItem("audioEnabled", "true");
+                setSoundEnabled(true);
+                const audio = new Audio("/noti.mp3");
+                audio.play().catch(e => console.log("Audio play failed", e));
+            } else {
+                localStorage.setItem("audioEnabled", "false");
+                setSoundEnabled(false);
+            }
+
         } catch (err) {
             console.error("Error updating status:", err);
             setIsActive(!newStatus);
             alert("Failed to update status");
+        } finally {
+            setStatusLoading(false);
         }
     };
 
@@ -169,10 +167,12 @@ export default function Dashboard() {
             <div className="status-toggle-wrapper">
                 <div
                     className={`swipe-style-switch ${isActive ? 'active' : 'inactive'}`}
-                    onClick={toggleStatus}
+                    onClick={statusLoading ? null : toggleStatus}
                     title={isActive ? "Click to Close" : "Click to Open"}
                 >
-                    <div className="switch-knob"></div>
+                    <div className="switch-knob" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                         {statusLoading && <FaSpinner className="loading-spinner" />}
+                    </div>
                     <div className="switch-label">
                         {isActive ? "OPEN" : "CLOSE"}
                     </div>

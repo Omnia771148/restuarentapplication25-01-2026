@@ -10,6 +10,7 @@ import "./settings.css";
 export default function SettingsPage() {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showLogoutModal, setShowLogoutModal] = useState(false);
     const router = useRouter();
 
     const fetchProfile = useCallback(async () => {
@@ -36,6 +37,10 @@ export default function SettingsPage() {
     }, [fetchProfile]);
 
     const handleLogout = () => {
+        setShowLogoutModal(true);
+    };
+
+    const confirmLogout = () => {
         const id = localStorage.getItem("restid");
         if (id) localStorage.removeItem(`mobileConnected_${id}`);
 
@@ -43,6 +48,10 @@ export default function SettingsPage() {
         localStorage.removeItem("restlocation");
         localStorage.removeItem("loginTime");
         router.push("/");
+    };
+
+    const cancelLogout = () => {
+        setShowLogoutModal(false);
     };
 
     return (
@@ -78,7 +87,7 @@ export default function SettingsPage() {
                 <Link href="/my-profile" className="menu-item">
                     <div className="menu-left">
                         <FaRegUser className="menu-icon" />
-                        <span className="menu-text">My Profile</span>
+                        <span className="menu-text">Restaurant Profile</span>
                     </div>
                     <FaChevronRight className="arrow-icon" />
                 </Link>
@@ -119,6 +128,26 @@ export default function SettingsPage() {
                     <FaChevronRight className="arrow-icon logout-arrow" />
                 </div>
             </div>
+
+            {/* Logout Confirmation Modal */}
+            {showLogoutModal && (
+                <div className="logout-modal-overlay" onClick={cancelLogout}>
+                    <div className="logout-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <div className="logout-modal-icon-container">
+                            <div className="logout-red-circle">
+                                <FaSignOutAlt className="modal-logout-icon" />
+                            </div>
+                        </div>
+                        <h2 className="logout-modal-title">Are you sure you want to logout?</h2>
+                        <button className="confirm-logout-btn" onClick={confirmLogout}>
+                            Logout
+                        </button>
+                        <button className="cancel-logout-link" onClick={cancelLogout}>
+                            Not now
+                        </button>
+                    </div>
+                </div>
+            )}
 
             <style jsx global>{`
                 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap');

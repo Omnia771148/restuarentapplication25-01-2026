@@ -1,6 +1,6 @@
 .settings-container {
     min-height: 100vh;
-    background-color: #F8F4EA;
+    background-color: #f7f7eb;
     /* Creame/Bone background */
     display: flex;
     flex-direction: column;
@@ -71,7 +71,8 @@
 
 /* Page Title Pill */
 .page-title-pill {
-    background-color: #EDE6D8;
+    background-color: white;
+    color: Black;
     padding: 12px 28px;
     border-radius: 50px;
     display: inline-flex;
@@ -181,3 +182,102 @@
         padding: 14px 20px;
     }
 }
+
+/* Logout Modal Styles */
+.logout-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+    padding: 20px;
+}
+
+.logout-modal-content {
+    background-color: #E6DCC8; /* Updated to warm beige */
+    width: 100%;
+    max-width: 320px;
+    border-radius: 35px;
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    animation: modalSlideUp 0.3s ease-out;
+}
+
+@keyframes modalSlideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.logout-modal-icon-container {
+    margin-bottom: 25px;
+}
+
+.logout-red-circle {
+    width: 90px;
+    height: 90px;
+    background-color: #f14c4c; /* Premium red from image */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-logout-icon {
+    font-size: 40px;
+    color: white;
+    transform: translateX(2px); /* Slight nudge for balance */
+}
+
+.logout-modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1A1A1A;
+    margin-bottom: 35px;
+    line-height: 1.3;
+}
+
+.confirm-logout-btn {
+    width: 100%;
+    background-color: #f14c4c; /* Changed to Red from Black */
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 40px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    margin-bottom: 15px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.confirm-logout-btn:active {
+    transform: scale(0.96);
+    opacity: 0.9;
+}
+
+.cancel-logout-link {
+    background: none;
+    border: none;
+    color: #000; /* Changed from #666 to Black */
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 10px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.cancel-logout-link:hover {
+    color: #333;
+}

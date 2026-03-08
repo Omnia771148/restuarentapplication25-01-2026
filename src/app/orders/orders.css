@@ -1,11 +1,7 @@
 /* Import Bootstrap */
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-body {
-    background-color: #fcfbf7;
-    padding-bottom: 200px;
-    /* Increased to ensure scrollability for navbar */
-}
+/* Body styles moved to globals.css */
 
 /* Page Header */
 .page-header {

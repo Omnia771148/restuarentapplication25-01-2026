@@ -66,7 +66,7 @@ export default function Home() {
     }
   };
 
-  if (loading) {
+  if (loading || isSubmitting) {
     return <Loading />;
   }
 
@@ -120,7 +120,7 @@ export default function Home() {
 
           {/* Login Button */}
           <button type="submit" className="login-btn-styled" disabled={isSubmitting}>
-            {isSubmitting ? "Wait" : "Login"}
+            Login
           </button>
 
         </form>

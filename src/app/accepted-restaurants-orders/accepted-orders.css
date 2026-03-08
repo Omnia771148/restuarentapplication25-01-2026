@@ -1,7 +1,7 @@
 .accepted-orders-container {
     min-height: 100vh;
-    background-color: #E6DCC8;
-    font-family: "Times New Roman", Times, serif;
+    background-color: #f7f7eb;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     display: flex;
     flex-direction: column;
     padding: 20px;
@@ -41,7 +41,7 @@
 }
 
 .header-title-pill {
-    background-color: #E6DCC8;
+    background-color: white;
     padding: 10px 20px;
     border-radius: 50px;
     display: flex;

@@ -13,74 +13,72 @@ const ProfileCard = ({ user }) => {
 
     return (
         <div className="order-card p-4">
-            <div className="text-center mb-4">
-                <h2 className="mt-2" style={{ fontWeight: '800' }}>Restaurant Profile</h2>
-            </div>
+            
 
-            <div className="divider-line"></div>
+        
 
             {/* Email */}
-            <div className="d-flex align-items-center mb-4">
-                <div className="me-3" style={styles.iconContainer}>
-                    <FaEnvelope />
-                </div>
-                <div>
-                    <div style={styles.label}>Email Address</div>
+            <div className="mb-3 px-1">
+                <div style={{ ...styles.label, marginBottom: '5px', marginLeft: '8px' }}>Email Address</div>
+                <div style={styles.infoRow}>
+                    <div className="me-2" style={styles.iconContainer}>
+                        <FaEnvelope />
+                    </div>
                     <div style={styles.value}>{user.email}</div>
                 </div>
             </div>
 
             {/* Phone */}
-            <div className="d-flex align-items-center mb-4">
-                <div className="me-3" style={{ ...styles.iconContainer, transform: 'rotate(90deg)' }}>
-                    <FaPhone />
-                </div>
-                <div>
-                    <div style={styles.label}>Phone Number</div>
+            <div className="mb-3 px-1">
+                <div style={{ ...styles.label, marginBottom: '5px', marginLeft: '8px' }}>Phone Number</div>
+                <div style={styles.infoRow}>
+                    <div className="me-2" style={{ ...styles.iconContainer, transform: 'rotate(90deg)' }}>
+                        <FaPhone />
+                    </div>
                     <div style={styles.value}>{user.phone}</div>
                 </div>
             </div>
 
             {/* Address */}
-            <div className="d-flex align-items-center mb-4">
-                <div className="me-3" style={styles.iconContainer}>
-                    <FaBuilding />
-                </div>
-                <div>
-                    <div style={styles.label}>Restaurant Address</div>
+            <div className="mb-3 px-1">
+                <div style={{ ...styles.label, marginBottom: '5px', marginLeft: '8px' }}>Restaurant Address</div>
+                <div style={styles.infoRow}>
+                    <div className="me-2" style={styles.iconContainer}>
+                        <FaBuilding />
+                    </div>
                     <div style={styles.value}>{user.address || "None"}</div>
                 </div>
             </div>
 
             {/* FSSAI */}
-            <div className="d-flex align-items-center mb-4">
-                <div className="me-3" style={styles.iconContainer}>
-                    <FaUserCircle />
-                </div>
-                <div>
-                    <div style={styles.label}>FSSAI Number</div>
+            <div className="mb-3 px-1">
+                <div style={{ ...styles.label, marginBottom: '5px', marginLeft: '8px' }}>FSSAI Number</div>
+                <div style={styles.infoRow}>
+                    <div className="me-2" style={styles.iconContainer}>
+                        <FaUserCircle />
+                    </div>
                     <div style={styles.value}>{user.fssai || "None"}</div>
                 </div>
             </div>
 
             {/* Latitude */}
-            <div className="d-flex align-items-center mb-4">
-                <div className="me-3" style={styles.iconContainer}>
-                    <FaMapMarkerAlt />
-                </div>
-                <div>
-                    <div style={styles.label}>Latitude</div>
+            <div className="mb-3 px-1">
+                <div style={{ ...styles.label, marginBottom: '5px', marginLeft: '8px' }}>Latitude</div>
+                <div style={styles.infoRow}>
+                    <div className="me-2" style={styles.iconContainer}>
+                        <FaMapMarkerAlt />
+                    </div>
                     <div style={styles.value}>{user.restaurantLocation?.lat}</div>
                 </div>
             </div>
 
             {/* Longitude */}
-            <div className="d-flex align-items-center mb-4">
-                <div className="me-3" style={styles.iconContainer}>
-                    <FaMapMarkerAlt />
-                </div>
-                <div>
-                    <div style={styles.label}>Longitude</div>
+            <div className="mb-3 px-1">
+                <div style={{ ...styles.label, marginBottom: '5px', marginLeft: '8px' }}>Longitude</div>
+                <div style={styles.infoRow}>
+                    <div className="me-2" style={styles.iconContainer}>
+                        <FaMapMarkerAlt />
+                    </div>
                     <div style={styles.value}>{user.restaurantLocation?.lng}</div>
                 </div>
             </div>
@@ -89,7 +87,7 @@ const ProfileCard = ({ user }) => {
 
             {/* Location Button */}
             <div className="mt-4">
-                <div style={{ ...styles.label, textAlign: 'center', marginBottom: '15px' }}>Location</div>
+                
                 <a
                     href={user.restLocation}
                     target="_blank"
@@ -170,9 +168,9 @@ export default function MyProfilePage() {
                     <FaChevronLeft />
                 </button>
                 <div className="d-flex justify-content-center w-100">
-                    <div className="page-header m-0">
+                    <div className="page-header" style={{ backgroundColor: 'white' }}>
                         <FaUserCircle className="header-icon" />
-                        <span>My Profile</span>
+                        <span>Restaurant Profile</span>
                     </div>
                 </div>
             </div>
@@ -188,6 +186,11 @@ export default function MyProfilePage() {
                     )}
                 </div>
             </div>
+            <br></br>
+            <br></br>
+            <br></br>   
+            <br></br>
+            <br></br>
         </div>
     );
 }
@@ -198,8 +201,22 @@ const styles = {
         minHeight: '100vh'
     },
     iconContainer: {
-        fontSize: '1.5rem',
-        color: '#666'
+        fontSize: '1.3rem',
+        color: '#333',
+        width: '40px',
+        height: '40px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    infoRow: {
+        backgroundColor: '#fff',
+        borderRadius: '30px', /* Match button and pill shapes */
+        padding: '8px 15px',
+        display: 'flex',
+        alignItems: 'center',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.03)',
+        border: '1px solid #eee'
     },
     label: {
         fontSize: '0.85rem',
@@ -212,14 +229,14 @@ const styles = {
         fontWeight: '600'
     },
     locationBtn: {
-        backgroundColor: '#e6e0d0',
+        backgroundColor: '#fff',
         color: '#000',
         borderRadius: '50px',
         padding: '15px',
         fontWeight: '800',
         fontSize: '1.1rem',
         boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
-        border: 'none'
+        border: '1px solid #ddd'
     },
     refreshBtn: {
         width: '40px',
@@ -227,5 +244,5 @@ const styles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
 };

@@ -87,7 +87,7 @@ export default function AcceptedByRestaurantsOrders() {
                 </button>
                 <div className="header-title-pill">
                     <FaClipboardList className="header-icon" />
-                    <span>Accepted Orders</span>
+                    <span>My Orders</span>
                 </div>
             </div>
 

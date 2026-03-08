@@ -3,12 +3,16 @@ import { useState, useEffect } from "react";
 import styles from "./page.module.css";
 import { Data } from "../data/page";
 import Loading from "../loading/page";
+import { FaClipboardList } from "react-icons/fa";
+
 
 export default function StatusControlPage() {
     const [statuses, setStatuses] = useState({});
     const [loading, setLoading] = useState(true);
 
     const [restaurantItems, setRestaurantItems] = useState([]); // Store full items
+    const [searchTerm, setSearchTerm] = useState(""); // Search term state
+
 
     useEffect(() => {
         const restIdStr = localStorage.getItem("restid");
@@ -99,7 +103,24 @@ export default function StatusControlPage() {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Menu Status Control</h1>
+            <div className={styles.titleWrapper}>
+                <div className={styles.title}>
+                    <FaClipboardList className={styles.headerIcon} />
+                    <span>My Menu</span>
+                </div>
+            </div>
+
+
+            <div className={styles.searchContainer}>
+                <input
+                    type="text"
+                    placeholder="Search for items..."
+                    className={styles.searchInput}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+
 
             {/* New Buttons to Activate/Deactivate All */}
             <div className={styles.bulkActions}>
@@ -117,7 +138,9 @@ export default function StatusControlPage() {
                 </button>
             </div>
             <div className={styles.grid}>
-                {restaurantItems.map((item) => {
+                {restaurantItems.filter(item => 
+                    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+                ).map((item) => {
                     const isActive = statuses[item.id] === true; // Default false if undefined
                     return (
                         <div key={item.id} className={styles.card}>
