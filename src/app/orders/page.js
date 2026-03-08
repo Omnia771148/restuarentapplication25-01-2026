@@ -62,14 +62,8 @@ export default function OrdersList() {
   };
 
   const handleLogout = () => {
-    const id = localStorage.getItem("restid");
-    if (id) localStorage.removeItem(`mobileConnected_${id}`);
-
-    localStorage.removeItem("restid");
-    localStorage.removeItem("restlocation");
-    localStorage.removeItem("restaurantLocation");
-    localStorage.removeItem("loginTime");
-    router.push("/");
+    localStorage.clear();
+    window.location.href = "/";
   };
 
   useEffect(() => {

@@ -118,6 +118,10 @@ body {
     font-weight: 400;
 }
 
+.form-control-password::placeholder {
+    color: #E24836;
+}
+
 /* Login Button */
 .login-btn-styled {
     background-color: #FFFFFF;
@@ -161,4 +165,83 @@ body {
         font-size: 1.4rem;
         padding: 15px 50px;
     }
-}
+}
+
+/* Error Modal Overlay */
+.error-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    backdrop-filter: blur(2px);
+    padding: 20px;
+}
+
+.error-modal-card {
+    background-color: #F8F7F2; /* Cream background from image */
+    width: 100%;
+    max-width: 320px;
+    border-radius: 40px;
+    padding: 40px 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    animation: modalScaleUp 0.3s ease-out;
+}
+
+@keyframes modalScaleUp {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.error-modal-icon-container {
+    margin-bottom: 25px;
+}
+
+.error-red-circle {
+    width: 80px;
+    height: 80px;
+    background-color: #f14c4c; /* Red circle */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 35px;
+    box-shadow: 0 4px 12px rgba(241, 76, 76, 0.3);
+}
+
+.error-modal-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #000000;
+    line-height: 1.4;
+    margin-bottom: 30px;
+    word-wrap: break-word;
+}
+
+.error-modal-btn {
+    width: 90%;
+    background-color: #000000; /* Black pill button */
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.error-modal-btn:active {
+    transform: scale(0.96);
+}
+

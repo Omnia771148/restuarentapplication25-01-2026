@@ -41,13 +41,8 @@ export default function SettingsPage() {
     };
 
     const confirmLogout = () => {
-        const id = localStorage.getItem("restid");
-        if (id) localStorage.removeItem(`mobileConnected_${id}`);
-
-        localStorage.removeItem("restid");
-        localStorage.removeItem("restlocation");
-        localStorage.removeItem("loginTime");
-        router.push("/");
+        localStorage.clear();
+        window.location.href = "/";
     };
 
     const cancelLogout = () => {

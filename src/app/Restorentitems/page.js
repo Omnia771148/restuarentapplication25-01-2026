@@ -80,7 +80,7 @@ export default function OrdersPage() {
       <button 
         onClick={() => {
           localStorage.clear();
-          router.push("/");
+          window.location.href = "/";
         }}
         style={{ marginTop: '30px', padding: '10px 20px', cursor: 'pointer', backgroundColor: '#ff4444', color: 'white', border: 'none', borderRadius: '5px' }}
       >

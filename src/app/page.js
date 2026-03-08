@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Loading from "./loading/page";
-import { FaUser, FaLock } from "react-icons/fa";
+import { FaUser, FaLock, FaTimes } from "react-icons/fa";
 import Link from "next/link";
 import "./login.css"; // Custom Styles
 
@@ -12,6 +12,8 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [showError, setShowError] = useState(false);
   const router = useRouter();
 
 
@@ -36,6 +38,13 @@ export default function Home() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    
+    if (!email || !password) {
+      setErrorMsg("Please enter both Mobile Number and Password.");
+      setShowError(true);
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -56,12 +65,14 @@ export default function Home() {
         localStorage.setItem("loginTime", Date.now());
         router.push("/dashboard");
       } else {
-        alert(data.message || "Invalid login");
+        setErrorMsg(data.message || "Invalid login");
+        setShowError(true);
         setIsSubmitting(false);
       }
     } catch (error) {
       console.error('Login error:', error);
-      alert("Login failed. Please try again.");
+      setErrorMsg("Login failed. Please try again.");
+      setShowError(true);
       setIsSubmitting(false);
     }
   };
@@ -72,6 +83,23 @@ export default function Home() {
 
   return (
     <div className="login-container">
+      {/* Error Modal Overlay */}
+      {showError && (
+        <div className="error-modal-overlay">
+          <div className="error-modal-card">
+            <div className="error-modal-icon-container">
+              <div className="error-red-circle">
+                <FaTimes />
+              </div>
+            </div>
+            <p className="error-modal-text">{errorMsg}</p>
+            <button className="error-modal-btn" onClick={() => setShowError(false)}>
+              Try Again
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Background Split Panels */}
       <div className="split-left"></div>
       <div className="split-right"></div>
@@ -109,7 +137,7 @@ export default function Home() {
             <input
               type="password"
               placeholder="Password"
-              className="form-control-custom"
+              className="form-control-custom form-control-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
