@@ -57,18 +57,23 @@ export default function MyReviewsPage() {
     return (
         <div className="my-reviews-container">
             {/* Header */}
-            <div className="page-header">
-                <button onClick={handleBack} className="back-btn">
+            <div className="orders-header">
+                <button onClick={handleBack} className="back-button">
                     <FaArrowLeft />
                 </button>
-                <h1 className="page-title">My Reviews</h1>
+                <div className="header-title-pill">
+                    <FaStar className="header-icon" style={{color: '#4CAF50'}} />
+                    <span>My Reviews</span>
+                </div>
             </div>
 
             {/* Content */}
             <div className="reviews-list">
                 {error ? (
-                    <div className="error-message" style={{ textAlign: "center", color: "red", marginTop: "20px" }}>
-                        {error}
+                    <div className="text-center mt-5">
+                        <div className="error-message d-inline-block">
+                            {error}
+                        </div>
                     </div>
                 ) : reviews.length === 0 ? (
                     <div className="no-reviews">
@@ -88,7 +93,7 @@ export default function MyReviewsPage() {
                                 </span>
                             </div>
 
-                            <p className="review-text">{review.restaurantReview || "No review content."}</p>
+                            <p className="review-text">"{review.restaurantReview || "No review content."}"</p>
 
                             {review.items && review.items.length > 0 && (
                                 <div className="reviewed-items">
@@ -96,18 +101,13 @@ export default function MyReviewsPage() {
                                     <div className="item-list">
                                         {review.items.map((item, index) => (
                                             <div key={index} className="item-badge">
-                                                <span className="quantity">{item.quantity}x</span>
+                                                <span className="quantity">{item.quantity}</span>
                                                 {item.name}
                                             </div>
                                         ))}
                                     </div>
                                 </div>
                             )}
-
-                            {/* Optional: Show Restaurant ID if needed, but user said not to show Delivery Boy ID 
-                  and only show particular restaurant reviews.
-              */}
-                            {/* <span className="restaurant-id-badge">ID: {review.restaurantId}</span> */}
                         </div>
                     ))
                 )}
