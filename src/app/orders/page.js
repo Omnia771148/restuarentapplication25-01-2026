@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -83,16 +83,9 @@ export default function OrdersList() {
     }
   }, []);
 
-  useEffect(() => {
-    const restaurantId = localStorage.getItem("restid");
-
-    if (!restaurantId) {
-      showCustomAlert("Error", "No Restaurant ID found", "error");
-      setLoading(false);
-      return;
-    }
-
-    const fetchRestaurantStatus = async () => {
+    const fetchRestaurantStatus = useCallback(async () => {
+      const restaurantId = localStorage.getItem("restid");
+      if (!restaurantId) return;
       try {
         const res = await axios.get(
           `/api/restaurant-status?restaurantId=${restaurantId}`
@@ -103,9 +96,11 @@ export default function OrdersList() {
       } catch (err) {
         console.error("Status fetch error", err);
       }
-    };
+    }, []);
 
-    const fetchOrders = async () => {
+    const fetchOrders = useCallback(async () => {
+      const restaurantId = localStorage.getItem("restid");
+      if (!restaurantId) return;
       try {
         const res = await axios.get(
           `/api/orders?restaurantId=${restaurantId}`
@@ -123,14 +118,23 @@ export default function OrdersList() {
           setLoading(false);
         }
       }
-    };
+    }, []);
 
-    fetchRestaurantStatus();
-    fetchOrders();
+    useEffect(() => {
+        const restaurantId = localStorage.getItem("restid");
 
-    const interval = setInterval(fetchOrders, 3000);
-    return () => clearInterval(interval);
-  }, [audioEnabled]);
+        if (!restaurantId) {
+            showCustomAlert("Error", "No Restaurant ID found", "error");
+            setLoading(false);
+            return;
+        }
+
+        fetchRestaurantStatus();
+        fetchOrders();
+
+        const interval = setInterval(fetchOrders, 3000);
+        return () => clearInterval(interval);
+    }, [audioEnabled, fetchRestaurantStatus, fetchOrders]);
 
   async function acceptOrder(orderId, razorpayOrderId) {
     setLoading(true);

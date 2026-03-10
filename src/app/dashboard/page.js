@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Loading from "../loading/page";
 import axios from "axios";
@@ -24,6 +24,62 @@ export default function Dashboard() {
     });
     const [soundEnabled, setSoundEnabled] = useState(false);
 
+    const processStats = useCallback((orders) => {
+        const today = new Date().toDateString();
+        let todayE = 0;
+        let todayO = 0;
+        let totalE = 0;
+        let totalO = orders.length;
+
+        orders.forEach(order => {
+            const amount = parseFloat(order.totalPrice) || 0;
+            totalE += amount;
+
+            const orderDate = new Date(order.orderDate).toDateString();
+            if (orderDate === today) {
+                todayE += amount;
+                todayO += 1;
+            }
+        });
+
+        setStats({
+            todayEarnings: todayE * 0.88,
+            todayOrders: todayO,
+            totalEarnings: totalE * 0.88,
+            totalOrders: totalO
+        });
+    }, []);
+
+    const fetchStats = useCallback(async (restaurantId) => {
+        try {
+            const res = await fetch(`/api/accepted-by-restaurants?restaurantId=${restaurantId}`);
+            if (!res.ok) throw new Error("Failed to fetch data");
+            const data = await res.json();
+
+            if (data.success) {
+                processStats(data.orders);
+            }
+        } catch (error) {
+            console.error("Error fetching stats:", error);
+        }
+    }, [processStats]);
+
+    const fetchRestaurantStatus = useCallback(async (restaurantId) => {
+        setStatusLoading(true);
+        try {
+            const res = await axios.get(
+                `/api/restaurant-status?restaurantId=${restaurantId}`
+            );
+            if (res.data.success) {
+                setIsActive(res.data.isActive);
+            }
+        } catch (err) {
+            console.error("Status fetch error", err);
+        } finally {
+            setStatusLoading(false);
+        }
+    }, []);
+
     useEffect(() => {
         const storedRestId = localStorage.getItem("restid");
         const loginTime = localStorage.getItem("loginTime");
@@ -39,37 +95,7 @@ export default function Dashboard() {
         fetchStats(storedRestId);
         fetchRestaurantStatus(storedRestId);
         setLoading(false);
-    }, [router]);
-
-    const fetchStats = async (restaurantId) => {
-        try {
-            const res = await fetch(`/api/accepted-by-restaurants?restaurantId=${restaurantId}`);
-            if (!res.ok) throw new Error("Failed to fetch data");
-            const data = await res.json();
-
-            if (data.success) {
-                processStats(data.orders);
-            }
-        } catch (error) {
-            console.error("Error fetching stats:", error);
-        }
-    };
-
-    const fetchRestaurantStatus = async (restaurantId) => {
-        setStatusLoading(true);
-        try {
-            const res = await axios.get(
-                `/api/restaurant-status?restaurantId=${restaurantId}`
-            );
-            if (res.data.success) {
-                setIsActive(res.data.isActive);
-            }
-        } catch (err) {
-            console.error("Status fetch error", err);
-        } finally {
-            setStatusLoading(false);
-        }
-    };
+    }, [router, fetchStats, fetchRestaurantStatus]);
 
     const toggleStatus = () => {
         updateStatus(!isActive);
@@ -105,31 +131,7 @@ export default function Dashboard() {
         }
     };
 
-    const processStats = (orders) => {
-        const today = new Date().toDateString();
-        let todayE = 0;
-        let todayO = 0;
-        let totalE = 0;
-        let totalO = orders.length;
 
-        orders.forEach(order => {
-            const amount = parseFloat(order.totalPrice) || 0;
-            totalE += amount;
-
-            const orderDate = new Date(order.orderDate).toDateString();
-            if (orderDate === today) {
-                todayE += amount;
-                todayO += 1;
-            }
-        });
-
-        setStats({
-            todayEarnings: todayE * 0.88,
-            todayOrders: todayO,
-            totalEarnings: totalE * 0.88,
-            totalOrders: totalO
-        });
-    };
 
     const navigateToMenu = () => {
         router.push("/status-control");

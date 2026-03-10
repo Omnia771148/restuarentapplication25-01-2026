@@ -93,7 +93,7 @@ export default function MyReviewsPage() {
                                 </span>
                             </div>
 
-                            <p className="review-text">"{review.restaurantReview || "No review content."}"</p>
+                            <p className="review-text">&quot;{review.restaurantReview || "No review content."}&quot;</p>
 
                             {review.items && review.items.length > 0 && (
                                 <div className="reviewed-items">
