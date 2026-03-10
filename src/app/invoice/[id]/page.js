@@ -166,16 +166,22 @@ export default function InvoicePage() {
 
         <div className="divider"></div>
 
-        <p style={{ fontSize: "13px" }}><strong>Order ID:</strong> {order.orderId}</p>
-        <p style={{ fontSize: "13px" }}><strong>Date:</strong> {new Date(order.orderDate).toLocaleString()}</p>
+        <p style={{ fontSize: "13px" }}><strong>Order ID: {order.orderId}</strong></p>
+        <p style={{ fontSize: "13px" }}><strong>Date: {new Date(order.orderDate).toLocaleString()}</strong></p>
 
         <div className="divider"></div>
 
         <div style={{ marginBottom: "20px" }}>
+          <div className="item-row" style={{ fontWeight: 'bold', fontSize: '13px', borderBottom: '1px dashed #ccc', paddingBottom: '8px', marginBottom: '10px' }}>
+            <span style={{flex: 2}}>ITEM</span>
+            <span style={{flex: 1, textAlign: 'center'}}>QTY</span>
+            <span style={{flex: 1, textAlign: 'right'}}>PRICE</span>
+          </div>
           {order.items.map((item, i) => (
             <div key={i} className="item-row">
-              <span>{item.name} <small style={{fontSize: '0.75em', color: '#666'}}>(₹{item.price} - 12%)</small> × {item.quantity}</span>
-              <span>₹{(item.price * 0.88 * item.quantity).toFixed(2)}</span>
+              <span style={{flex: 2, fontWeight: 'bold'}}>{item.name}</span>
+              <span style={{flex: 1, textAlign: 'center', fontWeight: 'bold'}}>{item.quantity}</span>
+              <span style={{flex: 1, textAlign: 'right', fontWeight: 'bold'}}>₹{(item.price * 0.88 * item.quantity).toFixed(2)}</span>
             </div>
           ))}
         </div>

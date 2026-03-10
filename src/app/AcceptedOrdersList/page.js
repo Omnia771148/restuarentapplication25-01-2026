@@ -210,19 +210,25 @@ export default function AcceptedOrdersList() {
               <div className="invoice-dashed-divider"></div>
 
               <div className="invoice-info-row">
-                <span><strong>Order ID:</strong> {selectedOrder.orderId}</span>
+                <span><strong>Order ID: {selectedOrder.orderId}</strong></span>
               </div>
               <div className="invoice-info-row">
-                <span><strong>Date:</strong> {new Date(selectedOrder.orderDate).toLocaleString()}</span>
+                <span><strong>Date: {new Date(selectedOrder.orderDate).toLocaleString()}</strong></span>
               </div>
 
               <div className="invoice-dashed-divider"></div>
 
               <div className="invoice-items-container">
+                <div className="invoice-item-line" style={{ fontWeight: 'bold', borderBottom: '1px dashed #ccc', paddingBottom: '8px', marginBottom: '10px' }}>
+                  <span style={{flex: 2}}>ITEM</span>
+                  <span style={{flex: 1, textAlign: 'center'}}>QTY</span>
+                  <span style={{flex: 1, textAlign: 'right'}}>PRICE</span>
+                </div>
                 {selectedOrder.items.map((item, i) => (
                   <div key={i} className="invoice-item-line">
-                    <span>{item.name} <small style={{fontSize: '0.8em', color: '#666'}}>(₹{item.price} - 12%)</small> × {item.quantity}</span>
-                    <span>₹{(item.price * 0.88 * item.quantity).toFixed(2)}</span>
+                    <span style={{flex: 2, fontWeight: 'bold'}}>{item.name}</span>
+                    <span style={{flex: 1, textAlign: 'center', fontWeight: 'bold'}}>{item.quantity}</span>
+                    <span style={{flex: 1, textAlign: 'right', fontWeight: 'bold'}}>₹{(item.price * 0.88 * item.quantity).toFixed(2)}</span>
                   </div>
                 ))}
               </div>
