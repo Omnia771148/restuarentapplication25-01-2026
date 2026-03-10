@@ -1,13 +1,15 @@
 'use client';
 
 import { useEffect, useState } from "react";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 import axios from "axios";
 import Loading from "../../loading/page";
+import { FaArrowLeft, FaPrint } from "react-icons/fa";
 
 export default function InvoicePage() {
   const { id } = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const source = searchParams.get('source');
   const [order, setOrder] = useState(null);
 
@@ -39,7 +41,7 @@ export default function InvoicePage() {
   if (!order) return <Loading />;
 
   return (
-    <div style={{ width: "300px", fontFamily: "monospace" }}>
+    <div className="invoice-container">
       <style jsx global>{`
         @media print {
           @page {
@@ -47,44 +49,153 @@ export default function InvoicePage() {
             size: auto;
           }
           body {
-            margin: 1cm;
+            margin: 1cm !important;
+            background-color: white !important;
+          }
+          .no-print {
+            display: none !important;
           }
         }
+        
+        .invoice-container {
+          width: 100%;
+          max-width: 400px;
+          margin: 0 auto;
+          padding: 20px;
+          background-color: #f7f7eb;
+          min-height: 100vh;
+          font-family: 'Courier New', Courier, monospace;
+          color: #000;
+        }
+
+        .invoice-card {
+          background-color: white;
+          padding: 30px 20px;
+          border-radius: 20px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+          position: relative;
+        }
+
+        .back-btn {
+          background-color: #E6DCC8;
+          border: none;
+          width: 45px;
+          height: 45px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.2rem;
+          cursor: pointer;
+          margin-bottom: 20px;
+          transition: all 0.2s ease;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .back-btn:active {
+          transform: scale(0.9);
+        }
+
+        .print-fab {
+          position: fixed;
+          bottom: 30px;
+          right: 30px;
+          background-color: #000;
+          color: #fff;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+          border: none;
+          cursor: pointer;
+          z-index: 100;
+        }
+
+        .print-fab:active {
+          transform: scale(0.95);
+        }
+
+        .invoice-header {
+           text-align: center;
+           margin-bottom: 25px;
+        }
+        
+        .item-row {
+          display: flex;
+          justify-content: space-between;
+          margin: 12px 0;
+          font-size: 14px;
+        }
+
+        .divider {
+          border: none;
+          border-top: 1px dashed #7a7a7a;
+          margin: 15px 0;
+        }
       `}</style>
-      <h3 style={{ textAlign: "center" }}>
-        🍽 {order.restaurantEmail || order.restaurantName || "Restaurant Invoice"}
-      </h3>
-      <p style={{ textAlign: "center", margin: "5px 0", fontSize: "12px" }}>
-        Address: {order.address || "None"}
-      </p>
-      <p style={{ textAlign: "center", margin: "5px 0", fontSize: "12px" }}>
-        FSSAI: {order.fssai || "None"}
-      </p>
-      <hr />
 
-      <p>Order ID: {order.orderId}</p>
-      <p>Date: {new Date(order.orderDate).toLocaleString()}</p>
+      {/* Back Button - Hidden on Print */}
+      <button className="back-btn no-print" onClick={() => {
+        if (source === 'restaurant') {
+            router.push('/accepted-restaurants-orders');
+        } else if (source === 'accepted_list') {
+            router.push('/AcceptedOrdersList');
+        } else {
+            router.push('/dashboard');
+        }
+      }}>
+        <FaArrowLeft />
+      </button>
 
-      <hr />
+      <div className="invoice-card">
+        <div className="invoice-header">
+          <h3 style={{ margin: "0 0 10px 0" }}>
+            🍽 {order.restaurantEmail || order.restaurantName || "Restaurant Invoice"}
+          </h3>
+          <p style={{ margin: "5px 0", fontSize: "12px" }}>
+            Address: {order.address || "None"}
+          </p>
+          <p style={{ margin: "5px 0", fontSize: "12px" }}>
+            FSSAI: {order.fssai || "None"}
+          </p>
+        </div>
 
-      {order.items.map((item, i) => (
-        <p key={i}>
-          {item.name} × {item.quantity}
-          <span style={{ float: "right" }}>
-            ₹{item.price * item.quantity}
-          </span>
+        <div className="divider"></div>
+
+        <p style={{ fontSize: "13px" }}><strong>Order ID:</strong> {order.orderId}</p>
+        <p style={{ fontSize: "13px" }}><strong>Date:</strong> {new Date(order.orderDate).toLocaleString()}</p>
+
+        <div className="divider"></div>
+
+        <div style={{ marginBottom: "20px" }}>
+          {order.items.map((item, i) => (
+            <div key={i} className="item-row">
+              <span>{item.name} × {item.quantity}</span>
+              <span>₹{item.price * item.quantity}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="divider"></div>
+
+        <div className="item-row" style={{ fontSize: "18px", fontWeight: "bold" }}>
+          <span>Grand Total</span>
+          <span>₹{order.totalPrice}</span>
+        </div>
+
+        <p style={{ textAlign: "center", marginTop: "30px", fontSize: "14px", fontStyle: "italic" }}>
+          🙏 Thank you for ordering!
         </p>
-      ))}
+      </div>
 
-      <hr />
-      <p>
-        <strong>Total</strong>
-        <span style={{ float: "right" }}>₹{order.totalPrice}</span>
-      </p>
-
-      <p style={{ textAlign: "center", marginTop: "10px" }}>
-        🙏 Thank you
-      </p>
+      {/* Floating Print Action - Hidden on Print */}
+      <button className="print-fab no-print" onClick={() => window.print()}>
+        <FaPrint />
+      </button>
     </div>
   );
 }
