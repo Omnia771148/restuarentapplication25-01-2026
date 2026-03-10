@@ -69,7 +69,7 @@ export default function OrderHistory() {
               </p>
 
               <p>
-                <strong>Total:</strong> ₹{order.totalPrice}
+                <strong>Total:</strong> ₹{(order.totalPrice * 0.88).toFixed(2)}
               </p>
 
               <p>
@@ -81,7 +81,7 @@ export default function OrderHistory() {
               <ul>
                 {order.items.map((item, idx) => (
                   <li key={idx}>
-                    {item.name} × {item.quantity} — ₹{item.price}
+                    {item.name} × {item.quantity} — <span style={{textDecoration: 'line-through', color: '#999'}}>₹{item.price}</span> <strong>₹{(item.price * 0.88).toFixed(2)}</strong> <small style={{color: '#d9534f'}}>-12%</small>
                   </li>
                 ))}
               </ul>

@@ -141,11 +141,11 @@ export default function InvoicePage() {
       {/* Back Button - Hidden on Print */}
       <button className="back-btn no-print" onClick={() => {
         if (source === 'restaurant') {
-            router.push('/accepted-restaurants-orders');
+          router.push('/accepted-restaurants-orders');
         } else if (source === 'accepted_list') {
-            router.push('/AcceptedOrdersList');
+          router.push('/AcceptedOrdersList');
         } else {
-            router.push('/dashboard');
+          router.push('/dashboard');
         }
       }}>
         <FaArrowLeft />
@@ -174,8 +174,8 @@ export default function InvoicePage() {
         <div style={{ marginBottom: "20px" }}>
           {order.items.map((item, i) => (
             <div key={i} className="item-row">
-              <span>{item.name} × {item.quantity}</span>
-              <span>₹{item.price * item.quantity}</span>
+              <span>{item.name} <small style={{fontSize: '0.75em', color: '#666'}}>(₹{item.price} - 12%)</small> × {item.quantity}</span>
+              <span>₹{(item.price * 0.88 * item.quantity).toFixed(2)}</span>
             </div>
           ))}
         </div>
@@ -184,7 +184,7 @@ export default function InvoicePage() {
 
         <div className="item-row" style={{ fontSize: "18px", fontWeight: "bold" }}>
           <span>Grand Total</span>
-          <span>₹{order.totalPrice}</span>
+          <span>₹{(order.totalPrice * 0.88).toFixed(2)}</span>
         </div>
 
         <p style={{ textAlign: "center", marginTop: "30px", fontSize: "14px", fontStyle: "italic" }}>

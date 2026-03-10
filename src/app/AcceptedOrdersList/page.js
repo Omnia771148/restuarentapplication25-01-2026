@@ -47,7 +47,10 @@ const OrderCard = ({ order, onPrint }) => {
             <tr key={`${order._id}-item-${idx}`}>
               <td className="item-name">{item.name}</td>
               <td className="text-center">{item.quantity}</td>
-              <td className="text-center">₹{item.price}</td>
+              <td className="text-center">
+                <div style={{ fontSize: '0.85rem', color: '#666' }}>₹{item.price} <span style={{ color: '#d9534f' }}>-12%</span></div>
+                <div className="fw-bold">₹{(item.price * 0.88).toFixed(2)}</div>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -67,7 +70,7 @@ const OrderCard = ({ order, onPrint }) => {
         </div>
         <div className="d-flex flex-column align-items-center">
           <span>Total Price</span>
-          <span>₹{order.totalPrice}</span>
+          <span>₹{(order.totalPrice * 0.88).toFixed(2)}</span>
         </div>
       </div>
 
@@ -104,7 +107,7 @@ export default function AcceptedOrdersList() {
     setShowInvoice(true);
     // Auto trigger print after a short delay for modal to render
     setTimeout(() => {
-        window.print();
+      window.print();
     }, 800);
   };
 
@@ -192,58 +195,58 @@ export default function AcceptedOrdersList() {
       {/* Invoice Modal Overlay */}
       {showInvoice && selectedOrder && (
         <div className="invoice-modal-overlay">
-            <div className="invoice-modal-content">
-                <button className="close-invoice-btn no-print" onClick={() => setShowInvoice(false)}>
-                    <FaTimes />
-                </button>
-                
-                <div className="printable-invoice">
-                    <div className="invoice-header-box">
-                        <h3 className="m-0">🍽 {selectedOrder.restaurantName || "Restaurant Invoice"}</h3>
-                        <p className="invoice-subtext">Address: {selectedOrder.address || "None"}</p>
-                        <p className="invoice-subtext">FSSAI: {selectedOrder.fssai || "None"}</p>
-                    </div>
+          <div className="invoice-modal-content">
+            <button className="close-invoice-btn no-print" onClick={() => setShowInvoice(false)}>
+              <FaTimes />
+            </button>
 
-                    <div className="invoice-dashed-divider"></div>
+            <div className="printable-invoice">
+              <div className="invoice-header-box">
+                <h3 className="m-0">🍽 {selectedOrder.restaurantName || "Restaurant Invoice"}</h3>
+                <p className="invoice-subtext">Address: {selectedOrder.address || "None"}</p>
+                <p className="invoice-subtext">FSSAI: {selectedOrder.fssai || "None"}</p>
+              </div>
 
-                    <div className="invoice-info-row">
-                        <span><strong>Order ID:</strong> {selectedOrder.orderId}</span>
-                    </div>
-                    <div className="invoice-info-row">
-                        <span><strong>Date:</strong> {new Date(selectedOrder.orderDate).toLocaleString()}</span>
-                    </div>
+              <div className="invoice-dashed-divider"></div>
 
-                    <div className="invoice-dashed-divider"></div>
+              <div className="invoice-info-row">
+                <span><strong>Order ID:</strong> {selectedOrder.orderId}</span>
+              </div>
+              <div className="invoice-info-row">
+                <span><strong>Date:</strong> {new Date(selectedOrder.orderDate).toLocaleString()}</span>
+              </div>
 
-                    <div className="invoice-items-container">
-                        {selectedOrder.items.map((item, i) => (
-                            <div key={i} className="invoice-item-line">
-                                <span>{item.name} × {item.quantity}</span>
-                                <span>₹{item.price * item.quantity}</span>
-                            </div>
-                        ))}
-                    </div>
+              <div className="invoice-dashed-divider"></div>
 
-                    <div className="invoice-dashed-divider"></div>
+              <div className="invoice-items-container">
+                {selectedOrder.items.map((item, i) => (
+                  <div key={i} className="invoice-item-line">
+                    <span>{item.name} <small style={{fontSize: '0.8em', color: '#666'}}>(₹{item.price} - 12%)</small> × {item.quantity}</span>
+                    <span>₹{(item.price * 0.88 * item.quantity).toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
 
-                    <div className="invoice-total-line">
-                        <span>Grand Total</span>
-                        <span>₹{selectedOrder.totalPrice}</span>
-                    </div>
+              <div className="invoice-dashed-divider"></div>
 
-                    <div className="invoice-footer">
-                        <p>🙏 Thank you for ordering!</p>
-                    </div>
-                </div>
+              <div className="invoice-total-line">
+                <span>Grand Total</span>
+                <span>₹{(selectedOrder.totalPrice * 0.88).toFixed(2)}</span>
+              </div>
 
-                <div className="modal-actions no-print">
-                    <button className="print-again-btn" onClick={() => window.print()}>
-                        <FaPrint className="me-2" /> Print Again
-                    </button>
-                </div>
+              <div className="invoice-footer">
+                <p>🙏 Thank you for ordering!</p>
+              </div>
             </div>
 
-            <style jsx global>{`
+            <div className="modal-actions no-print">
+              <button className="print-again-btn" onClick={() => window.print()}>
+                <FaPrint className="me-2" /> Print Again
+              </button>
+            </div>
+          </div>
+
+          <style jsx global>{`
                 @media print {
                     /* Definitively remove the rest of the page from the printer */
                     .print-hide, 

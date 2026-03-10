@@ -282,7 +282,10 @@ export default function OrdersList() {
                       <tr key={idx}>
                         <td className="item-name">{item.name}</td>
                         <td className="text-center">{item.quantity}</td>
-                        <td className="text-center">₹{item.price}</td>
+                        <td className="text-center">
+                          <div style={{ fontSize: '0.85rem', color: '#666' }}>₹{item.price} <span style={{ color: '#d9534f' }}>-12%</span></div>
+                          <div className="fw-bold">₹{(item.price * 0.88).toFixed(2)}</div>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -302,7 +305,7 @@ export default function OrdersList() {
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <span>Total Price</span>
-                    <span>₹{order.totalPrice}</span>
+                    <span>₹{(order.totalPrice * 0.88).toFixed(2)}</span>
                   </div>
                 </div>
 

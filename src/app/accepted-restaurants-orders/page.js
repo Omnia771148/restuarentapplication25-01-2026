@@ -135,14 +135,17 @@ export default function AcceptedByRestaurantsOrders() {
                                             <div key={idx} className="order-item-row">
                                                 <span className="item-name">{item.name}</span>
                                                 <span className="item-qty-badge">x{item.quantity}</span>
-                                                <span className="item-price">₹{item.price * item.quantity}</span>
+                                                <span className="item-price">
+                                                    <div style={{fontSize: '0.75rem', textDecoration: 'line-through', color: '#999'}}>₹{item.price * item.quantity}</div>
+                                                    <div>₹{(item.price * 0.88 * item.quantity).toFixed(2)} <span style={{fontSize: '0.7rem', color: '#dc3545'}}>-12%</span></div>
+                                                </span>
                                             </div>
                                         ))}
                                     </div>
 
                                     <div className="order-total-row">
                                         <span className="total-label">Total</span>
-                                        <span className="total-amount">₹{order.grandTotal || order.totalPrice}</span>
+                                        <span className="total-amount">₹{((order.grandTotal || order.totalPrice) * 0.88).toFixed(2)}</span>
                                     </div>
                                 </div>
 
@@ -166,7 +169,7 @@ export default function AcceptedByRestaurantsOrders() {
                         <button className="close-invoice-btn no-print" onClick={() => setShowInvoice(false)}>
                             <FaTimes />
                         </button>
-                        
+
                         <div className="printable-invoice">
                             <div className="invoice-header-box">
                                 <h3 className="m-0">🍽 {selectedOrder.restaurantName || "Restaurant Invoice"}</h3>
@@ -188,8 +191,8 @@ export default function AcceptedByRestaurantsOrders() {
                             <div className="invoice-items-container">
                                 {selectedOrder.items.map((item, i) => (
                                     <div key={i} className="invoice-item-line">
-                                        <span>{item.name} × {item.quantity}</span>
-                                        <span>₹{item.price * item.quantity}</span>
+                                        <span>{item.name} <small style={{fontSize: '0.7em'}}>(₹{item.price} - 12%)</small> × {item.quantity}</span>
+                                        <span>₹{(item.price * 0.88 * item.quantity).toFixed(2)}</span>
                                     </div>
                                 ))}
                             </div>
@@ -198,7 +201,7 @@ export default function AcceptedByRestaurantsOrders() {
 
                             <div className="invoice-total-line">
                                 <span>Grand Total</span>
-                                <span>₹{selectedOrder.totalPrice}</span>
+                                <span>₹{(selectedOrder.totalPrice * 0.88).toFixed(2)}</span>
                             </div>
 
                             <div className="invoice-footer">
