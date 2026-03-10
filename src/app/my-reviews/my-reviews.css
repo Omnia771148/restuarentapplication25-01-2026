@@ -68,7 +68,7 @@
 }
 
 .review-card {
-    background: #ffffff;
+    background: #D6CDBA;
     border-radius: 30px;
     padding: 25px;
     margin-bottom: 25px;
@@ -79,16 +79,7 @@
     overflow: hidden;
 }
 
-.review-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 6px;
-    height: 100%;
-    background-color: #E6DCC8;
-    opacity: 0.5;
-}
+/* Removed the sidebar accent to eliminate the double background look */
 
 .review-card:hover {
     transform: translateY(-5px) scale(1.01);
@@ -134,9 +125,10 @@
     line-height: 1.6;
     margin-bottom: 15px;
     font-style: italic;
-    background: rgba(0,0,0,0.02);
-    padding: 10px;
+    background: #ffffff;
+    padding: 15px;
     border-radius: 12px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
 }
 
 /* Items Ordered Section */
@@ -162,7 +154,7 @@
 }
 
 .item-badge {
-    background-color: #D6CDBA;
+    background-color: #ffffff;
     color: #222;
     padding: 6px 15px;
     border-radius: 50px;
