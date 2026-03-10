@@ -50,7 +50,7 @@ export async function POST(req) {
                     priority: 'high',
                     notification: {
                         sound: 'new_order.wav',
-                        channelId: 'orders',
+                        channelId: 'orders_sound_channel_3',
                         priority: 'high',
                     },
                 },
