@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
       >
         <GlobalSoundManager />
         {children}
-        {!isInvoicePage && <Navbar />}
+        {!isInvoicePage && <div className="no-print"><Navbar /></div>}
       </body>
     </html>
   );

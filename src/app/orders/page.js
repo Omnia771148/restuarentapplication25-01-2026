@@ -41,6 +41,8 @@ export default function OrdersList() {
 
   const prevOrdersRef = useRef([]);
   const activeRef = useRef(false);
+  const isActionRunningRef = useRef(false);
+  const removedIdsRef = useRef(new Set());
 
   useEffect(() => {
     activeRef.current = isActive;
@@ -52,6 +54,8 @@ export default function OrdersList() {
 
   const closeAlert = () => {
     setAlertConfig({ ...alertConfig, show: false });
+    setLoading(false);
+    isActionRunningRef.current = false;
   };
 
   const enableAudio = () => {
@@ -108,14 +112,16 @@ export default function OrdersList() {
         );
 
         if (res.data.success) {
-          const newOrders = res.data.orders;
+          const newOrders = res.data.orders.filter(order => !removedIdsRef.current.has(order._id));
           setOrders(newOrders);
           prevOrdersRef.current = newOrders;
         }
       } catch (err) {
         console.error("Fetch orders error:", err);
       } finally {
-        setLoading(false);
+        if (!isActionRunningRef.current) {
+          setLoading(false);
+        }
       }
     };
 
@@ -128,6 +134,7 @@ export default function OrdersList() {
 
   async function acceptOrder(orderId, razorpayOrderId) {
     setLoading(true);
+    isActionRunningRef.current = true;
     try {
       const res = await axios.post("/api/orders/accept", {
         orderId,
@@ -137,49 +144,56 @@ export default function OrdersList() {
       });
 
       if (res.data.success) {
-        showCustomAlert("Order Accepted", "The order has been successfully accepted.", "success");
         removeOrder(orderId);
+        showCustomAlert("Order Accepted", "The order has been successfully accepted.", "success");
       } else {
         showCustomAlert("Accept Failed", res.data.message || "Could not accept order.", "error");
+        setLoading(false);
+        isActionRunningRef.current = false;
       }
     } catch (err) {
       console.error("Accept error:", err);
       showCustomAlert("Error", "Failed to connect to server.", "error");
-    } finally {
       setLoading(false);
+      isActionRunningRef.current = false;
     }
   }
 
   async function rejectOrder(orderId) {
     setLoading(true);
+    isActionRunningRef.current = true;
     try {
       const res = await axios.post("/api/orders/reject", { orderId });
 
       if (res.data.success) {
-        showCustomAlert("Order Rejected", "Theis order has been rejected.", "error");
         removeOrder(orderId);
+        showCustomAlert("Order Rejected", "Theis order has been rejected.", "error");
       } else {
         showCustomAlert("Reject Failed", res.data.message || "Could not reject order.", "error");
+        setLoading(false);
+        isActionRunningRef.current = false;
       }
     } catch (err) {
       console.error("Reject error:", err);
       showCustomAlert("Error", "Failed to connect to server.", "error");
-    } finally {
       setLoading(false);
+      isActionRunningRef.current = false;
     }
   }
 
   const removeOrder = (orderId) => {
+    removedIdsRef.current.add(orderId);
     setOrders((prev) => prev.filter((o) => o._id !== orderId));
     prevOrdersRef.current = prevOrdersRef.current.filter(
       (o) => o._id !== orderId
     );
   };
 
-  if (loading) return <Loading />;
+  if (loading && !alertConfig.show) return <Loading />;
 
   return (
     <div className="container-fluid p-3 pb-5">
+      {loading && <Loading />}
       {/* Custom Alert Overlay */}
       {alertConfig.show && (
         <div className="custom-alert-overlay">
@@ -268,7 +282,10 @@ export default function OrdersList() {
                       <tr key={idx}>
                         <td className="item-name">{item.name}</td>
                         <td className="text-center">{item.quantity}</td>
-                        <td className="text-center">₹{item.price}</td>
+                        <td className="text-center">
+                          <div style={{ fontSize: '0.85rem', color: '#666' }}>₹{item.price} <span style={{ color: '#d9534f' }}>-12%</span></div>
+                          <div className="fw-bold">₹{(item.price * 0.88).toFixed(2)}</div>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -288,7 +305,7 @@ export default function OrdersList() {
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                     <span>Total Price</span>
-                    <span>₹{order.totalPrice}</span>
+                    <span>₹{(order.totalPrice * 0.88).toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -320,6 +337,10 @@ export default function OrdersList() {
           )}
         </div>
       </div>
+      <br></br>
+      <br></br>
+      <br></br>
+      
     </div>
   );
 }

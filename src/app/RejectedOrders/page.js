@@ -46,7 +46,7 @@ export default function RejectedOrdersPage() {
         >
           <p><strong>Order ID:</strong> {order.orderId}</p>
           <p><strong>Total Items:</strong> {order.totalCount}</p>
-          <p><strong>Total Price:</strong> ₹{order.totalPrice}</p>
+          <p><strong>Total Price:</strong> ₹{(order.totalPrice * 0.88).toFixed(2)}</p>
           <p><strong>Order Date:</strong> {new Date(order.orderDate).toLocaleString()}</p>
           <p><strong>Status:</strong> {order.status}</p>
 
@@ -64,7 +64,10 @@ export default function RejectedOrdersPage() {
                 <tr key={index}>
                   <td style={{ border: "1px solid #ccc", padding: "5px" }}>{item.name}</td>
                   <td style={{ border: "1px solid #ccc", padding: "5px" }}>{item.quantity}</td>
-                  <td style={{ border: "1px solid #ccc", padding: "5px" }}>₹{item.price}</td>
+                  <td style={{ border: "1px solid #ccc", padding: "5px" }}>
+                    <div style={{ fontSize: '0.8rem', textDecoration: 'line-through', color: '#999' }}>₹{item.price}</div>
+                    <div>₹{(item.price * 0.88).toFixed(2)} <span style={{fontSize: '0.7rem', color: '#d9534f'}}>-12%</span></div>
+                  </td>
                 </tr>
               ))}
             </tbody>
