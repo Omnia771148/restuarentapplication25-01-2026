@@ -29,12 +29,12 @@ export default function OrdersPage() {
       filteredData = Data.filter(item => item.id >= 208 && item.id <= 301);
     } 
     else if (storedRestId === "2") {
-      // Fetch items 5 to 8
+      // Fetch items 1 to 207
       filteredData = Data.filter(item => item.id >= 1 && item.id <= 207);
     } 
     else if (storedRestId === "3") {
-      // Fetch items 9 to 12
-      filteredData = Data.filter(item => item.id >= 206 && item.id <= 310);
+      // Fetch items 302 to 328
+      filteredData = Data.filter(item => item.id >= 302 && item.id <= 328);
     }
     else if (storedRestId === "4") {
       // Fetch items 13 to 16
