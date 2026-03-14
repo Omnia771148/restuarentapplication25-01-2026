@@ -38,20 +38,9 @@ export default function OrdersPage() {
     }
     else if (storedRestId === "4") {
       // Fetch items 13 to 16
-      filteredData = Data.filter(item => item.id >= 311 && item.id <= 411);
+      filteredData = Data.filter(item => item.id >= 329 && item.id <= 442);
     }
-    else if (storedRestId === "5") {
-      // Fetch items 17 to 20
-      filteredData = Data.filter(item => item.id >= 412 && item.id <= 512);
-    }
-    else if (storedRestId === "6") {
-      // Fetch items 21 to 24
-      filteredData = Data.filter(item => item.id >= 513 && item.id <= 613 );
-    }
-    else if (storedRestId === "7") {
-      // Fetch items 25 to 28
-      filteredData = Data.filter(item => item.id >= 614 && item.id <= 714);
-    }
+    
        setItems(filteredData);
 
   }, [router]);
