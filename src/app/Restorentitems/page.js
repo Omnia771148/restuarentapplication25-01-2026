@@ -44,6 +44,10 @@ export default function OrdersPage() {
       // Fetch items 13 to 16
       filteredData = Data.filter(item => item.id >= 443 && item.id <= 635);
     }
+    else if (storedRestId === "6") {
+      // Fetch items 13 to 16
+      filteredData = Data.filter(item => item.id >= 636 && item.id <= 700);
+    }
     
        setItems(filteredData);
 
