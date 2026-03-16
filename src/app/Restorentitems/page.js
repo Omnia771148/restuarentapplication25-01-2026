@@ -54,7 +54,7 @@ export default function OrdersPage() {
     }
     else if (storedRestId === "8") {
       // Fetch items 13 to 16
-      filteredData = Data.filter(item => item.id >= 725 && item.id <= 964);
+      filteredData = Data.filter(item => item.id >= 725 && item.id <= 963);
     }
     else if (storedRestId === "9") {
       // Fetch items 13 to 16
