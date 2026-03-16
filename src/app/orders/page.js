@@ -83,58 +83,58 @@ export default function OrdersList() {
     }
   }, []);
 
-    const fetchRestaurantStatus = useCallback(async () => {
-      const restaurantId = localStorage.getItem("restid");
-      if (!restaurantId) return;
-      try {
-        const res = await axios.get(
-          `/api/restaurant-status?restaurantId=${restaurantId}`
-        );
-        if (res.data.success) {
-          setIsActive(res.data.isActive);
-        }
-      } catch (err) {
-        console.error("Status fetch error", err);
+  const fetchRestaurantStatus = useCallback(async () => {
+    const restaurantId = localStorage.getItem("restid");
+    if (!restaurantId) return;
+    try {
+      const res = await axios.get(
+        `/api/restaurant-status?restaurantId=${restaurantId}`
+      );
+      if (res.data.success) {
+        setIsActive(res.data.isActive);
       }
-    }, []);
+    } catch (err) {
+      console.error("Status fetch error", err);
+    }
+  }, []);
 
-    const fetchOrders = useCallback(async () => {
-      const restaurantId = localStorage.getItem("restid");
-      if (!restaurantId) return;
-      try {
-        const res = await axios.get(
-          `/api/orders?restaurantId=${restaurantId}`
-        );
+  const fetchOrders = useCallback(async () => {
+    const restaurantId = localStorage.getItem("restid");
+    if (!restaurantId) return;
+    try {
+      const res = await axios.get(
+        `/api/orders?restaurantId=${restaurantId}`
+      );
 
-        if (res.data.success) {
-          const newOrders = res.data.orders.filter(order => !removedIdsRef.current.has(order._id));
-          setOrders(newOrders);
-          prevOrdersRef.current = newOrders;
-        }
-      } catch (err) {
-        console.error("Fetch orders error:", err);
-      } finally {
-        if (!isActionRunningRef.current) {
-          setLoading(false);
-        }
+      if (res.data.success) {
+        const newOrders = res.data.orders.filter(order => !removedIdsRef.current.has(order._id));
+        setOrders(newOrders);
+        prevOrdersRef.current = newOrders;
       }
-    }, []);
+    } catch (err) {
+      console.error("Fetch orders error:", err);
+    } finally {
+      if (!isActionRunningRef.current) {
+        setLoading(false);
+      }
+    }
+  }, []);
 
-    useEffect(() => {
-        const restaurantId = localStorage.getItem("restid");
+  useEffect(() => {
+    const restaurantId = localStorage.getItem("restid");
 
-        if (!restaurantId) {
-            showCustomAlert("Error", "No Restaurant ID found", "error");
-            setLoading(false);
-            return;
-        }
+    if (!restaurantId) {
+      showCustomAlert("Error", "No Restaurant ID found", "error");
+      setLoading(false);
+      return;
+    }
 
-        fetchRestaurantStatus();
-        fetchOrders();
+    fetchRestaurantStatus();
+    fetchOrders();
 
-        const interval = setInterval(fetchOrders, 3000);
-        return () => clearInterval(interval);
-    }, [audioEnabled, fetchRestaurantStatus, fetchOrders]);
+    const interval = setInterval(fetchOrders, 3000);
+    return () => clearInterval(interval);
+  }, [audioEnabled, fetchRestaurantStatus, fetchOrders]);
 
   async function acceptOrder(orderId, razorpayOrderId) {
     setLoading(true);
@@ -344,7 +344,7 @@ export default function OrdersList() {
       <br></br>
       <br></br>
       <br></br>
-      
+
     </div>
   );
 }
