@@ -24,6 +24,9 @@ export default function SettingsPage() {
             const res = await axios.get(`/api/profile?restId=${restId}`);
             if (res.data.success) {
                 setUser(res.data.user);
+                // Cache data to make it instant next time
+                localStorage.setItem("userEmail", res.data.user.email);
+                localStorage.setItem("userPhone", res.data.user.phone);
             }
         } catch (err) {
             console.error("Profile fetch error:", err);
@@ -33,6 +36,16 @@ export default function SettingsPage() {
     }, [router]);
 
     useEffect(() => {
+        // Fast path: Check localStorage first
+        const storedEmail = localStorage.getItem("userEmail");
+        const storedPhone = localStorage.getItem("userPhone");
+        
+        if (storedEmail && storedPhone) {
+            setUser({ email: storedEmail, phone: storedPhone });
+            setLoading(false);
+        }
+
+        // Always fetch fresh data in background
         fetchProfile();
     }, [fetchProfile]);
 
@@ -52,13 +65,11 @@ export default function SettingsPage() {
     return (
         <div className="settings-container">
 
-            {/* Page Title */}
-            {!loading && (
-                <div className="page-title-pill">
-                    <FaCog className="settings-icon-spin" />
-                    <span>Settings</span>
-                </div>
-            )}
+            {/* Page Title - Show instantly */}
+            <div className="page-title-pill">
+                <FaCog className="settings-icon-spin" />
+                <span>Settings</span>
+            </div>
 
             {/* Profile Detail Card */}
             {user && (
