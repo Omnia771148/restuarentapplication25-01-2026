@@ -1011,7 +1011,7 @@ export const Data = [
 //////////    PR GRAND 
 
 ////veg starters
-[
+
 { id: 725, name: "Gobi Manchuria", price: 180, restid: 8, button: "Add", type: "veg", symbol: "🟢", image: "/fooditems/1 (200).webp" },
 { id: 726, name: "Gobi 65", price: 180, restid: 8, button: "Add", type: "veg", symbol: "🟢", image: "/fooditems/1 (200).webp" },
 { id: 727, name: "Gobi Chilly", price: 180, restid: 8, button: "Add", type: "veg", symbol: "🟢", image: "/fooditems/1 (200).webp" },
@@ -1653,7 +1653,7 @@ export const Data = [
 
 //family packs
 
-{ id: 1070, name: "Family pack C.B(2)+Pulks(6)+Chicken 65+Chicken Curry+curd rice(1)", price: 15, restid: 8, button: "Add", type: "non-veg", symbol: "🔺", image: "/fooditems/1 (200).webp", category: "FAMILY PACKS" }
+{ id: 1070, name: "Family pack C.B(2)+Pulks(6)+Chicken 65+Chicken Curry+curd rice(1)", price: 15, restid: 8, button: "Add", type: "non-veg", symbol: "🔺", image: "/fooditems/1 (200).webp", category: "FAMILY PACKS" },
 
 
 
