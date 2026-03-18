@@ -1634,7 +1634,7 @@ export const Data = [
 
 //family packs
 
-{ id: 1070, name: "Family pack C.B(2)+Pulks(6)+Chicken 65+Chicken Curry+curd rice(1)", price: 15, restid: 8, button: "Add", type: "non-veg", symbol: "🔺", image: "/fooditems/1 (200).webp", category: "FAMILY PACKS" }
+{ id: 1070, name: "Family pack C.B(2)+Pulks(6)+Chicken 65+Chicken Curry+curd rice(1)", price: 15, restid: 8, button: "Add", type: "non-veg", symbol: "🔺", image: "/fooditems/1 (200).webp", category: "FAMILY PACKS" },
 
 
 
