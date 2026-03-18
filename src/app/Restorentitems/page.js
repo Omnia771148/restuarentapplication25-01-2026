@@ -54,7 +54,7 @@ export default function OrdersPage() {
     }
     else if (storedRestId === "8") {
       // Fetch items 13 to 16
-      filteredData = Data.filter(item => item.id >= 725 && item.id <= 963);
+      filteredData = Data.filter(item => item.id >= 725 && item.id <= 967);
     }
     else if (storedRestId === "9") {
       // Fetch items 13 to 16
@@ -62,7 +62,7 @@ export default function OrdersPage() {
     }
     else if (storedRestId === "10") {
       // Fetch items 13 to 16
-      filteredData = Data.filter(item => item.id >= 1133 && item.id <= 1235);
+      filteredData = Data.filter(item => item.id >= 968 && item.id <= 1070);
     }
     else if (storedRestId === "11") {
       // Fetch items 13 to 16
