@@ -1458,10 +1458,10 @@ export const Data = [
 { id: 1191, name: "Egg Biryani", price: 690, restid: 9, button: "Add", type: "non-veg", symbol: "🔺", image: "/fooditems/biryani5.webp", category: "5person biryani" },
 
 //veg
-{ id: 1192, name: "Veg Biryani", price: 620, restid: 9, button: "Add", type: "veg", symbol: "🟩", image: "/fooditems/biryani5.webp", category: "veg" },
-{ id: 1193, name: "Mushroom Biryani", price: 760, restid: 9, button: "Add", type: "veg", symbol: "🟩", image: "/fooditems/biryani5.webp", category: "veg" },
-{ id: 1194, name: "Kaju Biryani", price: 900, restid: 9, button: "Add", type: "veg", symbol: "🟩", image: "/fooditems/biryani5.webp", category: "veg" },
-{ id: 1195, name: "Paneer Biryani", price: 760, restid: 9, button: "Add", type: "veg", symbol: "🟩", image: "/fooditems/biryani5.webp", category: "veg" },
+{ id: 1192, name: "Veg Biryani", price: 620, restid: 9, button: "Add", type: "veg", symbol: "🟩", image: "/fooditems/biryani5.webp", category: "Veg" },
+{ id: 1193, name: "Mushroom Biryani", price: 760, restid: 9, button: "Add", type: "veg", symbol: "🟩", image: "/fooditems/biryani5.webp", category: "Veg" },
+{ id: 1194, name: "Kaju Biryani", price: 900, restid: 9, button: "Add", type: "veg", symbol: "🟩", image: "/fooditems/biryani5.webp", category: "Veg" },
+{ id: 1195, name: "Paneer Biryani", price: 760, restid: 9, button: "Add", type: "veg", symbol: "🟩", image: "/fooditems/biryani5.webp", category: "Veg" },
 
 
 
