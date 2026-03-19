@@ -25,47 +25,49 @@ export default function OrdersPage() {
     let filteredData = [];
 
     if (storedRestId === "1") {
-      // Fetch items 208 to 301
+      // Fetch items 208 to 301-------------------->k-fortune
       filteredData = Data.filter(item => item.id >= 208 && item.id <= 301);
     } 
+ 
     else if (storedRestId === "2") {
-      // Fetch items 1 to 207
+      // Fetch items 1 to 207   //----------------------------Amogo
       filteredData = Data.filter(item => item.id >= 1 && item.id <= 207);
     } 
+   
     else if (storedRestId === "3") {
-      // Fetch items 302 to 328
+      // Fetch items 302 to 328 //--------------------------------> Mr hangouts
       filteredData = Data.filter(item => item.id >= 302 && item.id <= 328);
     }
     else if (storedRestId === "4") {
-      // Fetch items 13 to 16
+      // Fetch items 13 to 16//--------------------------->reddy familyrest
       filteredData = Data.filter(item => item.id >= 329 && item.id <= 442);
     }
     else if (storedRestId === "5") {
-      // Fetch items 13 to 16
+      // Fetch items 13 to 16--------------------------->Aha kitchens
       filteredData = Data.filter(item => item.id >= 443 && item.id <= 635);
     }
     else if (storedRestId === "6") {
-      // Fetch items 13 to 16
+      // Fetch items 13 to 16------------------------------>bro story
       filteredData = Data.filter(item => item.id >= 636 && item.id <= 700);
     }
     else if (storedRestId === "7") {
-      // Fetch items 13 to 16
+      // Fetch items 13 to 16--------------------------------->fun and food
       filteredData = Data.filter(item => item.id >= 701 && item.id <= 724);
     }
     else if (storedRestId === "8") {
-      // Fetch items 13 to 16
+      // Fetch items 13 to 16------------------------------=-->pr grand
       filteredData = Data.filter(item => item.id >= 725 && item.id <= 966);
     }
     else if (storedRestId === "9") {
-      // Fetch items 13 to 16
+      // Fetch items 13 to 16------------------------------->food land
       filteredData = Data.filter(item => item.id >= 1236 && item.id <= 1362);
     }
     else if (storedRestId === "10") {
-      // Fetch items 13 to 16
-      filteredData = Data.filter(item => item.id >= 968 && item.id <= 1070);
+      // Fetch items 13 to 16------------------------------>talimpu
+      filteredData = Data.filter(item => item.id >= 967 && item.id <= 1069);
     }
     else if (storedRestId === "11") {
-      // Fetch items 13 to 16
+      // Fetch items 13 to 16=00000000000000000000000000000000000>>>taj darbar
       filteredData = Data.filter(item => item.id >= 1363 && item.id <= 1543);
     }
 
