@@ -68,7 +68,7 @@ export default function OrdersPage() {
     }
     else if (storedRestId === "11") {
       // Fetch items 13 to 16=00000000000000000000000000000000000>>>taj darbar
-      filteredData = Data.filter(item => item.id >= 1363 && item.id <= 1543);
+      filteredData = Data.filter(item => item.id >= 1196 && item.id <= 1377);
     }
 
     
