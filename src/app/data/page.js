@@ -1278,6 +1278,32 @@ export const Data = [
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //food land
 
 //VEG starters
@@ -1461,6 +1487,21 @@ export const Data = [
 { id: 1360, name: "Mushroom Biryani ", price: 760, restid: 9, button: "Add", type: "veg", symbol: "🟩", image: "/fooditems/biryani5.webp" },
 { id: 1361, name: "Kaju Biryani ", price: 900, restid: 9, button: "Add", type: "veg", symbol: "🟩", image: "/fooditems/biryani5.webp" },
 { id: 1362, name: "Paneer Biryani ", price: 760, restid: 9, button: "Add", type: "veg", symbol: "🟩", image: "/fooditems/biryani5.webp" },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
