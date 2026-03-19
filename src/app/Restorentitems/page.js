@@ -60,7 +60,7 @@ export default function OrdersPage() {
     }
     else if (storedRestId === "9") {
       // Fetch items 13 to 16------------------------------->food land
-      filteredData = Data.filter(item => item.id >= 1236 && item.id <= 1362);
+      filteredData = Data.filter(item => item.id >= 1070 && item.id <= 1195);
     }
     else if (storedRestId === "10") {
       // Fetch items 13 to 16------------------------------>talimpu
