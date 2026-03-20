@@ -79,6 +79,10 @@ export default function OrdersPage() {
       // Fetch items 13 to 16=------------------------------------>>>Hindustan
       filteredData = Data.filter(item => item.id >= 1453 && item.id <= 1651);
     }
+    else if (storedRestId === "14") {
+      // Fetch items 13 to 16=------------------------------------>>>lassi corner
+      filteredData = Data.filter(item => item.id >= 1652 && item.id <= 1851);
+    }
 
     
        setItems(filteredData);
