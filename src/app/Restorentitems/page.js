@@ -75,6 +75,10 @@ export default function OrdersPage() {
       // Fetch items 13 to 16=00000000000000000000000000000000000>>>Ruchivedhika
       filteredData = Data.filter(item => item.id >= 1377 && item.id <= 1452);
     }
+     else if (storedRestId === "13") {
+      // Fetch items 13 to 16=------------------------------------>>>Hindustan
+      filteredData = Data.filter(item => item.id >= 1453 && item.id <= 1651);
+    }
 
     
        setItems(filteredData);
