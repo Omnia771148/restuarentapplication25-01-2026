@@ -19,6 +19,50 @@ export default function Home() {
 
   // ✅ CHECK SESSION + AUTO REDIRECT
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const autoLogin = params.get("autoLogin");
+    const paramEmail = params.get("email");
+    const paramPassword = params.get("password");
+
+    // 1. First priority: Auto-login from URL (if we're being redirected from office app)
+    if (autoLogin === "true" && paramEmail && paramPassword) {
+      setEmail(paramEmail);
+      setPassword(paramPassword);
+      
+      const triggerLogin = async () => {
+        setIsSubmitting(true);
+        try {
+          const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: paramEmail, password: paramPassword }),
+          });
+          const data = await response.json();
+          if (data.success) {
+            localStorage.setItem("restid", data.user.restId);
+            localStorage.setItem("restlocation", data.user.restLocation);
+            localStorage.setItem("restaurantLocation", JSON.stringify(data.user.restaurantLocation));
+            localStorage.setItem("userEmail", data.user.email);
+            localStorage.setItem("userPhone", data.user.phone);
+            localStorage.setItem("loginTime", Date.now());
+            router.push("/dashboard");
+          } else {
+            setErrorMsg(data.message || "Auto-login failed");
+            setShowError(true);
+            setIsSubmitting(false);
+          }
+        } catch (error) {
+          console.error('Auto-login error:', error);
+          setErrorMsg("Auto-login failed. Please login manually.");
+          setShowError(true);
+          setIsSubmitting(false);
+        }
+      };
+      triggerLogin();
+      return; // Skip session check if auto-login is happening
+    }
+
+    // 2. Second priority: Existing local session
     const loginTime = localStorage.getItem("loginTime");
     const storedRestId = localStorage.getItem("restid");
 
@@ -37,7 +81,7 @@ export default function Home() {
   }, [router]);
 
   const handleLogin = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     
     if (!email || !password) {
       setErrorMsg("Please enter both Mobile Number and Password.");
